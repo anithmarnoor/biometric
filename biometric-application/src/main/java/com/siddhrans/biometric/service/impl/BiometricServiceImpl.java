@@ -53,4 +53,10 @@ public class BiometricServiceImpl implements BiometricService{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public BiometricData fetchBiometricDataById(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

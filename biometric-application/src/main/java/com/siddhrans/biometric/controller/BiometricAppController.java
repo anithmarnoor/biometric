@@ -35,7 +35,7 @@ public class BiometricAppController {
 	@RequestMapping(value= "/biometric/add", method = RequestMethod.POST)
 	public String addPerson(@ModelAttribute("biometricData") BiometricData p){
 		
-		if(p.getId() == "0"){
+		if(p.getId() == 0){
 			//new person, add it
 			this.service.saveBiometricData(p);
 		}else{
@@ -56,8 +56,8 @@ public class BiometricAppController {
  
     @RequestMapping("/edit/{id}")
     public String editPerson(@PathVariable("id") int id, Model model){
-        model.addAttribute("person", this.personService.getPersonById(id));
-        model.addAttribute("listPersons", this.personService.listPersons());
+        model.addAttribute("person", this.service.fetchBiometricDataById(id));
+        model.addAttribute("listPersons", this.service.fetchBiometricData(new BiometricData()));
         return "person";
     }
 }
