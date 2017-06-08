@@ -6,11 +6,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import com.siddhrans.biometric.dao.BiometricDAO;
 import com.siddhrans.biometric.model.BiometricData;
 import com.siddhrans.biometric.service.BiometricService;
 
+@Repository
 public class BiometricDAOImpl implements BiometricDAO {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BiometricDAOImpl.class);

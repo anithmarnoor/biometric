@@ -14,16 +14,18 @@ import com.siddhrans.biometric.service.BiometricService;
 
 @Controller
 public class BiometricAppController {
-	private BiometricService service;
-
-	public BiometricService getService() {
-		return service;
+	private BiometricService biometricService;
+	
+	
+	public BiometricService getBiometricService() {
+		return biometricService;
 	}
 	@Autowired(required=true)
-	@Qualifier(value="service")
-	public void setService(BiometricService service) {
-		this.service = service;
+	@Qualifier(value="biometricService")
+	public void setBiometricService(BiometricService biometricService) {
+		this.biometricService = biometricService;
 	}
+
 	
 	@RequestMapping(value = "/persons", method = RequestMethod.GET)
 	public String listPersons(Model model) {
@@ -37,10 +39,10 @@ public class BiometricAppController {
 		
 		if(p.getId() == 0){
 			//new person, add it
-			this.service.saveBiometricData(p);
+			this.biometricService.saveBiometricData(p);
 		}else{
 			//existing person, call update
-			this.service.updateBiometricData(p);
+			this.biometricService.updateBiometricData(p);
 		}
 		
 		return "redirect:/biometric";
@@ -50,14 +52,14 @@ public class BiometricAppController {
 	@RequestMapping("/remove/{id}")
     public String removePerson(@PathVariable("id") int id){
 		
-        this.service.deleteBiometricData(id);
+        this.biometricService.deleteBiometricData(id);
         return "redirect:/biometric";
     }
  
     @RequestMapping("/edit/{id}")
     public String editPerson(@PathVariable("id") int id, Model model){
-        model.addAttribute("person", this.service.fetchBiometricDataById(id));
-        model.addAttribute("listPersons", this.service.fetchBiometricData(new BiometricData()));
+        model.addAttribute("person", this.biometricService.fetchBiometricDataById(id));
+        model.addAttribute("listPersons", this.biometricService.fetchBiometricData(new BiometricData()));
         return "person";
     }
 }

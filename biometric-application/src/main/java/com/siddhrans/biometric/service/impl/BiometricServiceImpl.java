@@ -2,50 +2,56 @@ package com.siddhrans.biometric.service.impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.siddhrans.biometric.dao.BiometricDAO;
 import com.siddhrans.biometric.model.BiometricData;
 import com.siddhrans.biometric.service.BiometricService;
 
+@Service
 public class BiometricServiceImpl implements BiometricService{
 	
-	BiometricDAO dao;
+	BiometricDAO biometricDAO;
 	
 	public BiometricServiceImpl(){
 		
 	}
 
-	public BiometricDAO getDao() {
-		return dao;
+	public BiometricDAO getBiometricDAO() {
+		return biometricDAO;
 	}
 
-	public void setDao(BiometricDAO dao) {
-		this.dao = dao;
+
+
+	public void setBiometricDAO(BiometricDAO biometricDAO) {
+		this.biometricDAO = biometricDAO;
 	}
+
+
 
 	@Transactional
 	public void readBiometricData(BiometricData data) {
 		// TODO Auto-generated method stub
-		dao.readBiometricData(data);
+		biometricDAO.readBiometricData(data);
 	}
 	
 	@Transactional
 	public void saveBiometricData(BiometricData data) {
 		// TODO Auto-generated method stub
-		dao.saveBiometricData(data);
+		biometricDAO.saveBiometricData(data);
 	}
 	
 	@Transactional
 	public void updateBiometricData(BiometricData data) {
 		// TODO Auto-generated method stub
-		dao.updateBiometricData(data);
+		biometricDAO.updateBiometricData(data);
 	}
 	
 	@Transactional
 	public List<BiometricData> fetchBiometricData(BiometricData data) {
 		// TODO Auto-generated method stub
-		return dao.fetchBiometricData(data);
+		return biometricDAO.fetchBiometricData(data);
 	}
 
 	@Transactional

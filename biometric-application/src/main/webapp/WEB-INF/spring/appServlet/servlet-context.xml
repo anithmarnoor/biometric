@@ -29,9 +29,9 @@
 		destroy-method="close">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<beans:property name="url"
-			value="jdbc:mysql://localhost:3306/TestDB" />
-		<beans:property name="username" value="pankaj" />
-		<beans:property name="password" value="pankaj123" />
+			value="jdbc:mysql://localhost:3308/biometric_details" />
+		<beans:property name="username" value="root" />
+		<beans:property name="password" value="admin" />
 	</beans:bean>
 
 	<!-- Hibernate 4 SessionFactory Bean definition -->
@@ -40,25 +40,36 @@
 		<beans:property name="dataSource" ref="dataSource" />
 		<beans:property name="annotatedClasses">
 			<beans:list>
-				<beans:value>com.journaldev.spring.model.Person</beans:value>
+				<beans:value>com.siddhrans.biometric.model.Driver</beans:value>
+				<beans:value>com.siddhrans.biometric.model.BiometricData</beans:value>
 			</beans:list>
+			
 		</beans:property>
 		<beans:property name="hibernateProperties">
 			<beans:props>
 				<beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect
 				</beans:prop>
 				<beans:prop key="hibernate.show_sql">true</beans:prop>
+				 <beans:prop key="hibernate.hbm2ddl.auto">update</beans:prop>
 			</beans:props>
 		</beans:property>
 	</beans:bean>
 	
-	<beans:bean id="personDAO" class="com.journaldev.spring.dao.PersonDAOImpl">
+	<beans:bean id="driverDAO" class="com.siddhrans.biometric.dao.impl.DriverDAOImpl">
 		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
-	<beans:bean id="personService" class="com.journaldev.spring.service.PersonServiceImpl">
-		<beans:property name="personDAO" ref="personDAO"></beans:property>
+	<beans:bean id="driverService" class="com.siddhrans.biometric.service.impl.DriverServiceImpl">
+		<beans:property name="driverDAO" ref="driverDAO"></beans:property>
 	</beans:bean>
-	<context:component-scan base-package="com.journaldev.spring" />
+	
+	<beans:bean id="biometricDAO" class="com.siddhrans.biometric.dao.impl.BiometricDAOImpl">
+		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="biometricService" class="com.siddhrans.biometric.service.impl.BiometricServiceImpl">
+		<beans:property name="biometricDAO" ref="biometricDAO"></beans:property>
+	</beans:bean>
+		
+	<context:component-scan base-package="com.siddhrans.biometric" />
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 	
