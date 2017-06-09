@@ -19,13 +19,13 @@
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
 		in the /WEB-INF/views directory -->
-	<beans:bean
+	<!-- <beans:bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
-	</beans:bean>
+	</beans:bean> -->
 
-	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+	<!-- <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<beans:property name="url"
@@ -33,9 +33,9 @@
 		<beans:property name="username" value="root" />
 		<beans:property name="password" value="admin" />
 	</beans:bean> 
-
+ -->
 	<!-- Hibernate 4 SessionFactory Bean definition -->
- 	<beans:bean id="hibernate4AnnotatedSessionFactory"
+ 	<!-- <beans:bean id="hibernate4AnnotatedSessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<beans:property name="dataSource" ref="dataSource" />
 		<beans:property name="annotatedClasses">
@@ -54,7 +54,7 @@
 			</beans:props>
 		</beans:property>
 	</beans:bean> 
-	
+	 -->
 	<!-- <beans:bean id="driverDAO" class="com.siddhrans.biometric.dao.impl.DriverDAOImpl">
 		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
@@ -72,10 +72,10 @@
 		
 	<context:component-scan base-package="com.siddhrans.biometric" />
 	
-	<tx:annotation-driven transaction-manager="transactionManager"/>
+	<!-- <tx:annotation-driven transaction-manager="transactionManager"/> -->
 	
-	<beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	<!-- <beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
-
+ -->
 </beans:beans>
