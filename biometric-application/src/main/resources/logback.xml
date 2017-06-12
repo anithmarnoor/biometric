@@ -1,50 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="debug" strict="true" name="XMLConfigTest"
-               packages="org.apache.logging.log4j.test">
-  <Properties>
-    <Property name="filename">target/test.log</Property>
-  </Properties>
-  <Filter type="ThresholdFilter" level="trace"/>
- 
-  <Appenders>
-    <Appender type="Console" name="STDOUT">
-      <Layout type="PatternLayout" pattern="%m MDC%X%n"/>
-      <Filters>
-        <Filter type="MarkerFilter" marker="FLOW" onMatch="DENY" onMismatch="NEUTRAL"/>
-        <Filter type="MarkerFilter" marker="EXCEPTION" onMatch="DENY" onMismatch="ACCEPT"/>
-      </Filters>
-    </Appender>
-    <Appender type="Console" name="FLOW">
-      <Layout type="PatternLayout" pattern="%C{1}.%M %m %ex%n"/><!-- class and line number -->
-      <Filters>
-        <Filter type="MarkerFilter" marker="FLOW" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
-        <Filter type="MarkerFilter" marker="EXCEPTION" onMatch="ACCEPT" onMismatch="DENY"/>
-      </Filters>
-    </Appender>
-    <Appender type="File" name="File" fileName="${filename}">
-      <Layout type="PatternLayout">
-        <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
-      </Layout>
-    </Appender>
-    <Appender type="List" name="List">
-    </Appender>
-  </Appenders>
- 
-  <Loggers>
-    <Logger name="org.apache.logging.log4j.test1" level="debug" additivity="false">
-      <Filter type="ThreadContextMapFilter">
-        <KeyValuePair key="test" value="123"/>
-      </Filter>
-      <AppenderRef ref="STDOUT"/>
-    </Logger>
- 
-    <Logger name="org.apache.logging.log4j.test2" level="debug" additivity="false">
-      <AppenderRef ref="File"/>
-    </Logger>
- 
-    <Root level="trace">
-      <AppenderRef ref="List"/>
-    </Root>
-  </Loggers>
- 
-</Configuration>
+    <configuration>
+    	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+    		<encoder>
+    			<Pattern>.%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n
+    			</Pattern>
+    		</encoder>
+    		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+    			<level>TRACE</level>
+    		</filter>
+    	</appender>
+
+      	<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    		<File>c:/anith/rest-demo.log</File>
+    		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+    		    <!-- daily rollover -->
+    			<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
+
+    			<!-- keep 30 days' worth of history -->
+    			<maxHistory>30</maxHistory>			
+    		</rollingPolicy>
+
+    		<encoder>
+    			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
+    		</encoder> 	    
+      	</appender>
+      	<appender name="minuteRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+    		    <!-- rollover every minute -->
+    			<FileNamePattern>c:/anith/minutes/rest-demo-minute.%d{yyyy-MM-dd_HH-mm}.log</FileNamePattern>
+
+    			<!-- keep 30 minutes' worth of history -->
+    			<maxHistory>30</maxHistory>			
+    		</rollingPolicy>
+
+    		<encoder>
+    			<Pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</Pattern>
+    		</encoder> 	    
+      	</appender>  	
+
+    	<logger name="com.siddhrans.biometric" additivity="false">
+    	    <level value="DEBUG" />
+    		<appender-ref ref="dailyRollingFileAppender"/>
+    		<appender-ref ref="minuteRollingFileAppender"/>
+    		<appender-ref ref="consoleAppender" />
+    	</logger>
+
+    	<root>
+    		<level value="INFO" />
+    		<appender-ref ref="consoleAppender" />
+    	</root>
+    </configuration>
