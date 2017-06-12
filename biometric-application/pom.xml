@@ -73,6 +73,12 @@
 			<artifactId>spring-security-taglibs</artifactId>
 			<version>${springsecurity.version}</version>
 		</dependency>
+		<!-- JODA Time -->
+		<dependency>
+    <groupId>joda-time</groupId>
+    <artifactId>joda-time</artifactId>
+    <version>2.2</version>
+</dependency>
 
 		<!-- Apache Commons DBCP -->
 		<dependency>

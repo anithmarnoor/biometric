@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal; 
+import javax.persistence.TemporalType;
  
 import org.hibernate.validator.constraints.NotEmpty;
  
@@ -25,8 +27,8 @@ public class User implements Serializable{
     private Integer id;
  
     @NotEmpty
-    @Column(name="SSO_ID", unique=true, nullable=false)
-    private String ssoId;
+    @Column(name="USER_NAME", unique=true, nullable=false)
+    private String userName;
      
     @NotEmpty
     @Column(name="PASSWORD", nullable=false)
@@ -37,15 +39,85 @@ public class User implements Serializable{
     private String firstName;
  
     @NotEmpty
-    @Column(name="LAST_NAME", nullable=false)
+    @Column(name="LAST_NAME", nullable=true)
     private String lastName;
  
     @NotEmpty
-    @Column(name="EMAIL", nullable=false)
+    @Column(name="EMAIL", nullable=true)
     private String email;
- 
+    
     @NotEmpty
-    @ManyToMany(fetch = FetchType.LAZY)
+    @Column(name="DL_NO", nullable=false)
+    private String dlNo;
+    
+    @NotEmpty
+    @Column(name="DOB", nullable=false)
+    private String dob;
+    
+    @NotEmpty
+    @Column(name="GENDER", nullable=false)
+    private String gender;
+    
+    @NotEmpty
+    @Column(name="DOJ", nullable=false)
+    private String doj;
+    
+    @NotEmpty
+    @Column(name="ADDRESS", nullable=false)
+    private String address;
+       
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+
+
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
+	public String getDoj() {
+		return doj;
+	}
+
+	public void setDoj(String doj) {
+		this.doj = doj;
+	}
+
+	public String getDlNo() {
+		return dlNo;
+	}
+
+	public void setDlNo(String dlNo) {
+		this.dlNo = dlNo;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	@NotEmpty
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "APP_USER_USER_PROFILE", 
              joinColumns = { @JoinColumn(name = "USER_ID") }, 
              inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
@@ -57,14 +129,6 @@ public class User implements Serializable{
  
     public void setId(Integer id) {
         this.id = id;
-    }
- 
-    public String getSsoId() {
-        return ssoId;
-    }
- 
-    public void setSsoId(String ssoId) {
-        this.ssoId = ssoId;
     }
  
     public String getPassword() {
@@ -112,7 +176,7 @@ public class User implements Serializable{
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((ssoId == null) ? 0 : ssoId.hashCode());
+        result = prime * result + ((userName == null) ? 0 : userName.hashCode());
         return result;
     }
  
@@ -130,10 +194,10 @@ public class User implements Serializable{
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (ssoId == null) {
-            if (other.ssoId != null)
+        if (userName == null) {
+            if (other.userName != null)
                 return false;
-        } else if (!ssoId.equals(other.ssoId))
+        } else if (!userName.equals(other.userName))
             return false;
         return true;
     }
@@ -144,11 +208,8 @@ public class User implements Serializable{
      */
     @Override
     public String toString() {
-        return "User [id=" + id + ", ssoId=" + ssoId + ", password=" + password
+        return "User [id=" + id + ", userName=" + userName + ", password=" + password
                 + ", firstName=" + firstName + ", lastName=" + lastName
                 + ", email=" + email + "]";
     }
- 
- 
-     
 }
