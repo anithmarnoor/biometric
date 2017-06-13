@@ -225,8 +225,9 @@ td {
 					</div>
 				</div>
 			</div>
-			<sec:authorize access="hasRole('ADMIN') ">
-				<div class="row">
+
+			<div class="row">
+				<sec:authorize access="hasRole('ADMIN') ">
 					<div class="form-group col-md-12">
 						<label class="col-md-3 control-lable" for="userProfiles">Roles</label>
 						<div class="col-md-7">
@@ -238,8 +239,9 @@ td {
 							</div>
 						</div>
 					</div>
-				</div>
-			</sec:authorize>
+				</sec:authorize>
+			</div>
+
 			<div class="row">
 				<div class="form-actions floatRight">
 					<c:choose>
