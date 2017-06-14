@@ -11,6 +11,7 @@ import java.util.Set;
 
 
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -20,6 +21,9 @@ import javax.validation.Valid;
 
 
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
@@ -37,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.siddhrans.biometric.dao.impl.HibernateTokenRepositoryImpl;
 import com.siddhrans.biometric.model.User;
 import com.siddhrans.biometric.model.UserProfile;
 import com.siddhrans.biometric.service.UserProfileService;
@@ -48,6 +53,8 @@ import com.siddhrans.biometric.service.UserService;
 @RequestMapping("/")
 @SessionAttributes("roles")
 public class AppController {
+	
+	static final Logger logger = LoggerFactory.getLogger(HibernateTokenRepositoryImpl.class);
 
 	@Autowired
 	UserService userService;
@@ -132,7 +139,7 @@ public class AppController {
 		 * 
 		 */
 		if(!userService.isUserNameUnique(user.getId(), user.getUserName())){
-			FieldError userNameError =new FieldError("user","username",messageSource.getMessage("non.unique.userName", new String[]{user.getUserName()}, Locale.getDefault()));
+			FieldError userNameError =new FieldError("user","userName",messageSource.getMessage("non.unique.userName", new String[]{user.getUserName()}, Locale.getDefault()));
 			result.addError(userNameError);
 			return "registration";
 		}
@@ -166,6 +173,8 @@ public class AppController {
 	public String updateUser(@Valid User user, BindingResult result,
 			ModelMap model, @PathVariable String userName) {
 
+		
+		logger.debug("Anith New Error in edit is "+result.toString()+" \n\n Error message END");
 		if (result.hasErrors()) {
 			return "registration";
 		}

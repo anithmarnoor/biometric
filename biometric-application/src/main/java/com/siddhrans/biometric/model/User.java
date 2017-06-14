@@ -82,8 +82,6 @@ public class User implements Serializable{
 		this.gender = gender;
 	}
 
-
-
 	public String getDob() {
 		return dob;
 	}

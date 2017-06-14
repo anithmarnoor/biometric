@@ -12,11 +12,9 @@
 <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
 <link href="<c:url value='/static/js/*' />" rel="stylesheet"></link>
 
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<link rel="stylesheet" href="/resources/demos/style.css">
+     <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">  
+      <script src="http://code.jquery.com/jquery-1.10.2.js"></script>  
+      <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>  
 
 <title>Spring MVC</title>
 <style type="text/css">
@@ -88,23 +86,24 @@ td {
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="gender">Gender</label>
 					<div class="col-md-7">
-						<c:choose>
+					<%-- 	<c:choose>
 							<c:when test="${edit}">
 								<form:radiobutton path="gender" id="gender" value="Male"
 									disabled="true" label="Male" />
 								<form:radiobutton path="gender" id="gender" value="Female"
 									disabled="true" label="Female" />
 							</c:when>
-							<c:otherwise>
+							<c:otherwise> --%>
 								<form:radiobutton path="gender" id="gender" value="Male"
 									label="Male" />
 								<form:radiobutton path="gender" id="gender" value="Female"
 									label="Female" />
-							</c:otherwise>
-						</c:choose>
-						<div class="has-error">
-							<form:errors path="gender" class="help-inline" />
-						</div>
+								<div class="has-error">
+									<form:errors path="gender" class="help-inline" />
+								</div>
+							<%-- </c:otherwise>
+						</c:choose> --%>
+
 					</div>
 				</div>
 			</div>
@@ -140,18 +139,19 @@ td {
 					<label class="col-md-3 control-lable" for="doj">Date Of
 						Joining</label>
 					<div class="col-md-7">
-						<c:choose>
+						<%-- <c:choose>
 							<c:when test="${edit}">
 								<form:input path="doj" id="doj" class="form-control input-sm"
 									disabled="true" />
 							</c:when>
-							<c:otherwise>
+							<c:otherwise> --%>
 								<form:input path="doj" id="doj" class="form-control input-sm" />
-							</c:otherwise>
+								<div class="has-error">
+									<form:errors path="doj" class="help-inline" />
+								</div>
+							<%-- </c:otherwise>
 						</c:choose>
-						<div class="has-error">
-							<form:errors path="doj" class="help-inline" />
-						</div>
+ --%>
 					</div>
 				</div>
 			</div>
@@ -196,19 +196,20 @@ td {
 					<label class="col-md-3 control-lable" for="password">Driving
 						License Number</label>
 					<div class="col-md-7">
-						<c:choose>
+						<%-- <c:choose>
 							<c:when test="${edit}">
 								<form:input type="dlNo" path="dlNo" id="dlNo"
 									class="form-control input-sm" disabled="true" />
 							</c:when>
-							<c:otherwise>
+							<c:otherwise> --%>
 								<form:input type="dlNo" path="dlNo" id="dlNo"
 									class="form-control input-sm" />
-							</c:otherwise>
+								<div class="has-error">
+									<form:errors path="dlNo" class="help-inline" />
+								</div>
+							<%-- </c:otherwise>
 						</c:choose>
-						<div class="has-error">
-							<form:errors path="dlNo" class="help-inline" />
-						</div>
+ --%>
 					</div>
 				</div>
 			</div>
