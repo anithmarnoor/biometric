@@ -11,8 +11,9 @@
     <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
 </head>
 <body>
+<%@include file="authheader.jsp" %>
     <div class="generic-container">
-        <%@include file="authheader.jsp" %>
+        
          
         <div class="alert alert-success lead">
             ${success}

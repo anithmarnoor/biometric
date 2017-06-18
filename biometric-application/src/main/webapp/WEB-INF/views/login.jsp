@@ -11,6 +11,7 @@
     </head>
  
     <body>
+    <%@include file="authheader.jsp"%>
         <div id="mainWrapper">
             <div class="login-container">
                 <div class="login-card">

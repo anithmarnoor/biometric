@@ -7,48 +7,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>User Registration Form</title>
+
 <link href="<c:url value='/static/css/bootstrap.css' />"
 	rel="stylesheet"></link>
 <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
-<link href="<c:url value='/static/js/*' />" rel="stylesheet"></link>
 
-     <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">  
-      <script src="http://code.jquery.com/jquery-1.10.2.js"></script>  
-      <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>  
+<link
+	href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+	rel="stylesheet">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src='<c:url value='/static/jQuery/jQuery.js'/>'></script>
 
 <title>Spring MVC</title>
-<style type="text/css">
-span.label {
-	display: inline-block;
-	width: 100px;
-	text-align: right;
-	margin-right: 6px;
-}
-
-td {
-	margin: 4px;
-}
-
-.field {
-	width: 250px;
-}
-</style>
-
-
-<script>
-	$(function() {
-		$("#dob").datepicker();
-	});
-
-	$(function() {
-		$("#doj").datepicker();
-	});
-</script>
 </head>
 
 <body>
+	<%@include file="authheader.jsp"%>
 	<div class="generic-container">
-		<%@include file="authheader.jsp"%>
+		
 
 		<div class="well lead">Registration Form</div>
 		<form:form method="POST" modelAttribute="user" class="form-horizontal">
@@ -86,7 +63,7 @@ td {
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="gender">Gender</label>
 					<div class="col-md-7">
-					<%-- 	<c:choose>
+						<%-- 	<c:choose>
 							<c:when test="${edit}">
 								<form:radiobutton path="gender" id="gender" value="Male"
 									disabled="true" label="Male" />
@@ -94,14 +71,14 @@ td {
 									disabled="true" label="Female" />
 							</c:when>
 							<c:otherwise> --%>
-								<form:radiobutton path="gender" id="gender" value="Male"
-									label="Male" />
-								<form:radiobutton path="gender" id="gender" value="Female"
-									label="Female" />
-								<div class="has-error">
-									<form:errors path="gender" class="help-inline" />
-								</div>
-							<%-- </c:otherwise>
+						<form:radiobutton path="gender" id="gender" value="Male"
+							label="Male" />
+						<form:radiobutton path="gender" id="gender" value="Female"
+							label="Female" />
+						<div class="has-error">
+							<form:errors path="gender" class="help-inline" />
+						</div>
+						<%-- </c:otherwise>
 						</c:choose> --%>
 
 					</div>
@@ -145,11 +122,11 @@ td {
 									disabled="true" />
 							</c:when>
 							<c:otherwise> --%>
-								<form:input path="doj" id="doj" class="form-control input-sm" />
-								<div class="has-error">
-									<form:errors path="doj" class="help-inline" />
-								</div>
-							<%-- </c:otherwise>
+						<form:input path="doj" id="doj" class="form-control input-sm" />
+						<div class="has-error">
+							<form:errors path="doj" class="help-inline" />
+						</div>
+						<%-- </c:otherwise>
 						</c:choose>
  --%>
 					</div>
@@ -191,28 +168,7 @@ td {
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="form-group col-md-12">
-					<label class="col-md-3 control-lable" for="password">Driving
-						License Number</label>
-					<div class="col-md-7">
-						<%-- <c:choose>
-							<c:when test="${edit}">
-								<form:input type="dlNo" path="dlNo" id="dlNo"
-									class="form-control input-sm" disabled="true" />
-							</c:when>
-							<c:otherwise> --%>
-								<form:input type="dlNo" path="dlNo" id="dlNo"
-									class="form-control input-sm" />
-								<div class="has-error">
-									<form:errors path="dlNo" class="help-inline" />
-								</div>
-							<%-- </c:otherwise>
-						</c:choose>
- --%>
-					</div>
-				</div>
-			</div>
+
 
 			<div class="row">
 				<div class="form-group col-md-12">
@@ -234,13 +190,38 @@ td {
 						<div class="col-md-7">
 							<form:select path="userProfiles" items="${roles}"
 								multiple="false" itemValue="id" itemLabel="type"
-								class="form-control input-sm" />
+								class="form-control input-sm" id="roles" />
 							<div class="has-error">
 								<form:errors path="userProfiles" class="help-inline" />
 							</div>
 						</div>
 					</div>
 				</sec:authorize>
+			</div>
+
+			<div class="row">
+				<div class="is2">
+					<div class="form-group col-md-12">
+						<label class="col-md-3 control-lable" for="password">Driving
+							License Number</label>
+						<div class="col-md-7">
+							<%-- <c:choose>
+							<c:when test="${edit}">
+								<form:input type="dlNo" path="dlNo" id="dlNo"
+									class="form-control input-sm" disabled="true" />
+							</c:when>
+							<c:otherwise> --%>
+							<form:input type="dlNo" path="dlNo" id="dlNo"
+								class="form-control input-sm" />
+							<div class="has-error">
+								<form:errors path="dlNo" class="help-inline" />
+							</div>
+							<%-- </c:otherwise>
+						</c:choose>
+ --%>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="row">

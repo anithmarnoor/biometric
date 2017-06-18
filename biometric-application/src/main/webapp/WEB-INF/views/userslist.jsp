@@ -14,19 +14,19 @@
 </head>
 
 <body>
+<%@include file="authheader.jsp"%>
 	<div class="generic-container">
-		<%@include file="authheader.jsp"%>
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
 			<div class="panel-heading">
 				<sec:authorize access="hasRole('ADMIN') ">
-					<span class="lead">List of Drivers </span>
+					<span class="lead">Drivers </span>
 				</sec:authorize>
 				<sec:authorize access="hasRole('USER')">
 					<span class="lead">Your Profile</span>
 				</sec:authorize>
 			</div>
-			<table class="table table-hover">
+			<table>
 				<thead>
 					<tr>
 						<sec:authorize access="hasRole('ADMIN')">
@@ -102,9 +102,9 @@
 			</br>
 			</br>
 				<div class="panel-heading">
-					<span class="lead">List Of Admins</span>
+					<span class="lead">Admins</span>
 				</div>
-				<table class="table table-hover">
+				<table >
 					<thead>
 						<tr>
 							<th>Name</th>

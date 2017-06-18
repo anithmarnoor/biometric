@@ -1,86 +1,200 @@
-html{
-	background-color:#2F2F2F;
-}
-
-body{
+body {
 	height: 100%;
-	background-color:rgb(245, 245, 245);
+	background: rgb(16, 128, 171);
 }
 
+span.label {
+	display: inline-block;
+	width: 100px;
+	text-align: right;
+	margin-right: 6px;
+}
+
+h2 {
+	font-size: 30px;
+	font-family: 'impact', sans-serif;
+}
+
+td {
+	margin: 4px;
+}
+
+.field {
+	width: 250px;
+}
+
+.hidden {
+	display: none;
+}
 
 #mainWrapper {
 	height: 100%;
-	background-image: -webkit-gradient(
-	linear,
-	right bottom,
-	right top,
-	color-stop(0, #EDEDED),
-	color-stop(0.08, #EAEAEA),
-	color-stop(1, #2F2F2F),
-	color-stop(1, #AAAAAA)
-);
-background-image: -o-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
-background-image: -moz-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
-background-image: -webkit-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
-background-image: -ms-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
-background-image: linear-gradient(to top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+	background-image: -webkit-gradient(linear, right bottom, right top, color-stop(0, #EDEDED),
+		color-stop(0.08, #EAEAEA), color-stop(1, #2F2F2F),
+		color-stop(1, #AAAAAA));
+	background-image: -o-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA
+		100%);
+	background-image: -moz-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA
+		100%);
+	background-image: -webkit-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%,
+		#AAAAAA 100%);
+	background-image: -ms-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA
+		100%);
+	background-image: linear-gradient(to top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA
+		100%);
 }
 
-.floatRight{
-	float:right;
+.floatRight {
+	float: right;
 	margin-right: 18px;
 }
 
-.has-error{
-	color:red;
+.has-error {
+	color: red;
 }
 
 .generic-container {
-  position:fixed;
-  width:80%;
-  margin-left: 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 20px;
-  background-color: #EAE7E7;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 0 30px black;
+	position: relative;
+	width: 90%;
+	margin-left: 20px;
+	margin-top: 80px;
+	margin-bottom: 20px;
+	margin-left: 50px;
+	padding: 20px;
+	background-color: #EAE7E7;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-shadow: 0 0 30px black;
 }
 
 .custom-width {
-    width: 80px !important;
+	width: 80px !important;
 }
 
-body, #mainWrapper, .form-control{
-	font-size:12px!important;
+body,#mainWrapper,.form-control {
+	font-size: 12px !important;
 }
 
 #mainWrapper {
 	/*height: 720px; Without explicit px values, % in children's does not work*/
-	height: 100vh; /*with Viewport-Percentage, we can handles all devices screens  */
-	padding-left:10px;
-	padding-right:10px;
-	padding-bottom:10px;
+	height: 100vh;
+	/*with Viewport-Percentage, we can handles all devices screens  */
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
 }
 
 .login-container {
-    margin-top: 100px;
-    background-color: floralwhite;
-    width: 40%;
-    left: 30%;
-    position: absolute;
+	margin-top: 100px;
+	background-color: floralwhite;
+	width: 40%;
+	left: 30%;
+	position: absolute;
 }
 
 .login-card {
-    width: 80%;
-    margin: auto;
+	width: 80%;
+	margin: auto;
 }
 
 .login-form {
-    padding: 10%;
+	padding: 10%;
 }
 
-.authbar{
-	margin-bottom:15px;
+.authbar {
+	float: right;
+	margin-right: 10%;
+	margin-top: 0%;
+}
+
+.application-name {
+	margin-left: 30%;
+	word-wrap: break-word;
+	margin-top: 0%;
+	rgba
+	(0,
+	194,
+	255,
+	0.72);
+}
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media only screen and (max-width: 760px) , ( min-device-width : 768px)
+	and (max-device-width: 1024px) {
+	/* Force table to not be like tables anymore */
+	table,thead,tbody,th,td,tr {
+		display: block;
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	tr {
+		border: 1px solid #ccc;
+	}
+	td {
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		padding-left: 50%;
+	}
+	td:before {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: nowrap;
+	}
+	tr:nth-of-type(odd) {
+		background: #eee;
+	}
+	th {
+		background: #333;
+		color: white;
+		font-weight: bold;
+	}
+	/*
+	Label the data
+	*/
+	td:nth-of-type(1):before {
+		content: "Name";
+	}
+	td:nth-of-type(2):before {
+		content: "Email Id";
+	}
+	td:nth-of-type(3):before {
+		content: "Username";
+	}
+	td:nth-of-type(4):before {
+		content: "UserId";
+	}
+	td:nth-of-type(5):before {
+		content: "DL No.";
+	}
+	td:nth-of-type(6):before {
+		content: "Birth Date";
+	}
+	td:nth-of-type(7):before {
+		content: "Address";
+	}
+	td:nth-of-type(8):before {
+		content: "Joining Date";
+	}
+	td:nth-of-type(9):before {
+		content: "";
+	}
+	td:nth-of-type(10):before {
+		content: "";
+	}
 }

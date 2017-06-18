@@ -6,7 +6,7 @@
 	<artifactId>biometric-application</artifactId>
 	<packaging>war</packaging>
 	<version>1.0.0</version>
-	<name>BMS</name>
+	<name>DAPS</name>
 
 	<properties>
 		<springframework.version>4.2.5.RELEASE</springframework.version>
@@ -182,7 +182,7 @@
 				<version>2.4</version>
 				<configuration>
 					<warSourceDirectory>src/main/webapp</warSourceDirectory>
-					<warName>BMS</warName>
+					<warName>DAPS</warName>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
@@ -193,7 +193,7 @@
 				<configuration>
 					<url>http://localhost:8081/manager/text</url>
 					<server>TomcatServer</server>
-					<path>/biometricApp</path>
+					<path>/DAPS</path>
 				</configuration>
 			</plugin>
 			<plugin>
