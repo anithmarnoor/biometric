@@ -31,6 +31,18 @@ public class UserServiceImpl implements UserService{
         User user = dao.findByUserName(userName);
         return user;
     }
+    
+	@Override
+	public User findByPhoneNo(String phoneNo) {
+		 User user = dao.findByPhoneNo(phoneNo);
+	        return user;
+	}
+
+	@Override
+	public User findByDlNo(String dlNo) {
+		 User user = dao.findByDlNo(dlNo);
+	        return user;
+	}
  
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -73,5 +85,14 @@ public class UserServiceImpl implements UserService{
         User user = findByUserName(userName);
         return ( user == null || ((id != null) && (user.getId() == id)));
     }
-     
+    
+    public boolean isPhoneNoUnique(Integer id, String phoneNo) {
+        User user = findByPhoneNo(phoneNo);
+        return ( user == null || ((id != null) && (user.getId() == id)));
+    }
+    
+    public boolean isDlNoUnique(Integer id, String dlNo) {
+        User user = findByDlNo(dlNo);
+        return ( user == null || ((id != null) && (user.getId() == id)));
+    }     
 }

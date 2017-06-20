@@ -47,7 +47,11 @@ public class User implements Serializable{
     private String email;
     
     @NotEmpty
-    @Column(name="DL_NO", nullable=false)
+    @Column(name="PHONE", unique=true, nullable=true)
+    private String phoneNo;
+    
+    @NotEmpty
+    @Column(name="DL_NO", unique=true, nullable=false)
     private String dlNo;
     
     @NotEmpty
@@ -128,8 +132,16 @@ public class User implements Serializable{
     public void setId(Integer id) {
         this.id = id;
     }
- 
-    public String getPassword() {
+    
+    public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
+	}
+
+	public String getPassword() {
         return password;
     }
  

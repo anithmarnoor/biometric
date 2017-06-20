@@ -25,7 +25,7 @@
 <body>
 	<%@include file="authheader.jsp"%>
 	<div class="generic-container">
-		
+
 
 		<div class="well lead">Registration Form</div>
 		<form:form method="POST" modelAttribute="user" class="form-horizontal">
@@ -178,6 +178,19 @@
 							class="form-control input-sm" />
 						<div class="has-error">
 							<form:errors path="email" class="help-inline" />
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="form-group col-md-12">
+					<label class="col-md-3 control-lable" for="phoneNo">Phone No</label>
+					<div class="col-md-7">
+						<form:input type="text" path="phoneNo" id="phoneNo"
+							class="form-control input-sm" />
+						<div class="has-error">
+							<form:errors path="phoneNo" class="help-inline" />
 						</div>
 					</div>
 				</div>

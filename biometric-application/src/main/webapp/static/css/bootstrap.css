@@ -183,6 +183,8 @@ optgroup {
 table {
   border-spacing: 0;
   border-collapse: collapse;
+  width:100%;
+  margin:5px;
 }
 td,
 th {
@@ -1077,7 +1079,6 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
-  color: #333;
   background-color: #fff;
 }
 input,
@@ -2292,6 +2293,8 @@ th {
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td {
   border: 1px solid #ddd;
+  word-wrap: break-word;
+  min-width: 50px;
 }
 .table-bordered > thead > tr > th,
 .table-bordered > thead > tr > td {
@@ -3365,7 +3368,7 @@ input[type="button"].btn-block {
 }
 .collapse {
   display: none;
-  visibility: hidden;
+  /* visibility: hidden; */
 }
 .collapse.in {
   display: block;

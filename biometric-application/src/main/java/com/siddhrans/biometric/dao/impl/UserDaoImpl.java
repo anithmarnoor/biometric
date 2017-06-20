@@ -65,5 +65,34 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
         User user = (User)crit.uniqueResult();
         delete(user);
     }
+
+	@Override
+	public User findByPhoneNo(String phoneNo) {
+		// TODO Auto-generated method stub
+        logger.info("PhoneNo : {}", phoneNo);
+        Criteria crit = createEntityCriteria();
+        crit.add(Restrictions.eq("phoneNo", phoneNo));
+        User user = (User)crit.uniqueResult();
+        if(user!=null){
+        	logger.info("user Found for Phone Number criteria : {}", user.getId());
+            Hibernate.initialize(user.getUserProfiles());
+        }
+        return user;
+	}
+
+	@Override
+	public User findByDlNo(String dlNo) {
+		// TODO Auto-generated method stub
+        logger.info("dlNo : {}", dlNo);
+        Criteria crit = createEntityCriteria();
+        crit.add(Restrictions.eq("dlNo", dlNo));
+        User user = (User)crit.uniqueResult();
+        
+        if(user!=null){
+        	logger.info("user Found for DL No criteria : {}", user.getId());
+            Hibernate.initialize(user.getUserProfiles());
+        }
+        return user;
+	}
  
 }

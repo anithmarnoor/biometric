@@ -75,7 +75,7 @@ public class AppController {
 	/**
 	 * This method will list all existing users.
 	 */
-	@RequestMapping(value = { "/", "/list" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/list" }, method = RequestMethod.GET)
 	public String listUsers(ModelMap model) {
 
 		List<User> users = userService.findAllUsers();
@@ -104,6 +104,19 @@ public class AppController {
 		model.addAttribute("adminUsers", adminUsers);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "userslist";
+	}
+	
+	/**
+	 * This method will list all existing users.
+	 */
+	@RequestMapping(value = { "/", "/myProfile" }, method = RequestMethod.GET)
+	public String myProfile(ModelMap model) {
+
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "myProfile";
 	}
 
 	/**
@@ -143,7 +156,19 @@ public class AppController {
 			result.addError(userNameError);
 			return "registration";
 		}
-
+		
+		if(!userService.isPhoneNoUnique(user.getId(), user.getPhoneNo())){
+			
+			FieldError phoneNoError =new FieldError("user","phoneNo",messageSource.getMessage("non.unique.phoneNo", new String[]{user.getPhoneNo()}, Locale.getDefault()));
+			result.addError(phoneNoError);
+			return "registration";
+		}
+		
+		if(!userService.isDlNoUnique(user.getId(), user.getDlNo())){
+			FieldError dlNoError =new FieldError("user","dlNo",messageSource.getMessage("non.unique.dlNo", new String[]{user.getDlNo()}, Locale.getDefault()));
+			result.addError(dlNoError);
+			return "registration";
+		}
 		userService.saveUser(user);
 
 		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " registered successfully");
@@ -232,7 +257,7 @@ public class AppController {
 		if (isCurrentAuthenticationAnonymous()) {
 			return "login";
 		} else {
-			return "redirect:/list";  
+			return "redirect:/myProfile";  
 		}
 	}
 
