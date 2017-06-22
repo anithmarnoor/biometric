@@ -2281,7 +2281,7 @@ th {
 .table-condensed > thead > tr > td,
 .table-condensed > tbody > tr > td,
 .table-condensed > tfoot > tr > td {
-  padding: 5px;
+  padding: 10px;
 }
 .table-bordered {
   border: 1px solid #ddd;
@@ -2294,7 +2294,7 @@ th {
 .table-bordered > tfoot > tr > td {
   border: 1px solid #ddd;
   word-wrap: break-word;
-  min-width: 50px;
+  
 }
 .table-bordered > thead > tr > th,
 .table-bordered > thead > tr > td {

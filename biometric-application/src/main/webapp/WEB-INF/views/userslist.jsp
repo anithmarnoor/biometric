@@ -90,10 +90,10 @@
 					</table>
 				</div>
 				<sec:authorize access="hasRole('ADMIN')">
-					</br>
-					</br>
+					<br>
+					<br>
 					<div class="panel-heading">
-						<span class="lead">Admins</span>
+						<span class="lead">Administrators</span>
 					</div>
 					<div id="no-more-tables">
 						<table

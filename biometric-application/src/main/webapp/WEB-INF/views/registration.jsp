@@ -7,18 +7,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>User Registration Form</title>
-
-<link href="<c:url value='/static/css/bootstrap.css' />"
-	rel="stylesheet"></link>
-<link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
-
-<link
-	href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
-	rel="stylesheet">
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<script src='<c:url value='/static/jQuery/jQuery.js'/>'></script>
-
+<script src='<c:url value='/static/jQuery/bootstrap.min.js'/>'></script>
 <title>Spring MVC</title>
 </head>
 
@@ -182,10 +173,11 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="row">
 				<div class="form-group col-md-12">
-					<label class="col-md-3 control-lable" for="phoneNo">Phone No</label>
+					<label class="col-md-3 control-lable" for="phoneNo">Phone
+						No</label>
 					<div class="col-md-7">
 						<form:input type="text" path="phoneNo" id="phoneNo"
 							class="form-control input-sm" />
@@ -197,19 +189,35 @@
 			</div>
 
 			<div class="row">
-				<sec:authorize access="hasRole('ADMIN') ">
-					<div class="form-group col-md-12">
-						<label class="col-md-3 control-lable" for="userProfiles">Roles</label>
-						<div class="col-md-7">
-							<form:select path="userProfiles" items="${roles}"
-								multiple="false" itemValue="id" itemLabel="type"
-								class="form-control input-sm" id="roles" />
-							<div class="has-error">
-								<form:errors path="userProfiles" class="help-inline" />
+				<c:choose>
+					<c:when test="${roleChange}">
+						<div class="form-group col-md-12">
+							<label class="col-md-3 control-lable" for="userProfiles">Roles</label>
+							<div class="col-md-7">
+								<form:select path="userProfiles" items="${roles}"
+									multiple="false" itemValue="id" itemLabel="type"
+									class="form-control input-sm" id="roles" />
+								<div class="has-error">
+									<form:errors path="userProfiles" class="help-inline" />
+								</div>
 							</div>
 						</div>
-					</div>
-				</sec:authorize>
+					</c:when>
+					<c:otherwise>
+						<div class="form-group col-md-12">
+							<label class="col-md-3 control-lable" for="userProfiles">Roles</label>
+							<div class="col-md-7">
+								<form:select path="userProfiles" items="${roles}"
+									multiple="false" itemValue="id" itemLabel="type"
+									class="form-control input-sm" id="roles" />
+								<div class="has-error">
+									<form:errors path="userProfiles" class="help-inline" />
+								</div>
+							</div>
+						</div>
+					</c:otherwise>
+				</c:choose>
+
 			</div>
 
 			<div class="row">

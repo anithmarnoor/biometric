@@ -13,7 +13,7 @@
 
 <body>
 	<%@include file="authheader.jsp"%>
-	<%@include file="menu.jsp"%>
+	
 	<div class="generic-container">
 		<div class="row">
 			<div class="panel panel-default">

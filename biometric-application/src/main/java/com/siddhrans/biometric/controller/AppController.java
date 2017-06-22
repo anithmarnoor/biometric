@@ -127,6 +127,7 @@ public class AppController {
 		User user = new User();
 		model.addAttribute("user", user);
 		model.addAttribute("edit", false);
+		model.addAttribute("roleChange", true);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "registration";
 	}
@@ -140,6 +141,10 @@ public class AppController {
 			ModelMap model) {
 
 		if (result.hasErrors()) {
+			model.addAttribute("user", user);
+			model.addAttribute("edit", false);
+			model.addAttribute("roleChange", true);
+			model.addAttribute("loggedinuser", getPrincipal());
 			return "registration";
 		}
 
@@ -186,6 +191,7 @@ public class AppController {
 		User user = userService.findByUserName(userName);
 		model.addAttribute("user", user);
 		model.addAttribute("edit", true);
+		model.addAttribute("roleChange", false);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "registration";
 	}
@@ -201,6 +207,10 @@ public class AppController {
 		
 		logger.debug("Anith New Error in edit is "+result.toString()+" \n\n Error message END");
 		if (result.hasErrors()) {
+			model.addAttribute("user", user);
+			model.addAttribute("edit", true);
+			model.addAttribute("roleChange", false);
+			model.addAttribute("loggedinuser", getPrincipal());
 			return "registration";
 		}
 
