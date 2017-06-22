@@ -35,6 +35,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +48,7 @@ import com.siddhrans.biometric.model.User;
 import com.siddhrans.biometric.model.UserProfile;
 import com.siddhrans.biometric.service.UserProfileService;
 import com.siddhrans.biometric.service.UserService;
+import com.siddhrans.biometric.validator.FileValidator;
 
 
 
@@ -53,7 +56,7 @@ import com.siddhrans.biometric.service.UserService;
 @RequestMapping("/")
 @SessionAttributes("roles")
 public class AppController {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(HibernateTokenRepositoryImpl.class);
 
 	@Autowired
@@ -71,6 +74,13 @@ public class AppController {
 	@Autowired
 	AuthenticationTrustResolver authenticationTrustResolver;
 
+	@Autowired
+	FileValidator fileValidator;
+
+	@InitBinder("biometricData")
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(fileValidator);
+	}
 
 	/**
 	 * This method will list all existing users.
@@ -105,7 +115,6 @@ public class AppController {
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "userslist";
 	}
-	
 	/**
 	 * This method will list all existing users.
 	 */
@@ -161,14 +170,11 @@ public class AppController {
 			result.addError(userNameError);
 			return "registration";
 		}
-		
 		if(!userService.isPhoneNoUnique(user.getId(), user.getPhoneNo())){
-			
 			FieldError phoneNoError =new FieldError("user","phoneNo",messageSource.getMessage("non.unique.phoneNo", new String[]{user.getPhoneNo()}, Locale.getDefault()));
 			result.addError(phoneNoError);
 			return "registration";
 		}
-		
 		if(!userService.isDlNoUnique(user.getId(), user.getDlNo())){
 			FieldError dlNoError =new FieldError("user","dlNo",messageSource.getMessage("non.unique.dlNo", new String[]{user.getDlNo()}, Locale.getDefault()));
 			result.addError(dlNoError);
@@ -204,7 +210,6 @@ public class AppController {
 	public String updateUser(@Valid User user, BindingResult result,
 			ModelMap model, @PathVariable String userName) {
 
-		
 		logger.debug("Anith New Error in edit is "+result.toString()+" \n\n Error message END");
 		if (result.hasErrors()) {
 			model.addAttribute("user", user);

@@ -33,7 +33,7 @@
 					<label>DL No: </label><label>${profile.dlNo}</label><br>
 					<label>
 						<a href="<c:url value='/edit-user-${profile.userName}' />"
-													class="btn btn-success custom-width">Edit Profile</a>
+													class="btn btn-success custom-width">Edit</a>
 					</label>
 				</div>
 			</div>
