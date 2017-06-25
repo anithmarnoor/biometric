@@ -1,5 +1,6 @@
 package com.siddhrans.biometric.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -26,7 +27,8 @@ public class BiometricDataDaoImpl extends AbstractDao<Integer, BiometricData>  i
 
 	@Override
 	public void save(BiometricData document) {
-		List<BiometricData> dataList = findByMonthAndYear(document.getMonth(), document.getYear());
+		List<BiometricData> dataList = findByStartAndEndDate(document.getStartDate(), document.getEndDate());
+		
 		if(dataList.size() <= 0){
 			persist(document);
 		} else {
@@ -35,10 +37,10 @@ public class BiometricDataDaoImpl extends AbstractDao<Integer, BiometricData>  i
 	}
 	
 	@Override
-	public List<BiometricData> findByMonthAndYear(int month, int year) {
+	public List<BiometricData> findByStartAndEndDate(Date startDate, Date endDate) {
 		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("month", month));
-		crit.add(Restrictions.eq("year", year));
+		crit.add(Restrictions.eq("startDate", startDate));
+		crit.add(Restrictions.eq("endDate", endDate));
 		List<BiometricData> dataList = (List<BiometricData>)crit.list();
 		return dataList;
 	}

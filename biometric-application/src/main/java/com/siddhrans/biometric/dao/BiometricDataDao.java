@@ -1,5 +1,6 @@
 package com.siddhrans.biometric.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.siddhrans.biometric.model.BiometricData;
@@ -10,7 +11,7 @@ public interface BiometricDataDao {
 
 	BiometricData findById(int id);
 	
-	public List<BiometricData> findByMonthAndYear(int month, int year);
+	public List<BiometricData> findByStartAndEndDate(Date startDate, Date endDate);
 
 	void save(BiometricData document);
 

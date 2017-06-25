@@ -77,7 +77,7 @@ public class BiometricDataController {
 		model.addAttribute("biometricData", biometricData);
 		model.addAttribute("edit", false);
 		model.addAttribute("loggedinuser", getPrincipal());
-		return "addBiometricData";
+		return "viewBiometricData";
 	}
 	
 	/**
@@ -88,11 +88,15 @@ public class BiometricDataController {
 	public String saveBiometricData(@Valid BiometricData biometricData, BindingResult result,
 			ModelMap model) throws IOException {
 		if (result.hasErrors()) {
+			List<BiometricData> biometricDataList = biometricDataService.findAll();
+			model.addAttribute("biometricDataList", biometricDataList);
 			model.addAttribute("biometricData", biometricData);
 			model.addAttribute("edit", false);
 			model.addAttribute("loggedinuser", getPrincipal());
-			return "addBiometricData";
+			return "viewBiometricData";
 		}
+		logger.debug("I amhere in controller-->biometricData.getStartDate-->"+biometricData.getStartDate());
+		logger.debug("I amhere in controller-->biometricData.getStartDate-->"+biometricData.getEndDate());
 		MultipartFile multipartFile = biometricData.getFile();
 		
 		biometricData.setName(multipartFile.getOriginalFilename());
@@ -100,7 +104,7 @@ public class BiometricDataController {
 		biometricData.setContent(multipartFile.getBytes());
 		
 		biometricDataService.saveDocument(biometricData);
-		model.addAttribute("success", "Biometric Data saves Successfully..");
+		model.addAttribute("success", "Biometric Data saved Successfully..");
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addBiometricSuccess";
 	}

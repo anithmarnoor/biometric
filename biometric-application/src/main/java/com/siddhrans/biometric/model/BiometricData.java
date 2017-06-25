@@ -2,6 +2,8 @@ package com.siddhrans.biometric.model;
 
 
 import java.io.Serializable;
+import java.util.Date;
+
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -10,13 +12,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
  
@@ -27,11 +26,11 @@ public class BiometricData implements Serializable{
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id; 
      
-    @Column(name="month", length=100, nullable=false)
-    private Integer month;
+    @Column(name="START_DATE", nullable=false)
+    private Date startDate;
      
-    @Column(name="year", length=255)
-    private Integer year;
+    @Column(name="END_DATE", nullable=false)
+    private Date endDate;
      
     @Column(name="type", length=100, nullable=false)
     private String type;
@@ -48,7 +47,23 @@ public class BiometricData implements Serializable{
     MultipartFile file;
     
     
-    public String getName() {
+    public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getName() {
         return name;
     }
  
@@ -88,32 +103,17 @@ public class BiometricData implements Serializable{
         this.content = content;
     }
 
-	public Integer getMonth() {
-		return month;
-	}
 
-	public void setMonth(Integer month) {
-		this.month = month;
-	}
-
-	public Integer getYear() {
-		return year;
-	}
-
-	public void setYear(Integer year) {
-		this.year = year;
-	}
-
-	@Override
+/*	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((month == null) ? 0 : month.hashCode());
+        result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
         return result;
-    }
+    }*/
  
-    @Override
+   /* @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -127,17 +127,22 @@ public class BiometricData implements Serializable{
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (month == null) {
-            if (other.month != null)
+        if (startDate == null) {
+            if (other.startDate != null)
                 return false;
-        } else if (!month.equals(other.month))
+        } else if (!startDate.equals(other.startDate))
+            return false;
+        if (endDate == null) {
+            if (other.endDate != null)
+                return false;
+        } else if (!endDate.equals(other.endDate))
             return false;
         return true;
     }
- 
+ */
     @Override
     public String toString() {
-        return "BioMetric Data [id=" + id + ", Month=" + month + ", Year="
-                + year + ", type=" + type + "]";
+        return "BioMetric Data [id=" + id + ", Start Date=" + startDate + ", End Date="
+                + endDate + ", type=" + type + "]";
     }
 }

@@ -1,5 +1,6 @@
 package com.siddhrans.biometric.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class BiometricDataServiceImpl implements BiometricDataService {
 	}
 
 	@Override
-	public List<BiometricData> findByMonthAndYear(int month, int year) {
-		return biometricDao.findByMonthAndYear(month,year);
+	public List<BiometricData> findByStartAndEndDate(Date startDate, Date endDate) {
+		return biometricDao.findByStartAndEndDate(startDate, endDate);
 	}
 
 	@Override

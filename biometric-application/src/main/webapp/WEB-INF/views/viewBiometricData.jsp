@@ -23,8 +23,8 @@
 					<thead>
 						<tr>
 							<th>No.</th>
-							<th>Year</th>
-							<th>Month</th>
+							<th>Start Date</th>
+							<th>End Date</th>
 							<th>File Name</th>
 							<th>Type</th>
 							<th width="100"></th>
@@ -35,8 +35,8 @@
 						<c:forEach items="${biometricDataList}" var="doc" varStatus="counter">
 							<tr>
 								<td>${counter.index + 1}</td>
-								<td>${doc.year}</td>
-								<td>${doc.month}</td>
+								<td>${doc.startDate}</td>
+								<td>${doc.endDate}</td>
 								<td>${doc.name}</td>
 								<td>${doc.type}</td>
 								<td><a
