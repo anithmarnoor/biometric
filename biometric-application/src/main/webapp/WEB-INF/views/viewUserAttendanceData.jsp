@@ -7,7 +7,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Biometric Data</title>
+<title>Attendance Log</title>
 </head>
 
 <body>
@@ -16,31 +16,33 @@
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
 			<div class="panel-heading">
-				<span class="lead">List of Documents </span>
+				<span class="lead">Attendance</span>
 			</div>
 			<div class="tablecontainer">
 				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th>No.</th>
-							<th>Year</th>
-							<th>Month</th>
-							<th width="100"></th>
-							<th width="100"></th>
+							<th>User ID</th>
+							<th>Date</th>
+							<th>Logged Hours</th>
+							<!-- <th width="100"></th>
+							<th width="100"></th> -->
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${biometricDataList}" var="doc" varStatus="counter">
+						<c:forEach items="${userAttendanceLog}" var="log" varStatus="counter">
 							<tr>
 								<td>${counter.index + 1}</td>
-								<td>${doc.year}</td>
-								<td>${doc.month}</td>
-								<td><a
+								<td>${log.userId}</td>
+								<td>${log.year}/${log.month}/${log.date}</td>
+								<td>${log.noOfHours}Hours and ${log.noOfMins}Minutes</td>
+								<%-- <td><a
 									href="<c:url value='/download-document-${doc.id}' />"
-									class="btn btn-success custom-width">download</a></td>
-								<td><a
+									class="btn btn-success custom-width">download</a></td> --%>
+								<%-- <td><a
 									href="<c:url value='/delete-BiometricData-${doc.id}' />"
-									class="btn btn-danger custom-width">delete</a></td>
+									class="btn btn-danger custom-width">delete</a></td> --%>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -50,11 +52,11 @@
 		<div class="panel panel-default">
 
 			<div class="panel-heading">
-				<span class="lead">Upload New Document</span>
+				<span class="lead">Search Attendance</span>
 			</div>
 			
 			<div class="uploadcontainer">
-				<%@include file="addBiometricData.jsp"%>
+				<%@include file="searchAttendance.jsp"%>
 			</div>
 		</div>
 

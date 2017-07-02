@@ -27,7 +27,7 @@ public class BiometricDataDaoImpl extends AbstractDao<Integer, BiometricData>  i
 
 	@Override
 	public void save(BiometricData document) {
-		List<BiometricData> dataList = findByStartAndEndDate(document.getStartDate(), document.getEndDate());
+		List<BiometricData> dataList = findByYearAndMonth(document.getYear(), document.getMonth());
 		
 		if(dataList.size() <= 0){
 			persist(document);
@@ -37,10 +37,10 @@ public class BiometricDataDaoImpl extends AbstractDao<Integer, BiometricData>  i
 	}
 	
 	@Override
-	public List<BiometricData> findByStartAndEndDate(Date startDate, Date endDate) {
+	public List<BiometricData> findByYearAndMonth(String year, String month) {
 		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("startDate", startDate));
-		crit.add(Restrictions.eq("endDate", endDate));
+		crit.add(Restrictions.eq("year", year));
+		crit.add(Restrictions.eq("month", month));
 		List<BiometricData> dataList = (List<BiometricData>)crit.list();
 		return dataList;
 	}

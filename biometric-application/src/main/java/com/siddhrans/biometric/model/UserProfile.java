@@ -13,7 +13,9 @@ import javax.persistence.Table;
 @Table(name="USER_PROFILE")
 public class UserProfile implements Serializable{
  
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id 
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="USER_PROFILE_ID")
     private Integer id; 
  
     @Column(name="TYPE", length=15, unique=true, nullable=false)

@@ -3,14 +3,11 @@ package com.siddhrans.biometric.model;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
  
 @Entity
@@ -28,10 +25,11 @@ public class UserBiometricData implements Serializable{
     @Column(name="YEAR", length=255)
     private Integer year;
     
-    private User user;
+    @Column(name="USER_ID")
+    private Integer userId;
 
     @Column(name="DATE", length=255)
-	private String date;
+	private Integer date;
     
     @Column(name="LOGOUT_TIME", length=255)
 	private String logoutTime;
@@ -44,22 +42,20 @@ public class UserBiometricData implements Serializable{
     
     @Column(name="NO_OF_MINS", length=255)
     private String noOfMins;
-        
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "USER_ID")
-    public User getUser() {
-		return user;
+   
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public String getDate() {
+	public Integer getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Integer date) {
 		this.date = date;
 	}
 

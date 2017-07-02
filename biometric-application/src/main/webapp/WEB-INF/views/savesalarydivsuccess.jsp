@@ -20,7 +20,7 @@
         </div>
          
         <span class="well floatRight">
-            Go to <a href="<c:url value='view-salaryDivision' />">View Pay Slips</a>
+            Go to <a href="<c:url value='view-salaryDivision' />">View Divisions</a>
         </span>
     </div>
 </body>

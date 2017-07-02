@@ -16,10 +16,10 @@ $(function() {
 	$("#doj").datepicker();
 });
 
-$(function() {
+/*$(function() {
 	$("#startDate").datepicker();
 });
 
 $(function() {
 	$("#endDate").datepicker();
-});
+});*/

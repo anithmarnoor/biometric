@@ -3,11 +3,11 @@
 	enctype="multipart/form-data" class="form-horizontal">
 	<div class="row">
 		<div class="form-group col-md-12">
-			<label class="col-md-3 control-lable" for="startDate">Start Date</label>
+			<label class="col-md-3 control-lable" for="year">Year</label>
 			<div class="col-md-7">
-				<form:input path="startDate" id="startDate" />
+				<form:input path="year" id="year" />
 				<div class="has-error">
-					<form:errors path="startDate" class="help-inline" />
+					<form:errors path="year" class="help-inline" />
 				</div>
 			</div>
 		</div>
@@ -15,11 +15,11 @@
 
 	<div class="row">
 		<div class="form-group col-md-12">
-			<label class="col-md-3 control-lable" for="endDate">End Date</label>
+			<label class="col-md-3 control-lable" for="month">Month</label>
 			<div class="col-md-7">
-				<form:input path="endDate" id="endDate" />
+				<form:input path="month" id="month" />
 				<div class="has-error">
-					<form:errors path="endDate" class="help-inline" />
+					<form:errors path="month" class="help-inline" />
 				</div>
 			</div>
 		</div>
@@ -37,6 +37,9 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<div class="row" style="color:red">
+			${error}
 	</div>
 
 	<div class="row">

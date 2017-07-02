@@ -11,7 +11,7 @@ public interface BiometricDataDao {
 
 	BiometricData findById(int id);
 	
-	public List<BiometricData> findByStartAndEndDate(Date startDate, Date endDate);
+	public List<BiometricData> findByYearAndMonth(String year, String month);
 
 	void save(BiometricData document);
 
