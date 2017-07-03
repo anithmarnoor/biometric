@@ -26,9 +26,9 @@ public class UserBiometricDataDaoImpl extends AbstractDao<Integer, UserBiometric
 	}
 	
 	@Override
-	public List<UserBiometricData> findByUser(User user) {
+	public List<UserBiometricData> findByUserId(String userId) {
 		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("user", user.getId()));
+		crit.add(Restrictions.eq("userId", Integer.parseInt(userId)));
 		List<UserBiometricData> dataList = (List<UserBiometricData>)crit.list();
 		return dataList;
 	}
@@ -49,9 +49,9 @@ public class UserBiometricDataDaoImpl extends AbstractDao<Integer, UserBiometric
 	}
 
 	@Override
-	public void deleteUserBiometricDataByUser(User user) {
+	public void deleteUserBiometricDataByUserId(String userId) {
 		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("user", user.getId()));
+		crit.add(Restrictions.eq("userId", userId));
 		List<UserBiometricData> dataList = (List<UserBiometricData>)crit.list();
 		for(int i=0; i<dataList.size(); i++){
 			UserBiometricData data = dataList.get(i);

@@ -2,14 +2,13 @@ package com.siddhrans.biometric.service;
 
 import java.util.List;
 
-import com.siddhrans.biometric.model.User;
 import com.siddhrans.biometric.model.UserBiometricData;
 
 public interface UserBiometricDataService {
 	
 	UserBiometricData findById(int id);
 	
-	public List<UserBiometricData> findByUser(User user);
+	public List<UserBiometricData> findByUserId(String userId);
 
 	List<UserBiometricData> findAll();
 
@@ -17,5 +16,5 @@ public interface UserBiometricDataService {
 
 	void save(UserBiometricData document);
 
-	void deleteBiometricDataByUser(User user);
+	void deleteBiometricDataByUserId(String userId);
 }

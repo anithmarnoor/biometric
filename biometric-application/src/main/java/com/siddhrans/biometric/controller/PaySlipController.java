@@ -24,6 +24,7 @@ import com.siddhrans.biometric.model.SalaryDivision;
 import com.siddhrans.biometric.model.User;
 import com.siddhrans.biometric.model.Wages;
 import com.siddhrans.biometric.service.PaySlipService;
+import com.siddhrans.biometric.service.UserService;
 
 
 @Controller
@@ -36,6 +37,9 @@ public class PaySlipController {
 
 	@Autowired
 	PaySlipService paySlipService;
+	
+	@Autowired
+	UserService userService;
 
 	@Autowired
 	MessageSource messageSource;
@@ -51,6 +55,9 @@ public class PaySlipController {
 	public String viewWages(ModelMap model) {
 		List<Wages> wagesList = paySlipService.findWages();
 		model.addAttribute("wagesList", wagesList);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "viewWages";
 	}
@@ -63,6 +70,9 @@ public class PaySlipController {
 		Wages wages = new Wages();
 		model.addAttribute("wages", wages);
 		model.addAttribute("edit", false);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addwages";
 	}
@@ -76,12 +86,18 @@ public class PaySlipController {
 		if (result.hasErrors()) {
 			model.addAttribute("wages", wages);
 			model.addAttribute("edit", false);
+			User profile = userService.findByUserName(getPrincipal());
+
+			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
 			return "addwages";
 		}
 		
 		paySlipService.saveWages(wages);
 		model.addAttribute("success", "Daily Wages updated successfully. Now Total salary will be calculated based on these amounts.");
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addwagessuccess";
 	}
@@ -94,6 +110,9 @@ public class PaySlipController {
 		List<Wages> wages = paySlipService.findWages();
 		model.addAttribute("wages", wages.get(0));
 		model.addAttribute("edit", true);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addwages";
 	}
@@ -108,12 +127,18 @@ public class PaySlipController {
 		if (result.hasErrors()) {
 			model.addAttribute("wages", wages);
 			model.addAttribute("edit", true);
+			User profile = userService.findByUserName(getPrincipal());
+
+			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
 			return "addwages";
 		}
 		paySlipService.updateWages(wages);
 	
 		model.addAttribute("success", "Daily Wages updated successfully. Now Total salary will calculated based on this amount per day.");
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addwagessuccess";
 	}
@@ -125,6 +150,9 @@ public class PaySlipController {
 	public String viewSalaryDivision(ModelMap model) {
 		List<SalaryDivision> salaryDivisionList = paySlipService.findSalaryDivision();
 		model.addAttribute("salaryDivision", salaryDivisionList);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "viewSalaryDiv";
 	}
@@ -137,6 +165,9 @@ public class PaySlipController {
 		SalaryDivision salaryDivision = new SalaryDivision();
 		model.addAttribute("salaryDivision", salaryDivision);
 		model.addAttribute("edit", false);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addsalarydivision";
 	}
@@ -150,6 +181,9 @@ public class PaySlipController {
 		if (result.hasErrors()) {
 			model.addAttribute("salaryDivision", division);
 			model.addAttribute("edit", false);
+			User profile = userService.findByUserName(getPrincipal());
+
+			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
 			return "addsalarydivision";
 		}
@@ -159,11 +193,17 @@ public class PaySlipController {
 			model.addAttribute("salaryDivision", division);
 			model.addAttribute("edit", false);
 			model.addAttribute("loggedinuser", getPrincipal());
+			User profile = userService.findByUserName(getPrincipal());
+
+			model.addAttribute("profile", profile);
 			model.addAttribute("error","Total % is not equal to 100. Please fill in correct percentage values.Make sure total is equal to 100%");
 			return "addsalarydivision";
 		}
 		model.addAttribute("success", "Salary divisions updated successfully. Now Total salary will broken down based on this information");
 		model.addAttribute("loggedinuser", getPrincipal());
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		return "savesalarydivsuccess";
 	}
 
@@ -175,6 +215,9 @@ public class PaySlipController {
 		List<SalaryDivision> salaryDivisionList = paySlipService.findSalaryDivision();
 		model.addAttribute("salaryDivision", salaryDivisionList.get(0));
 		model.addAttribute("edit", true);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addsalarydivision";
 	}
@@ -190,6 +233,9 @@ public class PaySlipController {
 			model.addAttribute("salaryDivision", salaryDivision);
 			model.addAttribute("edit", true);
 			model.addAttribute("loggedinuser", getPrincipal());
+			User profile = userService.findByUserName(getPrincipal());
+
+			model.addAttribute("profile", profile);
 			return "addsalarydivision";
 		}
 		if(isBreakDownCorrect(salaryDivision)){
@@ -198,11 +244,17 @@ public class PaySlipController {
 			model.addAttribute("salaryDivision", salaryDivision);
 			model.addAttribute("edit", false);
 			model.addAttribute("loggedinuser", getPrincipal());
+			User profile = userService.findByUserName(getPrincipal());
+
+			model.addAttribute("profile", profile);
 			model.addAttribute("error","Total % is not equal to 100. Please fill in correct percentage values.Make sure total is equal to 100%");
 			return "addsalarydivision";
 		}
 		
 		model.addAttribute("success", "Salary divisions updated successfully. Now Total salary will broken down during payslip generation based on this information");
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "savesalarydivsuccess";
 	}

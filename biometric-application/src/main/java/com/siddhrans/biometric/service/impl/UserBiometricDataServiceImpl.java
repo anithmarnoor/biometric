@@ -40,12 +40,12 @@ public class UserBiometricDataServiceImpl implements UserBiometricDataService {
 	}
 
 	@Override
-	public void deleteBiometricDataByUser(User user) {
-		biometricDao.deleteUserBiometricDataByUser(user);
+	public void deleteBiometricDataByUserId(String userId) {
+		biometricDao.deleteUserBiometricDataByUserId(userId);
 	}
 
 	@Override
-	public List<UserBiometricData> findByUser(User user) {
-		return biometricDao.findByUser(user);
+	public List<UserBiometricData> findByUserId(String userId) {
+		return biometricDao.findByUserId(userId);
 	}
 }

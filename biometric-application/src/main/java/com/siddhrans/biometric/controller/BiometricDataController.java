@@ -55,7 +55,7 @@ public class BiometricDataController {
 
 	@Autowired
 	BiometricDataService biometricDataService;
-	
+
 	@Autowired
 	UserBiometricDataService userBiometricDataService;
 
@@ -77,6 +77,9 @@ public class BiometricDataController {
 		List<BiometricData> biometricDataList = biometricDataService.findAll();
 		model.addAttribute("biometricDataList", biometricDataList);
 		model.addAttribute("biometricData", new BiometricData());
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "viewBiometricData";
 	}
@@ -88,9 +91,26 @@ public class BiometricDataController {
 	public String deleteBiometricData(@PathVariable String id, ModelMap model) {
 		biometricDataService.deleteBiometricDataById(Integer.parseInt(id));
 		model.addAttribute("success", "Data Deleted Successfully..");
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "delBiometricSuccess";
 	}
+	
+	
+	@RequestMapping(value = { "/view-Attendance-{userId}" }, method = RequestMethod.GET)
+	public String getUserAttendance(@PathVariable String userId, ModelMap model) {
+		List<UserBiometricData> userAttendanceLog = userBiometricDataService.findByUserId(userId);
+		model.addAttribute("userAttendanceLog", userAttendanceLog);
+		model.addAttribute("userBiometricData", new UserBiometricData());
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "viewUserAttendanceData";
+	}
+
 
 	/**
 	 * This method will provide the medium to add a Salary Division Details.
@@ -100,6 +120,9 @@ public class BiometricDataController {
 		BiometricData biometricData = new BiometricData();
 		model.addAttribute("biometricData", biometricData);
 		model.addAttribute("edit", false);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "viewBiometricData";
 	}
@@ -111,111 +134,156 @@ public class BiometricDataController {
 	@RequestMapping(value = { "/view-BiometricData" }, method = RequestMethod.POST)
 	public String saveBiometricData(@Valid BiometricData biometricData, BindingResult result,
 			ModelMap model) throws IOException {
-		if (result.hasErrors()) {
-			List<BiometricData> biometricDataList = biometricDataService.findAll();
-			model.addAttribute("biometricDataList", biometricDataList);
-			model.addAttribute("biometricData", biometricData);
-			model.addAttribute("edit", false);
-			model.addAttribute("loggedinuser", getPrincipal());
-			return "viewBiometricData";
-		}
+		try{
+			if (result.hasErrors()) {
+				List<BiometricData> biometricDataList = biometricDataService.findAll();
+				model.addAttribute("biometricDataList", biometricDataList);
+				model.addAttribute("biometricData", biometricData);
+				model.addAttribute("edit", false);
+				User profile = userService.findByUserName(getPrincipal());
 
-		MultipartFile multipartFile = biometricData.getFile();
-		String fileName = multipartFile.getOriginalFilename();
-		String extension = fileName.substring(fileName.lastIndexOf(".")+1,fileName.length());
-		logger.debug("ANITH: File Extension is "+extension);
-		File csvFile = null;
-		if(extension.equals("xls") || extension.equals("xlsx") || extension.equals("csv") || extension.equals("dat")){
-			/*if(extension.equals("xls") || extension.equals("xlsx")){
-			biometricData.setName(multipartFile.getOriginalFilename());
-			biometricData.setType(multipartFile.getContentType());
-			biometricData.setContent(multipartFile.getBytes());
-		} else {*/
-			File tmpFile = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + 
-					multipartFile.getOriginalFilename());
-			multipartFile.transferTo(tmpFile);
-
-			csvFile = datToCSVFile(tmpFile);
-			byte[] fileBytes = readBytesFromFile(csvFile);
-			biometricData.setName(csvFile.getName());
-			biometricData.setType("text/csv");
-			//biometricData.setContent(multipartFile.getBytes());
-			biometricData.setContent(fileBytes);
-
-			//START: Read the data in file and insert the values to list
-
-			Scanner scanner1=new Scanner(csvFile);
-			ArrayList< ArrayList<String>> bioDataList = new ArrayList< ArrayList<String>>();
-			while(scanner1.hasNext()){
-				String line=scanner1.nextLine();
-				String[] lineArr = line.split(",");
-				ArrayList<String> data = new ArrayList<String>(Arrays.asList(lineArr));
-				bioDataList.add(data);
+				model.addAttribute("profile", profile);
+				model.addAttribute("loggedinuser", getPrincipal());
+				return "viewBiometricData";
 			}
-			logger.debug("ANITH: bioDataList==>"+bioDataList);
-			HashMap<String, ArrayList<ArrayList<String>>> userData = getMapFromList(bioDataList);
 
-			//Block to read List and filter based on user Id's END
-			//Calculate Login and Logout Time based on map generated above.START
-			//Above map(userData) contains entries based on id's as keys. It contains all entries present in file as arrayList
-			Set<Entry<String, ArrayList<ArrayList<String>>>> keySet = userData.entrySet();
-			Iterator<Entry<String, ArrayList<ArrayList<String>>>> iterator = keySet.iterator();
-			while(iterator.hasNext())
-			{
-				Entry<String, ArrayList<ArrayList<String>>> me = iterator.next();
-				String userIdinMap = me.getKey();
-				ArrayList<ArrayList<String>> data = me.getValue();
-				User user = userService.findById(Integer.parseInt(userIdinMap));
-				if(user == null){
-					List<BiometricData> biometricDataList = biometricDataService.findAll();
-					model.addAttribute("biometricDataList", biometricDataList);
-					model.addAttribute("biometricData", biometricData);
-					model.addAttribute("edit", false);
-					model.addAttribute("error", "User with ID=>"+userIdinMap +" not found. Please add User details before uploading biometric data. ");
-					model.addAttribute("loggedinuser", getPrincipal());
-					//return "viewBiometricData";
-				} else {
-					if(biometricData.isMultipleShift()){
-						getMultipleShiftData(data);
+			MultipartFile multipartFile = biometricData.getFile();
+			String fileName = multipartFile.getOriginalFilename();
+			String extension = fileName.substring(fileName.lastIndexOf(".")+1,fileName.length());
+			logger.debug("ANITH: File Extension is "+extension);
+			File csvFile = null;
+			boolean isDuplicatesFound = false;
+			if(extension.equals("xls") || extension.equals("xlsx") || extension.equals("csv") || extension.equals("dat")){
+				
+				File tmpFile = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + 
+						multipartFile.getOriginalFilename());
+				multipartFile.transferTo(tmpFile);
+
+				csvFile = datToCSVFile(tmpFile);
+				byte[] fileBytes = readBytesFromFile(csvFile);
+				biometricData.setName(csvFile.getName());
+				biometricData.setType("text/csv");
+				//biometricData.setContent(multipartFile.getBytes());
+				biometricData.setContent(fileBytes);
+
+				//START: Read the data in file and insert the values to list
+
+				Scanner scanner1=new Scanner(csvFile);
+				ArrayList< ArrayList<String>> bioDataList = new ArrayList< ArrayList<String>>();
+				while(scanner1.hasNext()){
+					String line=scanner1.nextLine();
+					String[] lineArr = line.split(",");
+					ArrayList<String> data = new ArrayList<String>(Arrays.asList(lineArr));
+					bioDataList.add(data);
+				}
+				logger.debug("ANITH: bioDataList==>"+bioDataList);
+				HashMap<String, ArrayList<ArrayList<String>>> userData = getMapFromList(bioDataList);
+
+				//Block to read List and filter based on user Id's END
+				//Calculate Login and Logout Time based on map generated above.START
+				//Above map(userData) contains entries based on id's as keys. It contains all entries present in file as arrayList
+				Set<Entry<String, ArrayList<ArrayList<String>>>> keySet = userData.entrySet();
+				Iterator<Entry<String, ArrayList<ArrayList<String>>>> iterator = keySet.iterator();
+				String enteredYear = biometricData.getYear();
+				String enteredMonth = biometricData.getMonth();
+				ArrayList<UserBiometricData> listOfAttendance = new ArrayList<UserBiometricData>();
+				while(iterator.hasNext())
+				{
+					Entry<String, ArrayList<ArrayList<String>>> me = iterator.next();
+					String userIdinMap = me.getKey();
+					ArrayList<ArrayList<String>> data = me.getValue();
+					User user = userService.findById(Integer.parseInt(userIdinMap));
+					if(user == null){
+						List<BiometricData> biometricDataList = biometricDataService.findAll();
+						model.addAttribute("biometricDataList", biometricDataList);
+						model.addAttribute("biometricData", biometricData);
+						model.addAttribute("edit", false);
+						User profile = userService.findByUserName(getPrincipal());
+
+						model.addAttribute("profile", profile);
+						model.addAttribute("error", "User with ID=>"+userIdinMap +" not found. "
+								+ "Please add User details before uploading biometric data. ");
+						model.addAttribute("loggedinuser", getPrincipal());
+						return "viewBiometricData";
 					} else {
-						ArrayList<String> login = data.get(0);
-						ArrayList<String> logout = data.get(data.size()-1);
-						UserBiometricData biometricDataSS = getSingleShiftData(login, logout, user);
-						userBiometricDataService.save(biometricDataSS);
+						if(biometricData.isMultipleShift()){
+							getMultipleShiftData(data);
+						} else {
+							ArrayList<String> login = data.get(0);
+							ArrayList<String> logout = data.get(data.size()-1);
+							UserBiometricData biometricDataSS = getSingleShiftData(login, logout, user);
+							String yearInLog = biometricDataSS.getYear()+"";
+							String monthInLog = biometricDataSS.getMonth()+"";
+							if(yearInLog.equals(enteredYear) && monthInLog.equals(enteredMonth)){
+								listOfAttendance.add(biometricDataSS);
+							} else {
+								List<BiometricData> biometricDataList = biometricDataService.findAll();
+								model.addAttribute("biometricDataList", biometricDataList);
+								model.addAttribute("biometricData", biometricData);
+								model.addAttribute("edit", false);
+								User profile = userService.findByUserName(getPrincipal());
+
+								model.addAttribute("profile", profile);
+								model.addAttribute("error", "Log Contains Data from other Year or Month which is entered. "
+										+ "Please upload correct log file for correct Month and Year.");
+								model.addAttribute("loggedinuser", getPrincipal());
+								return "viewBiometricData";
+							}
+						}
 					}
 				}
+				for(UserBiometricData data:listOfAttendance){
+					List<UserBiometricData> existingUserData = userBiometricDataService.findByYearAndMonth(data.getYear(), data.getMonth(), data.getUserId());
+					if(existingUserData.size() > 0){
+						isDuplicatesFound = true;
+					}
+					if(existingUserData.size() < 0){
+						userBiometricDataService.save(data);
+					}
+				}
+				//Calculate Login and Logout Time based on map generated above.END
+
+				//END
+
+				/*}*/
+			} else {
+				List<BiometricData> biometricDataList = biometricDataService.findAll();
+				model.addAttribute("biometricDataList", biometricDataList);
+				model.addAttribute("biometricData", biometricData);
+				model.addAttribute("edit", false);
+				User profile = userService.findByUserName(getPrincipal());
+
+				model.addAttribute("profile", profile);
+				model.addAttribute("error", "File Format is not supported. Please select correct file. Allowed file types are .csv OR .dat OR .xls OR .xlsx");
+				model.addAttribute("loggedinuser", getPrincipal());
+				return "viewBiometricData";
 			}
-			//Calculate Login and Logout Time based on map generated above.END
 
-			//END
 
-			/*}*/
-		} else {
-			List<BiometricData> biometricDataList = biometricDataService.findAll();
-			model.addAttribute("biometricDataList", biometricDataList);
-			model.addAttribute("biometricData", biometricData);
-			model.addAttribute("edit", false);
-			model.addAttribute("error", "File Format is not supported. Please select correct file. Allowed file types are .csv OR .dat OR .xls OR .xlsx");
+			biometricDataService.saveDocument(biometricData);//save csv file
+			
+			if(isDuplicatesFound){
+				model.addAttribute("success", "Biometric Data saved Successfully. Biometric Data had duplicates which are ignored. "
+					+ "If you want to update, first delete existing data and then upload biometric data again.");
+			} else {
+				model.addAttribute("success", "Biometric Data saved Successfully..");
+			}
 			model.addAttribute("loggedinuser", getPrincipal());
-			return "viewBiometricData";
-		}
-
-		try{
-			biometricDataService.saveDocument(biometricData);
+			return "addBiometricSuccess";
+			
 		}catch(TransientObjectException e){
 			List<BiometricData> biometricDataList = biometricDataService.findAll();
 			model.addAttribute("biometricDataList", biometricDataList);
 			model.addAttribute("biometricData", biometricData);
 			model.addAttribute("edit", false);
+			User profile = userService.findByUserName(getPrincipal());
+
+			model.addAttribute("profile", profile);
 			model.addAttribute("error", "Biometric Data with same month and year is present.. Please delete existing data" +
 					" and upload again if you want to change.");
 			model.addAttribute("loggedinuser", getPrincipal());
 			return "viewBiometricData";
 		}
-
-		model.addAttribute("success", "Biometric Data saved Successfully..");
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "addBiometricSuccess";
 	}
 
 	@RequestMapping(value = { "/download-document-{docId}" }, method = RequestMethod.GET)
@@ -231,28 +299,34 @@ public class BiometricDataController {
 	}
 
 	//Attendance Related START
-	
+
 	@RequestMapping(value = { "/view-searchAttendance" }, method = RequestMethod.GET)
 	public String viewAttendance(ModelMap model) {
 		List<UserBiometricData> userAttendanceLog = new ArrayList<UserBiometricData>();
 		model.addAttribute("userAttendanceLog", userAttendanceLog);
 		model.addAttribute("userBiometricData", new UserBiometricData());
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "viewUserAttendanceData";
 	}
-	
-	
+
+
 	@RequestMapping(value = { "/view-searchAttendance" }, method = RequestMethod.POST)
 	public String searchAttendance(@Valid UserBiometricData userBiometricData, BindingResult result,
 			ModelMap model) throws IOException {
 		List<UserBiometricData> userAttendanceLog = userBiometricDataService.findByYearAndMonth(userBiometricData.getYear(),userBiometricData.getMonth(),userBiometricData.getUserId());
 		model.addAttribute("userAttendanceLog", userAttendanceLog);
 		model.addAttribute("userBiometricData", new UserBiometricData());
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "viewUserAttendanceData";
 	}
 	//Attendance Related END
-	
+
 
 	/**
 	 * This method returns the principal[user-name] of logged-in user.
@@ -360,16 +434,16 @@ public class BiometricDataController {
 
 		GregorianCalendar calendar1= new GregorianCalendar(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(date),
 				Integer.parseInt(outHour), Integer.parseInt(outMin));
-		
+
 		long startTime=calendar.getTimeInMillis();
 		long endTime=calendar1.getTimeInMillis();
-		
+
 		long diff=startTime-endTime;
-		
+
 		long diffinMins= (diff/1000)/60;
 		long workHours= diffinMins/60;
 		long workMins= diffinMins%60;
-		
+
 		UserBiometricData userBiometricData = new UserBiometricData();
 		userBiometricData.setDate(Integer.parseInt(date));
 		userBiometricData.setMonth(Integer.parseInt(month));

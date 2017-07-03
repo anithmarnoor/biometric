@@ -91,7 +91,7 @@ public class AppController {
 		List<User> users = userService.findAllUsers();
 		List<User> adminUsers = new ArrayList();
 		List<User> drivers = new ArrayList();
-/*		//filter admin users
+		/*		//filter admin users
 		for(User user:users){
 			UserProfile userProfile = userProfileService.findById(user.getId());
 			if(userProfile != null)
@@ -112,6 +112,9 @@ public class AppController {
 		}
 		model.addAttribute("drivers", drivers);
 		model.addAttribute("adminUsers", adminUsers);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "userslist";
 	}
@@ -137,6 +140,9 @@ public class AppController {
 		model.addAttribute("user", user);
 		model.addAttribute("edit", false);
 		model.addAttribute("roleChange", true);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "registration";
 	}
@@ -153,6 +159,9 @@ public class AppController {
 			model.addAttribute("user", user);
 			model.addAttribute("edit", false);
 			model.addAttribute("roleChange", true);
+			User profile = userService.findByUserName(getPrincipal());
+
+			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
 			return "registration";
 		}
@@ -183,6 +192,9 @@ public class AppController {
 		userService.saveUser(user);
 
 		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " registered successfully");
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		//return "success";
 		return "registrationsuccess";
@@ -198,6 +210,9 @@ public class AppController {
 		model.addAttribute("user", user);
 		model.addAttribute("edit", true);
 		model.addAttribute("roleChange", false);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "registration";
 	}
@@ -215,6 +230,9 @@ public class AppController {
 			model.addAttribute("user", user);
 			model.addAttribute("edit", true);
 			model.addAttribute("roleChange", false);
+			User profile = userService.findByUserName(getPrincipal());
+
+			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
 			return "registration";
 		}
@@ -230,6 +248,9 @@ public class AppController {
 		userService.updateUser(user);
 
 		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " updated successfully");
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "registrationsuccess";
 	}

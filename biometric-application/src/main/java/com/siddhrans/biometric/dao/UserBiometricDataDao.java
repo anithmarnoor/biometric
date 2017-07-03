@@ -2,7 +2,6 @@ package com.siddhrans.biometric.dao;
 
 import java.util.List;
 
-import com.siddhrans.biometric.model.User;
 import com.siddhrans.biometric.model.UserBiometricData;
 
 public interface UserBiometricDataDao {
@@ -11,11 +10,11 @@ public interface UserBiometricDataDao {
 
 	public UserBiometricData findById(int id);
 	
-	public List<UserBiometricData> findByUser(User user);
+	public List<UserBiometricData> findByUserId(String userId);
 	
 	public List<UserBiometricData> findByYearAndMonth(Integer year, Integer month, Integer id);
 
 	public void save(UserBiometricData document);
 
-	public void deleteUserBiometricDataByUser(User user);
+	public void deleteUserBiometricDataByUserId(String userId);
 }
