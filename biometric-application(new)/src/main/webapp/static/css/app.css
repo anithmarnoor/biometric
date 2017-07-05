@@ -1,0 +1,211 @@
+
+body{
+	height: 100%;
+background-color:#F5DEB3;
+}
+
+
+#mainWrapper {
+	height: 100%;
+	background-image: -webkit-gradient(
+	linear,
+	right bottom,
+	right top,
+	color-stop(0, #EDEDED),
+	color-stop(0.08, #EAEAEA),
+	color-stop(1, #2F2F2F),
+	color-stop(1, #AAAAAA)
+);
+background-image: -o-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+background-image: -moz-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+background-image: -webkit-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+background-image: -ms-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+background-image: linear-gradient(to top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+}
+
+.floatRight{
+	float:right;
+	margin-right: 61px;
+}
+
+.has-error{
+	color:red;
+}
+.generic-container-1 {
+    width: 37%;
+    margin-top: 80px;
+    margin-bottom: 20px;
+    margin-left: 441px;
+    padding: 20px;
+    background-color:#A2D9CE;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 0 30px black;
+    text-align: center;
+}
+
+.generic-container {
+  width: 84%;
+  margin-top: 80px;
+  margin-bottom: 20px;
+  margin-left:  205px;
+  padding: 20px;
+  background-color: #A2D9CE;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 0 30px black;
+}
+}
+
+.custom-width {
+    width: 80px !important;
+}
+
+body, #mainWrapper, .form-control{
+	/*font-size:12px!important;*/
+}
+
+#mainWrapper {
+	/*height: 720px; Without explicit px values, % in children's does not work*/
+	height: 100vh; /*with Viewport-Percentage, we can handle all devices screens  */
+	padding-left:10px;
+	padding-right:10px;
+	padding-bottom:10px;
+}
+
+.login-container {
+     margin-top: 100px;
+    background-color: #F5DEB3;
+    width: 40%;
+    left: 30%;
+    position: absolute;
+}
+
+.login-card {
+    width: 80%;
+    margin: auto;
+}
+
+.login-form {
+    padding: 10%;
+}
+
+.authbar{
+margin-bottom: 4px;
+    float: right;
+    margin-right: -3%;
+    margin-top: 0%;
+    color: red;
+}
+
+.top-name{
+		font-size:42px;
+	margin-top: 0px;
+	padding-top: 15px;
+	font-family: cursive;
+	color:#991f00;		
+}
+
+.application-name {
+	margin-left: 30%;
+	word-wrap: break-word;
+	margin-top: 0%;
+	height: 10px;
+	text-align: -webkit-center;
+    padding-left: 0px;
+    margin-left: 0px;
+}
+
+body {
+	/* padding-top:70px; */
+}
+
+/* responsive text queries */
+@media screen and (max-width: 992px) {
+  p,.btn,input,div,span,h4 {
+    font-size: 110%;
+  }
+  h1 {
+    font-size: 32px;  
+  }
+  h2 {
+    font-size: 28px;  
+  }
+  h3 {
+    font-size: 24px;  
+  }
+}
+
+@media screen and (max-width: 768px) {
+  p,.btn,input,div,span,h4 {
+    font-size: 100%;
+  }
+  h1 {
+    font-size: 28px;  
+  }
+  h2 {
+    font-size: 24px;  
+  }
+  h3 {
+    font-size: 20px;  
+  }
+}
+
+@media only screen and (max-width: 800px) {
+    
+    /* Force table to not be like tables anymore */
+	#no-more-tables table, 
+	#no-more-tables thead, 
+	#no-more-tables tbody, 
+	#no-more-tables th, 
+	#no-more-tables td, 
+	#no-more-tables tr { 
+		display: block; 
+	}
+ 
+	/* Hide table headers (but not display: none;, for accessibility) */
+	#no-more-tables thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+ 
+	#no-more-tables tr { border: 1px solid #ccc; }
+ 
+	#no-more-tables td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+		white-space: normal;
+		text-align:left;
+	}
+ 
+	#no-more-tables td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+		text-align:left;
+		font-weight: bold;
+	}
+ 
+	/*
+	Label the data
+	*/
+	#no-more-tables td:before { content: attr(data-title); }
+}
+
+/* changes done by me
+----------------------------------- */
+#thcolor{
+	 color: #991f00;
+}
+#log{
+	font-size: 24px;
+}
