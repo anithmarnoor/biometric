@@ -4,62 +4,105 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 
 @Entity
-@Table(name="PAY_SLIP")
+@Table(name="PAY_DETAILS")
 public class PaySlip implements Serializable{
  
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
     
-    @Column(name="BASIC")
-    private Integer basic;
+    @Column(name="USER_ID")
+    private Integer userId;
+
+	@Column(name="BASIC")
+    private Float basic;
     
     @Column(name="CONVEYANCE")
-    private Integer conveyance;
+    private Float conveyance;
     
     @Column(name="HRA")
-    private Integer hra;
+    private Float hra;	
     
     @Column(name="LTA")
-    private Integer lta;
+    private Float lta;
     
     @Column(name="MED_R")
-    private Integer mr;
+    private Float mr;
     
     @Column(name="ESI")
-    private Integer esi;
+    private Float esi;
     
     @Column(name="SA")
-    private Integer sa;
+    private Float sa;
     
     @Column(name="TAX")
-    private Integer incomeTax;
+    private Float incomeTax;
     
     @Column(name="PF")
-    private Integer pf;
+    private Float pf;
     
     @Column(name="PT")
-    private Integer pt;
+    private Float pt;
    
     @Column(name="ATTENDANCE")
     private Float attendance;
     
-    @Column(name="OVER_TIME")
-    private Float overTime;
+    @Column(name="TOTAL_SALARY")
+    private Float totalSalary;
+    
+    @Column(name="OVER_TIME_AMOUNT")
+    private Float overTimeAmount;
+    
+    @Column(name="OVER_TIME_HOURS")
+    private Float overTimeHours;
     
     @Column(name="PAN")
     private String panNo;
     
-    @Column(name="month")
+    @Column(name="MONTH")
     private Integer month;
 
-    @Column(name="Year")
+    @Column(name="YEAR")
     private Integer year;
-    	
+    
+    public Float getTotalSalary() {
+		return totalSalary;
+	}
+
+	public void setTotalSalary(Float totalSalary) {
+		this.totalSalary = totalSalary;
+	}
+
+	public Float getOverTimeAmount() {
+		return overTimeAmount;
+	}
+
+	public void setOverTimeAmount(Float overTimeAmount) {
+		this.overTimeAmount = overTimeAmount;
+	}
+
+	public Float getOverTimeHours() {
+		return overTimeHours;
+	}
+
+	public void setOverTimeHours(Float overTimeHours) {
+		this.overTimeHours = overTimeHours;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
     
 	public Float getAttendance() {
 		return attendance;
@@ -67,14 +110,6 @@ public class PaySlip implements Serializable{
 
 	public void setAttendance(Float attendance) {
 		this.attendance = attendance;
-	}
-
-	public Float getOverTime() {
-		return overTime;
-	}
-
-	public void setOverTime(Float overTime) {
-		this.overTime = overTime;
 	}
 
 	public String getPanNo() {
@@ -109,84 +144,83 @@ public class PaySlip implements Serializable{
 		this.id = id;
 	}
 
-	public Integer getBasic() {
+	public Float getBasic() {
 		return basic;
 	}
 
-	public void setBasic(Integer basic) {
+	public void setBasic(Float basic) {
 		this.basic = basic;
 	}
 
-	public Integer getConveyance() {
+	public Float getConveyance() {
 		return conveyance;
 	}
 
-	public void setConveyance(Integer conveyance) {
+	public void setConveyance(Float conveyance) {
 		this.conveyance = conveyance;
 	}
 
-	public Integer getHra() {
+	public Float getHra() {
 		return hra;
 	}
 
-	public void setHra(Integer hra) {
+	public void setHra(Float hra) {
 		this.hra = hra;
 	}
 
-	public Integer getLta() {
+	public Float getLta() {
 		return lta;
 	}
 
-	public void setLta(Integer lta) {
+	public void setLta(Float lta) {
 		this.lta = lta;
 	}
 
-	public Integer getMr() {
+	public Float getMr() {
 		return mr;
 	}
 
-	public void setMr(Integer mr) {
+	public void setMr(Float mr) {
 		this.mr = mr;
 	}
 
-	public Integer getEsi() {
+	public Float getEsi() {
 		return esi;
 	}
 
-	public void setEsi(Integer esi) {
+	public void setEsi(Float esi) {
 		this.esi = esi;
 	}
 
-	public Integer getSa() {
+	public Float getSa() {
 		return sa;
 	}
 
-	public void setSa(Integer sa) {
+	public void setSa(Float sa) {
 		this.sa = sa;
 	}
 
-	public Integer getIncomeTax() {
+	public Float getIncomeTax() {
 		return incomeTax;
 	}
 
-	public void setIncomeTax(Integer incomeTax) {
+	public void setIncomeTax(Float incomeTax) {
 		this.incomeTax = incomeTax;
 	}
 
-	public Integer getPf() {
+	public Float getPf() {
 		return pf;
 	}
 
-	public void setPf(Integer pf) {
+	public void setPf(Float pf) {
 		this.pf = pf;
 	}
 
-	public Integer getPt() {
+	public Float getPt() {
 		return pt;
 	}
 
-	public void setPt(Integer pt) {
+	public void setPt(Float pt) {
 		this.pt = pt;
 	}
-    
 }

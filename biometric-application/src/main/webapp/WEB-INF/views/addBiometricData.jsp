@@ -5,7 +5,7 @@
 		<div class="form-group col-md-12">
 			<label class="col-md-3 control-lable" for="year">Year</label>
 			<div class="col-md-7">
-				<form:input path="year" id="year" />
+				<form:input path="year" id="year" placeholder="YYYY" />
 				<div class="has-error">
 					<form:errors path="year" class="help-inline" />
 				</div>
@@ -17,7 +17,7 @@
 		<div class="form-group col-md-12">
 			<label class="col-md-3 control-lable" for="month">Month</label>
 			<div class="col-md-7">
-				<form:input path="month" id="month" />
+				<form:input path="month" id="month" placeholder="MM"/>
 				<div class="has-error">
 					<form:errors path="month" class="help-inline" />
 				</div>
@@ -31,7 +31,7 @@
 				document</label>
 			<div class="col-md-7">
 				<form:input type="file" path="file" id="file"
-					class="form-control input-sm" />
+					class="form-control input-sm" placeholder=".xls or .dat or .xslx or .csv"/>
 				<div class="has-error">
 					<form:errors path="file" class="help-inline" />
 				</div>

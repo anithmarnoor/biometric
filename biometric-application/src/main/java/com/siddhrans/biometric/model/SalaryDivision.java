@@ -19,34 +19,34 @@ public class SalaryDivision implements Serializable{
     private Integer id;
     
     @Column(name="BASIC_PERCENT")
-    private Integer basicPercentage;
+    private Float basicPercentage;
     
     @Column(name="CONVEYANCE_PERCENT")
-    private Integer conveyancePercentage;
+    private Float conveyancePercentage;
     
     @Column(name="HRA_PERCENT")
-    private Integer hraPercentage;
+    private Float hraPercentage;
     
     @Column(name="LTA_PERCENT")
-    private Integer ltaPercentage;
+    private Float ltaPercentage;
     
     @Column(name="MED_R_PERCENT")
-    private Integer mrPercentage;
+    private Float mrPercentage;
     
     @Column(name="ESI_PERCENT")
-    private Integer esiPercentage;
+    private Float esiPercentage;
     
     @Column(name="SA_PERCENT")
-    private Integer saPercentage;
+    private Float saPercentage;
     
     @Column(name="TAX_PERCENT")
-    private Integer incomeTaxPercentage;
+    private Float incomeTaxPercentage;
     
     @Column(name="PF_PERCENT")
-    private Integer pfPercentage;
+    private Float pfPercentage;
     
     @Column(name="PT_PERCENT")
-    private Integer ptPercentage;
+    private Float ptPercentage;
 
 	public Integer getId() {
 		return id;
@@ -56,84 +56,83 @@ public class SalaryDivision implements Serializable{
 		this.id = id;
 	}
 
-	public Integer getBasicPercentage() {
+	public Float getBasicPercentage() {
 		return basicPercentage;
 	}
 
-	public void setBasicPercentage(Integer basicPercentage) {
+	public void setBasicPercentage(Float basicPercentage) {
 		this.basicPercentage = basicPercentage;
 	}
 
-	public Integer getConveyancePercentage() {
+	public Float getConveyancePercentage() {
 		return conveyancePercentage;
 	}
 
-	public void setConveyancePercentage(Integer conveyancePercentage) {
+	public void setConveyancePercentage(Float conveyancePercentage) {
 		this.conveyancePercentage = conveyancePercentage;
 	}
 
-	public Integer getHraPercentage() {
+	public Float getHraPercentage() {
 		return hraPercentage;
 	}
 
-	public void setHraPercentage(Integer hraPercentage) {
+	public void setHraPercentage(Float hraPercentage) {
 		this.hraPercentage = hraPercentage;
 	}
 
-	public Integer getLtaPercentage() {
+	public Float getLtaPercentage() {
 		return ltaPercentage;
 	}
 
-	public void setLtaPercentage(Integer ltaPercentage) {
+	public void setLtaPercentage(Float ltaPercentage) {
 		this.ltaPercentage = ltaPercentage;
 	}
 
-	public Integer getMrPercentage() {
+	public Float getMrPercentage() {
 		return mrPercentage;
 	}
 
-	public void setMrPercentage(Integer mrPercentage) {
+	public void setMrPercentage(Float mrPercentage) {
 		this.mrPercentage = mrPercentage;
 	}
 
-	public Integer getEsiPercentage() {
+	public Float getEsiPercentage() {
 		return esiPercentage;
 	}
 
-	public void setEsiPercentage(Integer esiPercentage) {
+	public void setEsiPercentage(Float esiPercentage) {
 		this.esiPercentage = esiPercentage;
 	}
 
-	public Integer getSaPercentage() {
+	public Float getSaPercentage() {
 		return saPercentage;
 	}
 
-	public void setSaPercentage(Integer saPercentage) {
+	public void setSaPercentage(Float saPercentage) {
 		this.saPercentage = saPercentage;
 	}
 
-	public Integer getIncomeTaxPercentage() {
+	public Float getIncomeTaxPercentage() {
 		return incomeTaxPercentage;
 	}
 
-	public void setIncomeTaxPercentage(Integer incomeTaxPercentage) {
+	public void setIncomeTaxPercentage(Float incomeTaxPercentage) {
 		this.incomeTaxPercentage = incomeTaxPercentage;
 	}
 
-	public Integer getPfPercentage() {
+	public Float getPfPercentage() {
 		return pfPercentage;
 	}
 
-	public void setPfPercentage(Integer pfPercentage) {
+	public void setPfPercentage(Float pfPercentage) {
 		this.pfPercentage = pfPercentage;
 	}
 
-	public Integer getPtPercentage() {
+	public Float getPtPercentage() {
 		return ptPercentage;
 	}
 
-	public void setPtPercentage(Integer ptPercentage) {
+	public void setPtPercentage(Float ptPercentage) {
 		this.ptPercentage = ptPercentage;
 	}
-    
 }

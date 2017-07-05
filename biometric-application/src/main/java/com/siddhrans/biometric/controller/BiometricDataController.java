@@ -232,12 +232,14 @@ public class BiometricDataController {
 						}
 					}
 				}
+				logger.debug("ANITH: listOfAttendance==>"+listOfAttendance.size());
 				for(UserBiometricData data:listOfAttendance){
 					List<UserBiometricData> existingUserData = userBiometricDataService.findByYearAndMonth(data.getYear(), data.getMonth(), data.getUserId());
-					if(existingUserData.size() > 0){
+					if(existingUserData !=null && existingUserData.size() > 0){
 						isDuplicatesFound = true;
-					}
-					if(existingUserData.size() < 0){
+						logger.debug("ANITH1: listOfAttendance==>Duplicates found..");
+					} else{
+						logger.debug("ANITH1: listOfAttendance==>calling SAVE");
 						userBiometricDataService.save(data);
 					}
 				}

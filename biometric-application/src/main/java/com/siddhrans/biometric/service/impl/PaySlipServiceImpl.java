@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.siddhrans.biometric.dao.PaySlipDao;
 import com.siddhrans.biometric.dao.SalaryDivDao;
 import com.siddhrans.biometric.dao.WagesDao;
+import com.siddhrans.biometric.model.PaySlip;
 import com.siddhrans.biometric.model.SalaryDivision;
 import com.siddhrans.biometric.model.Wages;
 import com.siddhrans.biometric.service.PaySlipService;
@@ -57,5 +58,20 @@ public class PaySlipServiceImpl implements PaySlipService{
 	@Override
 	public List<Wages> findWages() {
 		return wagesDao.findWages();
+	}
+
+	@Override
+	public PaySlip getPayDetails(Integer id, Integer month, Integer year) {
+		return paySlipDao.getPayDetails(id, month, year);
+	}
+
+	@Override
+	public boolean savePayDetails(PaySlip paySlip) {
+		return paySlipDao.savePayDetails(paySlip);
+	}
+
+	@Override
+	public boolean deletePayDetails(Integer id, Integer month, Integer year) {
+		return paySlipDao.deletePayDetails(id, month, year);
 	}
 }
