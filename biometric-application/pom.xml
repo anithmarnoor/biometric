@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.siddhrans.biometric</groupId>
-	<artifactId>biometric-applicationModified</artifactId>
+	<artifactId>biometric-application</artifactId>
 	<packaging>war</packaging>
 	<version>1.0.0</version>
 	<name>PAM</name>

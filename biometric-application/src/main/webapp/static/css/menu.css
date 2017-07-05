@@ -2,11 +2,11 @@
   overflow: auto;
   font-family: verdana;
   font-weight: 200;
-  background-color: #4682B4;
+  background-color: #2e353d;
   position: fixed;
-  width:  194px;
+  width: 150px;
   height: 100%;
-  color: #ffffff;
+  color: #e1ffff;
 }
 .nav-side-menu .brand {
   background-color: #23282e;
@@ -90,7 +90,7 @@
 }
 .nav-side-menu li a {
   text-decoration: none;
-  color: #ffffff;
+  color: #e1ffff;
 }
 .nav-side-menu li a i {
   padding-left: 10px;

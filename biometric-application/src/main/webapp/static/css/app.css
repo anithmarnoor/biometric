@@ -1,7 +1,7 @@
 
 body{
 	height: 100%;
-background-color:#F5DEB3;
+	background-color:rgba(96, 140, 185, 0.49);
 }
 
 
@@ -25,36 +25,23 @@ background-image: linear-gradient(to top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, 
 
 .floatRight{
 	float:right;
-	margin-right: 61px;
+	margin-right: 18px;
 }
 
 .has-error{
 	color:red;
 }
-.generic-container-1 {
-    width: 37%;
-    margin-top: 80px;
-    margin-bottom: 20px;
-    margin-left: 441px;
-    padding: 20px;
-    background-color:#A2D9CE;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 0 30px black;
-    text-align: center;
-}
 
 .generic-container {
-  width: 84%;
+  width: 85%;
   margin-top: 80px;
   margin-bottom: 20px;
-  margin-left:  205px;
+  margin-left: 170px;
   padding: 20px;
-  background-color: #A2D9CE;
+  background-color: #EAE7E7;
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 0 30px black;
-}
 }
 
 .custom-width {
@@ -74,8 +61,8 @@ body, #mainWrapper, .form-control{
 }
 
 .login-container {
-     margin-top: 100px;
-    background-color: #F5DEB3;
+    margin-top: 100px;
+    background-color: floralwhite;
     width: 40%;
     left: 30%;
     position: absolute;
@@ -91,19 +78,17 @@ body, #mainWrapper, .form-control{
 }
 
 .authbar{
-margin-bottom: 4px;
-    float: right;
-    margin-right: -3%;
-    margin-top: 0%;
-    color: red;
+	margin-bottom:15px;
+	float: right;
+	margin-right: 1%;
+    margin-top: 1%;
 }
 
 .top-name{
-		font-size:42px;
+	font-size:42px;
 	margin-top: 0px;
 	padding-top: 15px;
-	font-family: cursive;
-	color:#991f00;		
+	font-family: cursive;	
 }
 
 .application-name {
@@ -199,13 +184,4 @@ body {
 	Label the data
 	*/
 	#no-more-tables td:before { content: attr(data-title); }
-}
-
-/* changes done by me
------------------------------------ */
-#thcolor{
-	 color: #991f00;
-}
-#log{
-	font-size: 24px;
 }

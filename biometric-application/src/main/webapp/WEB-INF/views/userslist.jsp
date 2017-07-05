@@ -27,7 +27,7 @@
 				<div id="no-more-tables">
 					<table
 						class="col-md-12 table-bordered table-striped table-condensed cf">
-						<thead class="cf" id="thcolor">
+						<thead class="cf">
 							<tr>
 								<th>Name</th>
 								<th>Email</th>
@@ -98,7 +98,7 @@
 					<div id="no-more-tables">
 						<table
 							class="col-md-12 table-bordered table-striped table-condensed cf">
-							<thead class="cf" id="thcolor">
+							<thead class="cf">
 								<tr>
 									<th>Name</th>
 									<th>Email</th>
