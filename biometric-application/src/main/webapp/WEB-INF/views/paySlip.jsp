@@ -44,8 +44,6 @@
 							</tr>
 						</thead>
 						<tbody>
-								<c:forEach items="${drivers}" var="user">
-									<c:if test="${user.userName eq loggedinuser}">
 										<tr>
 											<th data-title="User Id">				${paySlip.userId}	</th>
 											<th data-title="Basic">					${paySlip.basic}	</th>
@@ -65,8 +63,7 @@
 											<th data-title="Month">					${paySlip.month}	</th>
 											<th data-title="Year">					${paySlip.year}	</th>
 										</tr>
-									</c:if>
-								</c:forEach>
+									
 						</tbody>
 					</table>
 				</div>

@@ -332,14 +332,14 @@ public class PaySlipController {
 			Float workingHours = workingHoursAndOT.get("workingHours") + 
 					workingHoursAndOT.get("totalHalfWorkingHrs") + 
 						workingHoursAndOT.get("remainingWorkingHrs");
-			
+			logger.debug("Anith : workingHours====>"+workingHours);
 			paySlip.setAttendance(workingHours / 8.0f);
 			
 			paySlip.setOverTimeHours(workingHoursAndOT.get("overTime"));
 			
 			
 			HashMap<String, Float> totalSalaryDetails = calculateTotalSalary(workingHoursAndOT, wage);
-
+			logger.debug("Anith : totalSalaryDetails====>"+totalSalaryDetails);
 			generateSalaryData(paySlip, totalSalaryDetails, salaryDivision.get(0));
 
 			paySlip.setUserId(profile.getId());
@@ -348,7 +348,6 @@ public class PaySlipController {
 		paySlipService.savePayDetails(paySlip);
 		
 		model.addAttribute("paySlip", paySlip);
-
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "paySlip";
@@ -403,7 +402,7 @@ public class PaySlipController {
 		Float halfDayAmt = 0.0f;
 		Float remainingAmt = 0.0f;
 
-		wholeDaySalary = workingHoursAndOT.get("workingHours") * Float.parseFloat(wage.getNormalShift());
+		wholeDaySalary = (workingHoursAndOT.get("workingHours")/8) * Float.parseFloat(wage.getNormalShift());
 		overTimeAmt = workingHoursAndOT.get("overTime") * Float.parseFloat(wage.getOvertime());
 		halfDayAmt = (workingHoursAndOT.get("totalHalfWorkingHrs") / 4) * (Float.parseFloat(wage.getNormalShift()) / 2.0f);
 		remainingAmt = workingHoursAndOT.get("remainingWorkingHrs") * (Float.parseFloat(wage.getNormalShift())/8);
