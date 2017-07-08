@@ -34,6 +34,17 @@ public class UserBiometricDataDaoImpl extends AbstractDao<Integer, UserBiometric
 	}
 
 	@Override
+	public List<UserBiometricData> findByDateAndUserId(Integer year, Integer month, Integer date, Integer id) {
+		Criteria crit = createEntityCriteria();
+		crit.add(Restrictions.eq("userId", id));
+		crit.add(Restrictions.eq("year", year));
+		crit.add(Restrictions.eq("month", month));
+		crit.add(Restrictions.eq("date", date));
+		List<UserBiometricData> dataList = (List<UserBiometricData>)crit.list();
+		return dataList;
+	}
+	
+	@Override
 	public List<UserBiometricData> findByYearAndMonth(Integer year, Integer month, Integer id) {
 		Criteria crit = createEntityCriteria();
 		crit.add(Restrictions.eq("userId", id));

@@ -281,12 +281,12 @@ public class PaySlipController {
 	}
 
 
-	@RequestMapping(value = { "/generate-PaySlip{id}" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "/generate-PaySlip-{id}" }, method = RequestMethod.POST)
 	public String generateSelfPaySlip(@Valid PaySlip paySlip, BindingResult result,
 			ModelMap model, @PathVariable String id) {
 
 		User profile = userService.findByUserName(getPrincipal());
-		PaySlip existingPaySlip = paySlipService.getPayDetails(paySlip.getUserId(), paySlip.getMonth(), paySlip.getYear());
+		PaySlip existingPaySlip = paySlipService.getPayDetails(Integer.parseInt(id), paySlip.getMonth(), paySlip.getYear());
 		if(existingPaySlip != null){
 			model.addAttribute("paySlip", existingPaySlip);
 			model.addAttribute("profile", profile);
@@ -342,7 +342,7 @@ public class PaySlipController {
 			logger.debug("Anith : totalSalaryDetails====>"+totalSalaryDetails);
 			generateSalaryData(paySlip, totalSalaryDetails, salaryDivision.get(0));
 
-			paySlip.setUserId(profile.getId());
+			//paySlip.setUserId(profile.getId());
 		}
 		
 		paySlipService.savePayDetails(paySlip);
@@ -375,13 +375,13 @@ public class PaySlipController {
 			Float workingHours = Float.parseFloat(data.getNoOfHours()) + (Float.parseFloat(data.getNoOfMins())/60);
 			if(workingHours > 8.0f){
 				totalOverTimeWorkingHours = totalOverTimeWorkingHours + (workingHours - 8.0f);
-				totalWorkingHours = totalOverTimeWorkingHours + (workingHours - totalOverTimeWorkingHours);
+				totalWorkingHours = totalWorkingHours + 8.0f;
 			} else {
-				if(workingHours > 4){
+				if(workingHours > 4.0f){
 					totalHalfWorkingHrs = totalHalfWorkingHrs + 4;
-					remainingWorkingHrs = workingHours - 4;
+					remainingWorkingHrs = remainingWorkingHrs+ (workingHours - 4);
 				} else {
-					remainingWorkingHrs = remainingWorkingHrs+ workingHours;
+					remainingWorkingHrs = remainingWorkingHrs + workingHours;
 				}
 				totalOverTimeWorkingHours = totalOverTimeWorkingHours + 0.0f;
 			}
@@ -401,7 +401,7 @@ public class PaySlipController {
 		Float overTimeAmt = 0.0f;
 		Float halfDayAmt = 0.0f;
 		Float remainingAmt = 0.0f;
-
+		
 		wholeDaySalary = (workingHoursAndOT.get("workingHours")/8) * Float.parseFloat(wage.getNormalShift());
 		overTimeAmt = workingHoursAndOT.get("overTime") * Float.parseFloat(wage.getOvertime());
 		halfDayAmt = (workingHoursAndOT.get("totalHalfWorkingHrs") / 4) * (Float.parseFloat(wage.getNormalShift()) / 2.0f);

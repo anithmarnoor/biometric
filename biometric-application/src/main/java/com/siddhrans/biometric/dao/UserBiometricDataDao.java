@@ -12,6 +12,8 @@ public interface UserBiometricDataDao {
 	
 	public List<UserBiometricData> findByUserId(String userId);
 	
+	public List<UserBiometricData> findByDateAndUserId(Integer year, Integer month, Integer date, Integer id);
+	
 	public List<UserBiometricData> findByYearAndMonth(Integer year, Integer month, Integer id);
 
 	public void save(UserBiometricData document);

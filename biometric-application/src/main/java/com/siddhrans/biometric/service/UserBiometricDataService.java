@@ -6,15 +6,17 @@ import com.siddhrans.biometric.model.UserBiometricData;
 
 public interface UserBiometricDataService {
 	
-	UserBiometricData findById(int id);
+	public UserBiometricData findById(int id);
 	
 	public List<UserBiometricData> findByUserId(String userId);
 
-	List<UserBiometricData> findAll();
+	public List<UserBiometricData> findAll();
 
+	public List<UserBiometricData> findByDateAndUserId(Integer year, Integer month,Integer date, Integer id);
+	
 	public List<UserBiometricData> findByYearAndMonth(Integer year, Integer month, Integer id);
 
-	void save(UserBiometricData document);
+	public void save(UserBiometricData document);
 
-	void deleteBiometricDataByUserId(String userId);
+	public void deleteBiometricDataByUserId(String userId);
 }

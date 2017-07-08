@@ -41,7 +41,7 @@
 									<td>${log.userId}</td>
 								</sec:authorize>
 								<td>${log.year}/${log.month}/${log.date}</td>
-								<td>${log.noOfHours}Hoursand ${log.noOfMins}Minutes</td>
+								<td>${log.noOfHours} hrs and ${log.noOfMins} mins</td>
 								<%-- <td><a
 									href="<c:url value='/download-document-${doc.id}' />"
 									class="btn btn-success custom-width">download</a></td> --%>

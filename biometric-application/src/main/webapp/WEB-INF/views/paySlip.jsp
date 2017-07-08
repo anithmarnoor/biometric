@@ -13,6 +13,7 @@
 <body>
 	<%@include file="authheader.jsp"%>
 	<div class="generic-container">
+	<div class="alert alert-success lead">${error}</div>
 		<div class="row">
 			<div class="panel panel-default">
 				<!-- Default panel contents -->

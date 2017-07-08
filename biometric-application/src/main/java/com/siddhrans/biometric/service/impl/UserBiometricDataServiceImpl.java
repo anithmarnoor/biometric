@@ -30,10 +30,15 @@ public class UserBiometricDataServiceImpl implements UserBiometricDataService {
 	}
 
 	@Override
+	public List<UserBiometricData> findByDateAndUserId(Integer year, Integer month, Integer date, Integer id) {
+		return biometricDao.findByDateAndUserId(year, month, date, id);
+	}
+
+	@Override
 	public List<UserBiometricData> findByYearAndMonth(Integer year, Integer month, Integer id) {
 		return biometricDao.findByYearAndMonth(year, month, id);
 	}
-
+	
 	@Override
 	public void save(UserBiometricData data) {
 		biometricDao.save(data);
