@@ -1,6 +1,15 @@
 package com.siddhrans.biometric.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,6 +32,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.mysql.jdbc.util.Base64Decoder;
 import com.siddhrans.biometric.model.PaySlip;
 import com.siddhrans.biometric.model.SalaryDivision;
 import com.siddhrans.biometric.model.User;
@@ -311,7 +334,7 @@ public class PaySlipController {
 			model.addAttribute("paySlip", existingPaySlip);
 			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
-			return "paySlipError";
+			return "paySlip";
 		} else {
 
 
@@ -331,37 +354,237 @@ public class PaySlipController {
 			Wages wage = wages.get(0);
 			Float workingHours = workingHoursAndOT.get("workingHours") + 
 					workingHoursAndOT.get("totalHalfWorkingHrs") + 
-						workingHoursAndOT.get("remainingWorkingHrs");
+					workingHoursAndOT.get("remainingWorkingHrs");
 			logger.debug("Anith : workingHours====>"+workingHours);
 			paySlip.setAttendance(workingHours / 8.0f);
-			
+
 			paySlip.setOverTimeHours(workingHoursAndOT.get("overTime"));
-			
-			
+
+
 			HashMap<String, Float> totalSalaryDetails = calculateTotalSalary(workingHoursAndOT, wage);
 			logger.debug("Anith : totalSalaryDetails====>"+totalSalaryDetails);
 			generateSalaryData(paySlip, totalSalaryDetails, salaryDivision.get(0));
 
 			//paySlip.setUserId(profile.getId());
 		}
-		
+
 		paySlipService.savePayDetails(paySlip);
-		
+
 		model.addAttribute("paySlip", paySlip);
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "paySlip";
 	}
-	
+
 	@RequestMapping(value = { "/download-paySlip-{userId}-{month}-{year}" },  method = RequestMethod.GET)
-	public String downloadPaySlip( @PathVariable int userId, @PathVariable int month, @PathVariable int year, HttpServletResponse response) throws IOException {
+	public String downloadPaySlip( @PathVariable int userId, @PathVariable int month, @PathVariable int year, HttpServletResponse response) throws IOException, DocumentException {
 		PaySlip paySlip = paySlipService.getPayDetails(userId, month, year);
-		response.setContentType("application/pdf");
-		/*response.setContentLength(document.getContent().length);*/
-		response.setHeader("Content-Disposition","attachment; filename=\"" + ""+userId+"-"+month+"-"+year
-				+"\"");
-		byte[] b = "Test Data in PDF ".getBytes();
-		FileCopyUtils.copy(b, response.getOutputStream());
+
+		logger.debug("Anith: Pay Slip data is ===>"+paySlip.toString());
+
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+		Date date = new Date();
+		System.out.println(dateFormat.format(date));
+		Document document=new Document();
+		String fileName=dateFormat.format(date)+".pdf";
+		//Document Attributes
+		document.addAuthor("Anith ");
+		String date1=(String)dateFormat.format(date);
+		document.addCreationDate();
+		document.addCreator("Siddhrans technologies");
+		document.addTitle("PaySlip");
+
+
+		String filePath="C:/anith/"+fileName;
+
+		File file = new File(filePath);
+
+		PdfWriter writer = PdfWriter.getInstance(document,new FileOutputStream(filePath));
+		document.open();
+
+		PdfPTable table = new PdfPTable(2);
+
+		table.setSpacingBefore(5);
+		table.setSpacingAfter(1);
+		// table.setWidthPercentage(888 / 5.23f);
+		//table.setWidths(new float[]{ (float) 1.5, (float) 2.0, (float) 1.0, (float) 1.0, (float) 1.5, (float) 1.6, (float) 1.3, (float) 2.0} );
+
+
+		table.setTotalWidth(PageSize.A4.getWidth()-10);
+		table.setLockedWidth(true);
+		// t.setBorderColor(BaseColor.GRAY);
+		// t.setPadding(4);
+		// t.setSpacing(4);
+		// t.setBorderWidth(1);
+
+		Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.ITALIC);
+		PdfPCell c1 = new PdfPCell(new Phrase("BASIC"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getBasic()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("CONVEYANCE"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getConveyance()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("ESI"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getEsi()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("HRA"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getHra()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("Income Tax"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getIncomeTax()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("LTA"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getLta()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("Medical Reimbursement"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getMr()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("Provision Fund"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getPf()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("Profession Tax"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getPt()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("Special Allowance"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getSa()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("Year"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getYear()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("Month"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getMonth()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("OT Amount"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getOverTimeAmount()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("OT Hours"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getOverTimeHours()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("Attendance"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getAttendance()+"", normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("PAN"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getPanNo(), normalFont));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase("Total Salary"));
+		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c1.setBackgroundColor( new BaseColor (90, 137, 9));
+		table.addCell(c1);
+
+		c1 = new PdfPCell(new Phrase(paySlip.getTotalSalary()+"", normalFont));
+		table.addCell(c1);
+		//table.setHeaderRows(1);
+		// int i=0;
+
+		document.add(table);
+
+
+
+		document.close();
+
+
+		InputStream is = new FileInputStream(filePath);
+
+		response.setHeader("Content-Disposition", "attachment;filename=\""+fileName+"\"");
+
+
+		int read=0;
+		byte[] bytes = new byte[1024];
+		OutputStream os = response.getOutputStream();
+
+		while((read = is.read(bytes))!= -1){
+			os.write(bytes, 0, read);
+		}
+		os.flush();
+		os.close(); 
+		is.close();
+
+
+
+		/*
+		FileCopyUtils.copy(decodedBytes, response.getOutputStream());*/
 
 		return "paySlip";
 	}
@@ -401,7 +624,7 @@ public class PaySlipController {
 		Float overTimeAmt = 0.0f;
 		Float halfDayAmt = 0.0f;
 		Float remainingAmt = 0.0f;
-		
+
 		wholeDaySalary = (workingHoursAndOT.get("workingHours")/8) * Float.parseFloat(wage.getNormalShift());
 		overTimeAmt = workingHoursAndOT.get("overTime") * Float.parseFloat(wage.getOvertime());
 		halfDayAmt = (workingHoursAndOT.get("totalHalfWorkingHrs") / 4) * (Float.parseFloat(wage.getNormalShift()) / 2.0f);

@@ -13,12 +13,12 @@
 <body>
 	<%@include file="authheader.jsp"%>
 	<div class="generic-container">
-	<div class="alert alert-success lead">${error}</div>
+		<div class="alert alert-success lead">${error}</div>
 		<div class="row">
 			<div class="panel panel-default">
 				<!-- Default panel contents -->
 				<div class="panel-heading">
-						<span class="lead">PaySlip Data </span>
+					<span class="lead">PaySlip Data </span>
 				</div>
 				<div id="no-more-tables">
 					<table
@@ -26,53 +26,84 @@
 						<thead class="cf">
 							<tr>
 								<th>User Id</th>
+								<td data-title="User Id">${paySlip.userId}</td>
+							</tr>
+							<tr>
 								<th>Basic</th>
+								<td data-title="Basic">${paySlip.basic}</td>
+							</tr>
+							<tr>
 								<th>Conveyance</th>
+								<td data-title="Conveyance">${paySlip.conveyance}</td>
+							</tr>
+							<tr>
 								<th>Provident Fund</th>
+								<td data-title="Provident Fund">${paySlip.pf}</td>
+							</tr>
+							<tr>
 								<th>House Rent Allowance</th>
+								<td data-title="House Rent Allowance">${paySlip.hra}</td>
+							</tr>
+							<tr>
 								<th>Leave Travel Allowance</th>
+								<td data-title="Leave Travel Allowance">${paySlip.lta}</td>
+							</tr>
+							<tr>
 								<th>Medical Reimbursement</th>
+								<td data-title="Medical Reimbursement">${paySlip.mr}</td>
+							</tr>
+							<tr>
 								<th>ESI</th>
+								<td data-title="ESI">${paySlip.esi}</td>
+							</tr>
+							<tr>
 								<th>Special Allowance</th>
+								<td data-title="Special Allowance">${paySlip.sa}</td>
+							</tr>
+							<tr>
 								<th>Income Tax</th>
+								<td data-title="Income Tax">${paySlip.incomeTax}</td>
+							</tr>
+							<tr>
 								<th>Profession Tax</th>
+								<td data-title="Profession Tax">${paySlip.pf}</td>
+							</tr>
+							<tr>
 								<th>Attendance</th>
+								<td data-title="Attendance">${paySlip.attendance}</td>
+							</tr>
+							<tr>
 								<th>Total Salary</th>
+								<td data-title="Total Salary">${paySlip.totalSalary}</td>
+							</tr>
+							<tr>
 								<th>Over Time Salary</th>
+								<td data-title="Over Time Salary">
+									${paySlip.overTimeAmount}</td>
+							</tr>
+							<tr>
 								<th>Number of Overtime Hours</th>
+								<td data-title="Number of Overtime Hours">${paySlip.overTimeHours}</td>
+							</tr>
+							<tr>
 								<th>Month</th>
+								<td data-title="Month">${paySlip.month}</td>
+							</tr>
+							<tr>
 								<th>Year</th>
+								<td data-title="Year">${paySlip.year}</td>
 							</tr>
 						</thead>
-						<tbody>
-										<tr>
-											<th data-title="User Id">				${paySlip.userId}	</th>
-											<th data-title="Basic">					${paySlip.basic}	</th>
-											<th data-title="Conveyance">			${paySlip.conveyance}	</th>
-											<th data-title="Provident Fund">		${paySlip.pf}	</th>
-											<th data-title="House Rent Allowance">	${paySlip.hra}	</th>
-											<th data-title="Leave Travel Allowance">${paySlip.lta}	</th>
-											<th data-title="Medical Reimbursement">	${paySlip.mr}	</th>
-											<th data-title="ESI">					${paySlip.esi}	</th>
-											<th data-title="Special Allowance">		${paySlip.sa}	</th>
-											<th data-title="Income Tax">			${paySlip.incomeTax}	</th>
-											<th data-title="Profession Tax">		${paySlip.pf}	</th>
-											<th data-title="Attendance">			${paySlip.attendance}	</th>
-											<th data-title="Total Salary">			${paySlip.totalSalary}	</th>
-											<th data-title="Over Time Salary">		${paySlip.overTimeAmount}	</th>
-											<th data-title="Number of Overtime Hours">${paySlip.overTimeHours}</th>
-											<th data-title="Month">					${paySlip.month}	</th>
-											<th data-title="Year">					${paySlip.year}	</th>
-										</tr>
-									
-						</tbody>
+
 					</table>
 				</div>
 			</div>
 		</div>
-			<div class="well">
-				<a href="<c:url value='/download-paySlip-${paySlip.userId}-${paySlip.month}-${paySlip.year}' />">Download PaySlip</a>
-			</div>
+		<div class="well">
+			<a
+				href="<c:url value='/download-paySlip-${paySlip.userId}-${paySlip.month}-${paySlip.year}' />">Download
+				PaySlip</a>
+		</div>
 	</div>
 </body>
 </html>

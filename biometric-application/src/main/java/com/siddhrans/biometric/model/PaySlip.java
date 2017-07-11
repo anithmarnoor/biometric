@@ -223,4 +223,11 @@ public class PaySlip implements Serializable{
 	public void setPt(Float pt) {
 		this.pt = pt;
 	}
+	
+	@Override
+    public String toString() {
+        return "User [id=" + id + ", basic=" + basic + ", conveyance=" + conveyance
+                + ", Attendance=" + attendance + ", total Salary=" + totalSalary
+                + ", OT Salary=" + overTimeAmount + "]";
+    }
 }
