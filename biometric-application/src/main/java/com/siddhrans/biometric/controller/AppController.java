@@ -196,8 +196,8 @@ public class AppController {
 
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
-		//return "success";
-		return "registrationsuccess";
+		model.addAttribute("url", "view-BiometricData");
+		return "result";
 	}
 
 
@@ -252,7 +252,8 @@ public class AppController {
 
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
-		return "registrationsuccess";
+		model.addAttribute("url", "list");
+		return "result";
 	}
 
 

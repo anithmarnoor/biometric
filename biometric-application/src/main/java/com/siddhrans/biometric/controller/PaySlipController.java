@@ -128,7 +128,8 @@ public class PaySlipController {
 
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
-		return "addwagessuccess";
+		model.addAttribute("url", "view-wages");
+		return "result";
 	}
 
 	/**
@@ -169,7 +170,8 @@ public class PaySlipController {
 
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
-		return "addwagessuccess";
+		model.addAttribute("url", "view-wages");
+		return "result";
 	}
 
 	/**
@@ -233,7 +235,8 @@ public class PaySlipController {
 		User profile = userService.findByUserName(getPrincipal());
 
 		model.addAttribute("profile", profile);
-		return "savesalarydivsuccess";
+		model.addAttribute("url", "view-salaryDivision");
+		return "result";
 	}
 
 	/**
@@ -285,7 +288,8 @@ public class PaySlipController {
 
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
-		return "savesalarydivsuccess";
+		model.addAttribute("url", "view-salaryDivision");
+		return "result";
 	}
 
 	@RequestMapping(value = { "/view-PaySlip" }, method = RequestMethod.GET)
@@ -347,9 +351,10 @@ public class PaySlipController {
 		if(wages.size()<=0 || salaryDivision.size() <=0){
 			model.addAttribute("error", "Either Wages or Salary Division Information is not present.<br>"
 					+ " Please Add Wages and Salary Details before Generating PaySlip");
+			model.addAttribute("paySlip", new PaySlip());
 			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
-			return "paySlipError";
+			return "paySlip";
 		}
 		List<User> users = userService.findAllUsers();
 		String usersNotFound = new String();
@@ -386,7 +391,7 @@ public class PaySlipController {
 
 		/*model.addAttribute("paySlip", paySlip);*/
 		model.addAttribute("profile", profile);
-		if(usersNotFound.isEmpty())
+		if(usersNotFound.isEmpty() || usersNotFound.equals(""))
 			model.addAttribute("success", "Pay Slips for all Users generated successfully.");
 		else
 			model.addAttribute("success", "Pay Slips generated successfully.<br> Biometric Data for below users not found.\n");

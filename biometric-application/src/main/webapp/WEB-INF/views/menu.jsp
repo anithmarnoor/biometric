@@ -54,7 +54,7 @@
 						My Profile
 				</a></li>
 				<sec:authorize access="hasRole('ADMIN') ">
-					<li><a href="/PAM/list"> <i class="fa fa-users fa-lg"></i>
+					<li><a href="list"> <i class="fa fa-users fa-lg"></i>
 							Users
 					</a></li>
 				</sec:authorize>
@@ -67,7 +67,7 @@
 						<li><a href="view-wages">Set Wages</a></li>
 						<li><a href="view-salaryDivision">Salary Division</a></li>
 						<li><a href="view-BiometricData">Biometric Data</a></li>
-						<li><a href="view-searchAttendance">Attendance</a></li>
+						<!-- <li><a href="view-searchAttendance">Search Attendance</a></li> -->
 						<li><a href="generate-PaySlip">Generate Pay Slip</a></li>
 					</sec:authorize>
 					<li><a href="view-Attendance-${profile.id}">My Attendance</a></li>

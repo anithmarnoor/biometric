@@ -87,12 +87,13 @@ public class BiometricDataController {
 	@RequestMapping(value = { "/delete-BiometricData-{id}" }, method = RequestMethod.GET)
 	public String deleteBiometricData(@PathVariable String id, ModelMap model) {
 		biometricDataService.deleteBiometricDataById(Integer.parseInt(id));
-		model.addAttribute("success", "Data Deleted Successfully..");
+		model.addAttribute("success", "Biometric Data Deleted Successfully..");
 		User profile = userService.findByUserName(getPrincipal());
 
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
-		return "delBiometricSuccess";
+		model.addAttribute("url", "view-BiometricData");
+		return "result";
 	}
 
 
@@ -100,6 +101,19 @@ public class BiometricDataController {
 	public String getUserAttendance(@PathVariable String userId, ModelMap model) {
 		List<UserBiometricData> userAttendanceLog = userBiometricDataService.findByUserId(userId);
 		/*model.addAttribute("userAttendanceLog", userAttendanceLog);*/
+		model.addAttribute("userBiometricData", new UserBiometricData());
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "viewUserAttendanceData";
+	}
+	
+	@RequestMapping(value = { "/view-Attendance-{userId}" }, method = RequestMethod.POST)
+	public String searchSelfAttendance(@Valid UserBiometricData userBiometricData, @PathVariable int userId, BindingResult result,
+			ModelMap model) throws IOException {
+		List<UserBiometricData> userAttendanceLog = userBiometricDataService.findByYearAndMonth(userBiometricData.getYear(),userBiometricData.getMonth(),userId);
+		model.addAttribute("userAttendanceLog", userAttendanceLog);
 		model.addAttribute("userBiometricData", new UserBiometricData());
 		User profile = userService.findByUserName(getPrincipal());
 
@@ -244,7 +258,7 @@ public class BiometricDataController {
 					//Calculate Login and Logout Time based on map generated above.END
 				}
 				//END
-
+				scanner1.close();
 				/*}*/
 			} else {
 				List<BiometricData> biometricDataList = biometricDataService.findAll();
@@ -269,7 +283,8 @@ public class BiometricDataController {
 				model.addAttribute("success", "Biometric Data saved Successfully..");
 			}
 			model.addAttribute("loggedinuser", getPrincipal());
-			return "addBiometricSuccess";
+			model.addAttribute("url", "viewBiometricData");
+			return "result";
 
 		}catch(TransientObjectException e){
 			List<BiometricData> biometricDataList = biometricDataService.findAll();
@@ -300,7 +315,7 @@ public class BiometricDataController {
 
 	//Attendance Related START
 
-	@RequestMapping(value = { "/view-searchAttendance" }, method = RequestMethod.GET)
+	/*@RequestMapping(value = { "/view-searchAttendance" }, method = RequestMethod.GET)
 	public String viewAttendance(ModelMap model) {
 		List<UserBiometricData> userAttendanceLog = new ArrayList<UserBiometricData>();
 		model.addAttribute("userAttendanceLog", userAttendanceLog);
@@ -337,7 +352,7 @@ public class BiometricDataController {
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "viewUserAttendanceData";
-	}
+	}*/
 	//Attendance Related END
 
 
