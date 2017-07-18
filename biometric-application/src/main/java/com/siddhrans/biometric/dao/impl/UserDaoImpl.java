@@ -42,7 +42,7 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
  
     @SuppressWarnings("unchecked")
     public List<User> findAllUsers() {
-        Criteria criteria = createEntityCriteria().addOrder(Order.asc("firstName"));
+        Criteria criteria = createEntityCriteria().addOrder(Order.asc("id"));
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
         List<User> users = (List<User>) criteria.list();
          

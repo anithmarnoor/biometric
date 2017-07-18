@@ -6,9 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +16,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +39,10 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.mysql.jdbc.util.Base64Decoder;
 import com.siddhrans.biometric.model.PaySlip;
 import com.siddhrans.biometric.model.SalaryDivision;
 import com.siddhrans.biometric.model.User;
@@ -291,8 +288,6 @@ public class PaySlipController {
 		return "savesalarydivsuccess";
 	}
 
-
-
 	@RequestMapping(value = { "/view-PaySlip" }, method = RequestMethod.GET)
 	public String viewPaySlip(ModelMap model) {
 		PaySlip paySlip = new PaySlip();
@@ -301,6 +296,16 @@ public class PaySlipController {
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "viewPaySlip";
+	}
+	
+	@RequestMapping(value = { "/generate-PaySlip" }, method = RequestMethod.GET)
+	public String generatePaySlip(ModelMap model) {
+		PaySlip paySlip = new PaySlip();
+		model.addAttribute("paySlip", paySlip);
+		User profile = userService.findByUserName(getPrincipal());
+		model.addAttribute("profile", profile);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "generatePaySlip";
 	}
 
 
@@ -316,7 +321,7 @@ public class PaySlipController {
 			model.addAttribute("loggedinuser", getPrincipal());
 			return "paySlip";
 		} else {
-			model.addAttribute("error", "PaySlip for the month and year specified is not generated yet. Please contact administrator.");
+			model.addAttribute("error", "PaySlip for the specified month and year is not generated yet. Please contact administrator.");
 			model.addAttribute("paySlip", paySlip);
 			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
@@ -329,51 +334,65 @@ public class PaySlipController {
 			ModelMap model) {
 
 		User profile = userService.findByUserName(getPrincipal());
-		PaySlip existingPaySlip = paySlipService.getPayDetails(paySlip.getUserId(), paySlip.getMonth(), paySlip.getYear());
+		/*PaySlip existingPaySlip = paySlipService.getPayDetails(paySlip.getUserId(), paySlip.getMonth(), paySlip.getYear());
 		if(existingPaySlip != null){
 			model.addAttribute("paySlip", existingPaySlip);
 			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
 			return "paySlip";
-		} else {
+		} else {*/
+		List<Wages> wages = paySlipService.findWages();
+		List<SalaryDivision> salaryDivision = paySlipService.findSalaryDivision();
 
+		if(wages.size()<=0 || salaryDivision.size() <=0){
+			model.addAttribute("error", "Either Wages or Salary Division Information is not present.<br>"
+					+ " Please Add Wages and Salary Details before Generating PaySlip");
+			model.addAttribute("profile", profile);
+			model.addAttribute("loggedinuser", getPrincipal());
+			return "paySlipError";
+		}
+		List<User> users = userService.findAllUsers();
+		String usersNotFound = new String();
+		
+		for(User user:users){
+			PaySlip userPaySlip= new PaySlip();
+			logger.debug("Anith : UserID====>"+user.getId());
+			List<UserBiometricData> biometricData = userBiometricDataService.findByYearAndMonth(paySlip.getYear(), paySlip.getMonth(), user.getId());
+			if(biometricData.size()>0){
+				HashMap<String, Float> workingHoursAndOT = calculateNoOfWorkingHours(biometricData);
 
-			List<UserBiometricData> biometricData = userBiometricDataService.findByYearAndMonth(paySlip.getYear(), paySlip.getMonth(), paySlip.getUserId());
-			HashMap<String, Float> workingHoursAndOT = calculateNoOfWorkingHours(biometricData);
+				Wages wage = wages.get(0);
+				Float workingHours = workingHoursAndOT.get("workingHours") + 
+						workingHoursAndOT.get("totalHalfWorkingHrs") + 
+						workingHoursAndOT.get("remainingWorkingHrs");
+				logger.debug("Anith : workingHours====>"+workingHours);
+				userPaySlip.setAttendance(workingHours / 8.0f);
 
-			List<Wages> wages = paySlipService.findWages();
-			List<SalaryDivision> salaryDivision = paySlipService.findSalaryDivision();
-
-			if(wages.size()<=0 || salaryDivision.size() <=0){
-				model.addAttribute("error", "Either Wages or Salary Division Information is not present.<br>"
-						+ " Please Add Wages and Salary Details before Generating PaySlip");
-				model.addAttribute("profile", profile);
-				model.addAttribute("loggedinuser", getPrincipal());
-				return "paySlipError";
+				userPaySlip.setOverTimeHours(workingHoursAndOT.get("overTime"));
+				userPaySlip.setUserId(user.getId());
+				userPaySlip.setMonth(paySlip.getMonth());
+				userPaySlip.setYear(paySlip.getYear());
+				userPaySlip.setPanNo("");
+				
+				HashMap<String, Float> totalSalaryDetails = calculateTotalSalary(workingHoursAndOT, wage);
+				logger.debug("Anith : totalSalaryDetails====>"+totalSalaryDetails);
+				generateSalaryData(userPaySlip, totalSalaryDetails, salaryDivision.get(0));
+				paySlipService.savePayDetails(userPaySlip);
+				userPaySlip= null;
+			} else {
+				usersNotFound = usersNotFound+"\n"+ user.getUserName();
 			}
-			Wages wage = wages.get(0);
-			Float workingHours = workingHoursAndOT.get("workingHours") + 
-					workingHoursAndOT.get("totalHalfWorkingHrs") + 
-					workingHoursAndOT.get("remainingWorkingHrs");
-			logger.debug("Anith : workingHours====>"+workingHours);
-			paySlip.setAttendance(workingHours / 8.0f);
-
-			paySlip.setOverTimeHours(workingHoursAndOT.get("overTime"));
-
-
-			HashMap<String, Float> totalSalaryDetails = calculateTotalSalary(workingHoursAndOT, wage);
-			logger.debug("Anith : totalSalaryDetails====>"+totalSalaryDetails);
-			generateSalaryData(paySlip, totalSalaryDetails, salaryDivision.get(0));
-
-			//paySlip.setUserId(profile.getId());
 		}
 
-		paySlipService.savePayDetails(paySlip);
-
-		model.addAttribute("paySlip", paySlip);
+		/*model.addAttribute("paySlip", paySlip);*/
 		model.addAttribute("profile", profile);
+		if(usersNotFound.isEmpty())
+			model.addAttribute("success", "Pay Slips for all Users generated successfully.");
+		else
+			model.addAttribute("success", "Pay Slips generated successfully.<br> Biometric Data for below users not found.\n");
 		model.addAttribute("loggedinuser", getPrincipal());
-		return "paySlip";
+		model.addAttribute("url", "generate-PaySlip");
+		return "result";
 	}
 
 	@RequestMapping(value = { "/download-paySlip-{userId}-{month}-{year}" },  method = RequestMethod.GET)
@@ -394,12 +413,9 @@ public class PaySlipController {
 		document.addCreator("Siddhrans technologies");
 		document.addTitle("PaySlip");
 
+		File file = new File(fileName);
 
-		String filePath="C:/anith/"+fileName;
-
-		File file = new File(filePath);
-
-		PdfWriter writer = PdfWriter.getInstance(document,new FileOutputStream(filePath));
+		PdfWriter writer = PdfWriter.getInstance(document,new FileOutputStream(fileName));
 		document.open();
 
 		PdfPTable table = new PdfPTable(2);
@@ -560,31 +576,21 @@ public class PaySlipController {
 
 		document.add(table);
 
-
-
 		document.close();
-
-
-		InputStream is = new FileInputStream(filePath);
 
 		response.setHeader("Content-Disposition", "attachment;filename=\""+fileName+"\"");
 
-
-		int read=0;
-		byte[] bytes = new byte[1024];
-		OutputStream os = response.getOutputStream();
+		byte[] bytes=FileUtils.readFileToByteArray(file);
+		/*OutputStream os = response.getOutputStream();
 
 		while((read = is.read(bytes))!= -1){
 			os.write(bytes, 0, read);
 		}
 		os.flush();
 		os.close(); 
-		is.close();
+		is.close();*/
 
-
-
-		/*
-		FileCopyUtils.copy(decodedBytes, response.getOutputStream());*/
+		FileCopyUtils.copy(bytes, response.getOutputStream());
 
 		return "paySlip";
 	}

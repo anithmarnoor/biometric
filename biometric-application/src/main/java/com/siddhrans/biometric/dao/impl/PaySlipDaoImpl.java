@@ -30,9 +30,11 @@ public class PaySlipDaoImpl extends AbstractDao<Integer, PaySlip> implements Pay
 
 	@Override
 	public boolean savePayDetails(PaySlip paySlip) {
-		PaySlip existingPaySlip = getPayDetails(paySlip.getUserId(), paySlip.getYear(), paySlip.getMonth());
-		if(existingPaySlip == null)
+		/*PaySlip existingPaySlip = getPayDetails(paySlip.getUserId(), paySlip.getYear(), paySlip.getMonth());
+		if(existingPaySlip == null)*/
 			persist(paySlip);
+		/*else 
+		 	update(paySlip);*/
 		return true;
 	}
 
@@ -42,6 +44,4 @@ public class PaySlipDaoImpl extends AbstractDao<Integer, PaySlip> implements Pay
 		delete(existingPaySlip);
 		return true;
 	}
-
-
 }

@@ -68,12 +68,10 @@
 						<li><a href="view-salaryDivision">Salary Division</a></li>
 						<li><a href="view-BiometricData">Biometric Data</a></li>
 						<li><a href="view-searchAttendance">Attendance</a></li>
-						
+						<li><a href="generate-PaySlip">Generate Pay Slip</a></li>
 					</sec:authorize>
-					<sec:authorize access="hasRole('USER') ">
 					<li><a href="view-Attendance-${profile.id}">My Attendance</a></li>
-					</sec:authorize>
-					<li><a href="view-PaySlip">Pay Slip</a></li>
+					<li><a href="view-PaySlip">View My PaySlip</a></li>					
 				</ul>
 			</ul>
 		</div>
