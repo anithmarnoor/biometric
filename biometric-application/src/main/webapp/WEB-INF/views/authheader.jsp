@@ -5,7 +5,7 @@
 <div class="authbar">
 	<span>Dear <strong>${loggedinuser}</strong>, Welcome to PAM
 	</span> <span class="floatRight"> <br>
-			<a href="<c:url value="/logout" />">Logout</a>
+			<a href="<c:url value="/logout" />"><h3>Logout</h3></a>
 		
 	</span>
 </div>

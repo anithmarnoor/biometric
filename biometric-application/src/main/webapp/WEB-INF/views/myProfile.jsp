@@ -14,12 +14,12 @@
 <body>
 	<%@include file="authheader.jsp"%>
 	
-	<div class="generic-container">
+	<div class="generic-container-1">
 		<div class="row">
 			<div class="panel panel-default">
 				<!-- Default panel contents -->
 				<div class="panel-heading">
-					<span class="lead">My Profile</span>
+					<span class="lead" style="margin-left: 27px;">My Profile</span>
 				</div>
 				<div class="col-md-12">
 					<label>Name: </label><label>${profile.firstName} ${profile.lastName}</label><br>

@@ -22,7 +22,7 @@
 				<div id="no-more-tables">
 					<table
 						class="col-md-12 table-bordered table-striped table-condensed cf">
-						<thead class="cf">
+						<thead class="cf" id="thcolor">
 							<tr>
 								<th>Normal 8hr shift amount</th>
 								<th>Per trip Amount</th>

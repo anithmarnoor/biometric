@@ -22,7 +22,7 @@
 				<div id="no-more-tables">
 					<table
 						class="col-md-12 table-bordered table-striped table-condensed cf">
-						<thead class="cf">
+						<thead class="cf" id="thcolor">
 							<tr>
 								<th>Basic</th>
 								<th>Conveyance</th>

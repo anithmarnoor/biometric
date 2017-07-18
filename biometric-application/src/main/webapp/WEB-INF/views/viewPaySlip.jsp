@@ -12,7 +12,7 @@
 	<%@include file="authheader.jsp"%>
 	<div class="generic-container">
 		<div class="alert alert-success lead">${error}</div>
-		<div class="well lead">Enter Year and Month to generate PaySlip.</div>
+		<div class="well clead" style="color: #4682B4;font-size: 21px;">Enter Year and Month to generate PaySlip.</div>
 		<sec:authorize access="hasRole('ADMIN')">
 			<form:form method="POST" modelAttribute="paySlip"
 				class="form-horizontal" action="generate-PaySlip">

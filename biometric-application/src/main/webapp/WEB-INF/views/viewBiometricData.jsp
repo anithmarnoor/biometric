@@ -20,7 +20,7 @@
 			</div>
 			<div class="tablecontainer">
 				<table class="table table-hover">
-					<thead>
+					<thead id="thcolor">
 						<tr>
 							<th>No.</th>
 							<th>Year</th>
