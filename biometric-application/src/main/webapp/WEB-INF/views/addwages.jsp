@@ -12,7 +12,7 @@
 	<%@include file="authheader.jsp"%>
 	<div class="generic-container">
 		<div class="alert alert-success lead">${error}</div>
-		<div class="well lead">Please enter Daily Normal 8hr shift and Overtime wages. Based on this, monthly salary will be calculated.</div>
+		<div class="well lead" style="    margin-left: 4px;">Please enter Daily Normal 8hr shift and Overtime wages. Based on this, monthly salary will be calculated.</div>
 		<form:form method="POST" modelAttribute="wages"
 			class="form-horizontal">
 			<div class="row">

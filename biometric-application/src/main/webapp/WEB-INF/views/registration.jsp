@@ -18,7 +18,7 @@
 	<div class="generic-container">
 
 
-		<div class="well lead">Registration Form</div>
+		<div class="well lead" style="margin-left: 4px;">Registration Form</div>
 		<form:form method="POST" modelAttribute="user" class="form-horizontal">
 			<form:input type="hidden" path="id" id="id" />
 
@@ -63,7 +63,7 @@
 							</c:when>
 							<c:otherwise> --%>
 						<form:radiobutton path="gender" id="gender" value="Male"
-							label="Male" />
+							label="Male" />&nbsp;&nbsp;
 						<form:radiobutton path="gender" id="gender" value="Female"
 							label="Female" />
 						<div class="has-error">

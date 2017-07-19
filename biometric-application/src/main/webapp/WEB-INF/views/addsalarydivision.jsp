@@ -12,7 +12,7 @@
 	<%@include file="authheader.jsp"%>
 	<div class="generic-container">
 		<div class="alert alert-success lead">${error}</div>
-		<div class="well lead">Please enter Salary break down data in %</div>
+		<div class="well lead" style="margin-left: 4px;">Please enter Salary break down data in %</div>
 		<form:form method="POST" modelAttribute="salaryDivision"
 			class="form-horizontal">
 			<div class="row">
