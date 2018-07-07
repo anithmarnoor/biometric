@@ -7,16 +7,16 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Biometric Data</title>
+<title>Biometric Log</title>
 </head>
 
 <body>
 	<%@include file="authheader.jsp"%>
-	<div class="generic-container">
+	<div class="generic-container-2">
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
 			<div class="panel-heading">
-				<span class="lead">List of Documents </span>
+				<span class="lead">List of Logs</span>
 			</div>
 			<div class="tablecontainer">
 				<table class="table table-hover">
@@ -30,7 +30,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${biometricDataList}" var="doc" varStatus="counter">
+						<c:forEach items="${biometricDataList}" var="doc"
+							varStatus="counter">
 							<tr>
 								<td>${counter.index + 1}</td>
 								<td>${doc.year}</td>
@@ -50,9 +51,9 @@
 		<div class="panel panel-default">
 
 			<div class="panel-heading">
-				<span class="lead">Upload New Document</span>
+				<span class="lead">Upload New Log</span>
 			</div>
-			
+
 			<div class="uploadcontainer">
 				<%@include file="addBiometricData.jsp"%>
 			</div>

@@ -8,15 +8,32 @@
 <title>Pay Slip</title>
 </head>
 
+
+
 <body>
 	<%@include file="authheader.jsp"%>
-	<div class="generic-container">
+	<div class="generic-container-2">
 		<div class="alert alert-success lead">${error}</div>
 		<div class="well clead" style="color: #4682B4; font-size: 21px;">Enter
-			Year and Month to generate PaySlip.</div>
+			Year and Month</div>
+		<div class="alert alert-success lead">${error}</div>
 
 		<form:form method="POST" modelAttribute="paySlip"
-			class="form-horizontal" action="generate-PaySlip-${profile.id}">
+			class="form-horizontal" action="view-PaySlip">
+			<div class="row">
+				<div class="form-group col-md-12">
+					<label class="col-md-3 control-lable" for="department">User</label>
+					<div class="col-md-6">
+						<form:select path="user" items="${users}"
+							multiple="false" itemValue="userId"
+							itemLabel="userName" class="form-control input-sm"
+							id="department" style="margin-left: -97px;" />
+						<div class="has-error">
+							<form:errors path="user" class="help-inline" />
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="row">
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="year">Year</label>
@@ -59,6 +76,7 @@
 				</div>
 			</div>
 		</form:form>
+
 
 	</div>
 </body>

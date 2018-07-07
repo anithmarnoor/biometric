@@ -1,8 +1,6 @@
 package com.siddhrans.biometric.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
  
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -50,9 +47,9 @@ public class User implements Serializable{
     @Column(name="PHONE", unique=true, nullable=true)
     private String phoneNo;
     
-    @NotEmpty
+    /*@NotEmpty
     @Column(name="DL_NO", unique=true, nullable=false)
-    private String dlNo;
+    private String dlNo;*/
     
     @NotEmpty
     @Column(name="DOB", nullable=false)
@@ -69,7 +66,52 @@ public class User implements Serializable{
     @NotEmpty
     @Column(name="ADDRESS", nullable=false)
     private String address;
-       
+    
+   /* @NotEmpty
+    @Column(name="DL_EXPIRY_DATE", nullable=false)
+    private String dlExpiryDate;*/
+    
+    @Column(name="STATUS", nullable=false)
+    private String status;
+    
+    @Column(name="LEFT_DATE", nullable=true)
+    private String leftDate;
+    
+    @Column(name="OVERTIME_RULE", nullable=true)
+    private String overTime;
+    
+    public String getOverTime() {
+		return overTime;
+	}
+
+	public void setOverTime(String overTime) {
+		this.overTime = overTime;
+	}
+
+	public String getLeftDate() {
+		return leftDate;
+	}
+
+	public void setLeftDate(String leftDate) {
+		this.leftDate = leftDate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+/*	public String getDlExpiryDate() {
+		return dlExpiryDate;
+	}
+
+	public void setDlExpiryDate(String dlExpiryDate) {
+		this.dlExpiryDate = dlExpiryDate;
+	}
+*/
 	public String getAddress() {
 		return address;
 	}
@@ -102,13 +144,13 @@ public class User implements Serializable{
 		this.doj = doj;
 	}
 
-	public String getDlNo() {
+/*	public String getDlNo() {
 		return dlNo;
 	}
 
 	public void setDlNo(String dlNo) {
 		this.dlNo = dlNo;
-	}
+	}*/
 
 	public String getUserName() {
 		return userName;
@@ -124,8 +166,22 @@ public class User implements Serializable{
              joinColumns = { @JoinColumn(name = "USER_ID") }, 
              inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
     private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
- 
-    public Integer getId() {
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "USER_DESIGNATION", 
+             joinColumns = { @JoinColumn(name = "USER_ID") }, 
+             inverseJoinColumns = { @JoinColumn(name = "DESIGNATION_ID") })
+    private Designation designation;
+     
+    public Designation getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(Designation designation) {
+		this.designation = designation;
+	}
+
+	public Integer getId() {
         return id;
     }
  

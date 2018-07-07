@@ -42,7 +42,21 @@ public class UserBiometricData implements Serializable{
     
     @Column(name="NO_OF_MINS", length=255)
     private String noOfMins;
-   
+    
+    @Column(name="STATUS", length=255)
+    private String status;
+    
+    @Column(name="MACHINE_ID", length=255)
+    private Integer machineId;
+
+	public Integer getMachineId() {
+		return machineId;
+	}
+
+	public void setMachineId(Integer machineId) {
+		this.machineId = machineId;
+	}
+
 	public Integer getUserId() {
 		return userId;
 	}
@@ -115,6 +129,14 @@ public class UserBiometricData implements Serializable{
 		this.year = year;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	@Override
     public int hashCode() {
         final int prime = 31;
@@ -148,7 +170,7 @@ public class UserBiometricData implements Serializable{
  
     @Override
     public String toString() {
-        return "BioMetric Data [id=" + id + ", Month=" + month + ", Year="
-                + year + "]";
+        return "UserBiometricData [id=" + id + ", User ID="+ userId + ", Machine ID="+ machineId + ", Date="+date+", Month=" + month + ", Year="
+                + year + ", Status=" + status + ", LoginTime=" + loginTime +", LogoutTime=" + logoutTime +"]\n";
     }
 }

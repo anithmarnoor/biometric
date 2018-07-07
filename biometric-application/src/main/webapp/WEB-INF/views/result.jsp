@@ -12,7 +12,7 @@
 </head>
 <body>
 <%@include file="authheader.jsp" %>
-    <div class="generic-container">
+    <div class="generic-container-2">
         
          
         <div class="alert alert-success lead">

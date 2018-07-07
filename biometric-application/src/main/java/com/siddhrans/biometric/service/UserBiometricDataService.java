@@ -2,6 +2,7 @@ package com.siddhrans.biometric.service;
 
 import java.util.List;
 
+import com.siddhrans.biometric.model.Leaves;
 import com.siddhrans.biometric.model.UserBiometricData;
 
 public interface UserBiometricDataService {
@@ -19,4 +20,6 @@ public interface UserBiometricDataService {
 	public void save(UserBiometricData document);
 
 	public void deleteBiometricDataByUserId(String userId);
+	
+	List<UserBiometricData> findLeavesByUserInMonth(int userId, int month, int year);
 }

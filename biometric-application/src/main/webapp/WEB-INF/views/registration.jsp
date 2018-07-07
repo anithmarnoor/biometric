@@ -10,16 +10,14 @@
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src='<c:url value='/static/jQuery/bootstrap.min.js'/>'></script>
-<title>Spring MVC</title>
 </head>
 
 <body>
 	<%@include file="authheader.jsp"%>
-	<div class="generic-container">
-
-
-		<div class="well lead" style="margin-left: 4px;">Registration Form</div>
-		<form:form method="POST" modelAttribute="user" class="form-horizontal">
+	<div class="generic-container-2">
+		<div class="well lead" style="margin-left: 4px;">Registration
+			Form</div>
+		<form:form method="POST" modelAttribute="user" class="form-horizontal" action="newUser">
 			<form:input type="hidden" path="id" id="id" />
 
 			<div class="row">
@@ -129,17 +127,11 @@
 					<label class="col-md-3 control-lable" for="userName">Choose
 						UserName</label>
 					<div class="col-md-7">
-						<c:choose>
-							<c:when test="${edit}">
-								<form:input type="text" path="userName" id="userName"
-									class="form-control input-sm" disabled="true" />
-							</c:when>
-							<c:otherwise>
-								<form:input type="text" path="userName" id="userName"
-									class="form-control input-sm" />
-								<div class="has-error">
-									<form:errors path="userName" class="help-inline" />
-								</div>
+						<form:input type="text" path="userName" id="userName"
+							class="form-control input-sm" />
+						<div class="has-error">
+							<form:errors path="userName" class="help-inline" />
+						</div>
 							</c:otherwise>
 						</c:choose>
 					</div>
@@ -158,9 +150,6 @@
 					</div>
 				</div>
 			</div>
-
-
-
 			<div class="row">
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="email">Email</label>
@@ -189,74 +178,58 @@
 			</div>
 
 			<div class="row">
-				<c:choose>
-					<c:when test="${roleChange}">
-						<div class="form-group col-md-12">
-							<label class="col-md-3 control-lable" for="userProfiles">Roles</label>
-							<div class="col-md-7">
-								<form:select path="userProfiles" items="${roles}"
-									multiple="false" itemValue="id" itemLabel="type"
-									class="form-control input-sm" id="roles" />
-								<div class="has-error">
-									<form:errors path="userProfiles" class="help-inline" />
-								</div>
-							</div>
-						</div>
-					</c:when>
-					<c:otherwise>
-						<div class="form-group col-md-12">
-							<label class="col-md-3 control-lable" for="userProfiles">Roles</label>
-							<div class="col-md-7">
-								<form:select path="userProfiles" items="${roles}"
-									multiple="false" itemValue="id" itemLabel="type"
-									class="form-control input-sm" id="roles" />
-								<div class="has-error">
-									<form:errors path="userProfiles" class="help-inline" />
-								</div>
-							</div>
-						</div>
-					</c:otherwise>
-				</c:choose>
-
-			</div>
-
-			<div class="row">
-				<div class="is2">
-					<div class="form-group col-md-12">
-						<label class="col-md-3 control-lable" for="password">Driving
-							License Number</label>
-						<div class="col-md-7">
-							<%-- <c:choose>
-							<c:when test="${edit}">
-								<form:input type="dlNo" path="dlNo" id="dlNo"
-									class="form-control input-sm" disabled="true" />
-							</c:when>
-							<c:otherwise> --%>
-							<form:input type="dlNo" path="dlNo" id="dlNo"
-								class="form-control input-sm" />
-							<div class="has-error">
-								<form:errors path="dlNo" class="help-inline" />
-							</div>
-							<%-- </c:otherwise>
-						</c:choose>
- --%>
+				<div class="form-group col-md-12">
+					<label class="col-md-3 control-lable" for="userProfile">Roles</label>
+					<div class="col-md-7">
+						<form:select path="userProfile" items="${roles}" multiple="false"
+							itemValue="id" itemLabel="type" class="form-control input-sm"
+							id="roles" />
+						<div class="has-error">
+							<form:errors path="userProfile" class="help-inline" />
 						</div>
 					</div>
 				</div>
 			</div>
 
 			<div class="row">
+				<div class="form-group col-md-12">
+					<label class="col-md-3 control-lable" for="designation">Designation</label>
+					<div class="col-md-7">
+						<form:select path="designation" items="${designations}"
+							multiple="false" itemValue="designationId"
+							itemLabel="designationName" class="form-control input-sm"
+							id="roles" />
+						<div class="has-error">
+							<form:errors path="designation" class="help-inline" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="form-group col-md-12">
+					<label class="col-md-3 control-lable" for="overTime">OVERTIME</label>
+					<div class="col-md-7">
+						<form:radiobutton path="overTime" id="overTime" value="Full"
+							label="Full" />
+						<br>
+						<form:radiobutton path="overTime" id="overTime" value="Half"
+							label="Half" />
+						<br>
+						<form:radiobutton path="overTime" id="overTime"
+							value="One And Half" label="One And Half" />
+						<div class="has-error">
+							<br>
+							<form:errors path="overTime" class="help-inline" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
 				<div class="form-actions floatRight">
-					<c:choose>
-						<c:when test="${edit}">
-							<input type="submit" value="Update"
-								class="btn btn-primary btn-sm" /> or <a
-								href="<c:url value='/list' />">Cancel</a>
-						</c:when>
-						<c:otherwise>
-							<input type="submit" value="Register"
-								class="btn btn-primary btn-sm" /> or <a
-								href="<c:url value='/list' />">Cancel</a>
+					<input type="submit" value="Register"
+						class="btn btn-primary btn-sm" /> or <a
+						href="<c:url value='/list' />">Cancel</a>
 						</c:otherwise>
 					</c:choose>
 				</div>

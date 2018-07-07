@@ -18,7 +18,11 @@ public interface UserDao {
     void save(User user);
      
     void deleteByUserName(String userName);
+    
+    void deleteUserById(Integer userId);
      
     List<User> findAllUsers();
+    
+    List<User> findAllInactiveUsers();
  
 }

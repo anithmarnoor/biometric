@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.siddhrans.biometric.model.User;
 
-
- 
- 
 public interface UserService {
      
     User findById(int id);
@@ -22,8 +19,12 @@ public interface UserService {
     void updateUser(User user);
      
     void deleteUserByUserName(String userName);
+    
+    void deleteUserById(Integer userId);
  
-    List<User> findAllUsers(); 
+    List<User> findAllUsers();
+    
+    List<User> findAllInactiveUsers(); 
      
     boolean isUserNameUnique(Integer id, String userName);
     

@@ -4,15 +4,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.GregorianCalendar;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -36,11 +40,18 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.siddhrans.biometric.model.BiometricData;
+import com.siddhrans.biometric.model.BiometricMachine;
+import com.siddhrans.biometric.model.Holidays;
 import com.siddhrans.biometric.model.User;
 import com.siddhrans.biometric.model.UserBiometricData;
 import com.siddhrans.biometric.service.BiometricDataService;
+import com.siddhrans.biometric.service.HolidaysService;
+import com.siddhrans.biometric.service.LeavesService;
 import com.siddhrans.biometric.service.UserBiometricDataService;
 import com.siddhrans.biometric.service.UserService;
+import com.siddhrans.biometric.utils.BiometricConstants;
+import com.siddhrans.biometric.utils.CustomDateTimeComparator;
+import com.siddhrans.biometric.utils.CustomUserIdComparator;
 
 @Controller
 @RequestMapping("/")
@@ -48,7 +59,7 @@ import com.siddhrans.biometric.service.UserService;
 public class BiometricDataController {
 
 
-	static final Logger logger = LoggerFactory.getLogger(PaySlipController.class);
+	static final Logger logger = LoggerFactory.getLogger(BiometricDataController.class);
 
 	@Autowired
 	BiometricDataService biometricDataService;
@@ -60,11 +71,161 @@ public class BiometricDataController {
 	UserService userService;
 
 	@Autowired
+	LeavesService leavesService;
+
+	@Autowired
+	HolidaysService holidaysService;
+
+	@Autowired
 	MessageSource messageSource;
 
 	@Autowired
 	PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
 
+
+	/**
+	 * This method will provide the medium to add a Biometric Machine.
+	 */
+	@RequestMapping(value = { "/addMachine" }, method = RequestMethod.GET)
+	public String addMachine(ModelMap model) {
+		List<BiometricMachine> machineList = biometricDataService.findAllMachines();
+		model.addAttribute("machineList", machineList);
+		model.addAttribute("bioMachine", new BiometricMachine());
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "addBiometricMachine";
+	}
+
+	/**
+	 * This method will save/edit/delete the Biometric Machine Details to database
+	 */
+	@RequestMapping(value = { "/machine-{action}-{id}" }, method = RequestMethod.POST)
+	public String addMachineData(@Valid BiometricMachine bioMachine, @PathVariable String action, @PathVariable String id, BindingResult bindingResult, ModelMap model) {
+		if(action.equals("save")){
+			biometricDataService.saveMachine(bioMachine);
+			model.addAttribute("message", "Saved Successfully.");
+		} else if(action.equals("delete")){
+			biometricDataService.deleteMachineById(Integer.parseInt(id));
+			model.addAttribute("message", "Deleted Successfully.");
+		} else if(action.equals("edit")){
+			biometricDataService.editMachine(bioMachine);
+			model.addAttribute("message", "Edited Successfully.");
+		}		
+
+		List<BiometricMachine> machineList = biometricDataService.findAllMachines();
+		model.addAttribute("machineList", machineList);
+		model.addAttribute("bioMachine", new BiometricMachine());
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "addBiometricMachine";
+	}
+
+	/**
+	 * This method will provide the medium to add a Salary Division Details.
+	 */
+	@RequestMapping(value = { "/attendanceLog" }, method = RequestMethod.GET)
+	public String saveBiometricData(ModelMap model) {
+		BiometricData biometricData = new BiometricData();
+		model.addAttribute("biometricData", biometricData);
+		List<BiometricMachine> machineList = biometricDataService.findAllMachines();
+		model.addAttribute("machineList", machineList);
+		model.addAttribute("edit", false);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "viewBiometricData";
+	}
+
+	/**
+	 * This method will provide the medium to add a Salary Division Details.
+	 * @throws IOException 
+	 * @throws ParseException 
+	 */
+	@RequestMapping(value = { "/attendanceLog-save" }, method = RequestMethod.POST)
+	public String saveBiometricData(@Valid BiometricData biometricData, BindingResult result,
+			ModelMap model) throws IOException, ParseException {
+		logger.debug("ANITH: biometricData is "+biometricData);
+		try{
+			if (result.hasErrors()) {
+				List<BiometricData> biometricDataList = biometricDataService.findAll();
+				model.addAttribute("biometricDataList", biometricDataList);
+				model.addAttribute("biometricData", biometricData);
+				List<BiometricMachine> machineList = biometricDataService.findAllMachines();
+				model.addAttribute("machineList", machineList);
+				model.addAttribute("edit", false);
+				User profile = userService.findByUserName(getPrincipal());
+
+				model.addAttribute("profile", profile);
+				model.addAttribute("loggedinuser", getPrincipal());
+				return "viewBiometricData";
+			}
+
+			MultipartFile multipartFile = biometricData.getFile();
+			String fileName = multipartFile.getOriginalFilename();
+			String fileNameWithoutExt = fileName.substring(fileName.lastIndexOf(".")+1,fileName.length());
+			String extension = fileNameWithoutExt.substring(fileNameWithoutExt.lastIndexOf(".")+1,fileNameWithoutExt.length());
+			logger.debug("ANITH: File Name is "+fileNameWithoutExt+ "\n File Extension is "+extension);
+
+			boolean isDuplicatesFound = false;
+			if(extension.equals("xls") || extension.equals("xlsx") || extension.equals("csv") || extension.equals("dat")){
+				biometricData.setFileName(fileNameWithoutExt);
+				biometricData.setFileType("text/csv");
+				//biometricData.setContent(multipartFile.getBytes());
+				File tmpFile = File.createTempFile(fileNameWithoutExt, extension);
+				multipartFile.transferTo(tmpFile);
+
+				File csvFile = datToCSVFile(tmpFile);
+				byte[] fileBytes = readBytesFromFile(csvFile);
+				biometricData.setContent(fileBytes);
+
+				//Reads data from dat file and reads only user ID,data and time column
+				ArrayList<ArrayList<String>> bioDataList = readFromFile(fileNameWithoutExt, extension,  csvFile);
+				//Divides the user data according to User IDs and then sorts it according to data and time
+				HashMap<Integer, ArrayList<LocalDateTime>> userAttDataMap = this.sortAndDivideArrayList(bioDataList);
+				//Finds login and logout time and Calculate the number of hours worked per day. 
+				HashMap<Integer, ArrayList<HashMap<String,String>>> userAttDetails = calculateWorkingHours(userAttDataMap);
+				ArrayList<UserBiometricData> userBiometricObjsList = convertToUserBiometricObject(userAttDetails, biometricData.getYear(), biometricData.getMonth());
+				Integer machineId = biometricData.getMachine().getMachineId();
+				for(UserBiometricData biometricDataObj: userBiometricObjsList){
+					biometricDataObj.setMachineId(machineId);
+					userBiometricDataService.save(biometricDataObj);
+				}
+				biometricDataService.saveDocument(biometricData);
+			}
+			return "result";
+
+		}catch(TransientObjectException e){
+			List<BiometricData> biometricDataList = biometricDataService.findAll();
+			model.addAttribute("biometricDataList", biometricDataList);
+			model.addAttribute("biometricData", biometricData);
+			model.addAttribute("edit", false);
+			User profile = userService.findByUserName(getPrincipal());
+			logger.debug("TransientObjectException Occurred... Exception message is "+e.getMessage());
+			model.addAttribute("profile", profile);
+			model.addAttribute("error", "Biometric Data with same month and year is present.. Please delete existing data" +
+					" and upload again if you want to change.");
+			model.addAttribute("loggedinuser", getPrincipal());
+			return "viewBiometricData";
+		}catch(Exception e){
+			List<BiometricData> biometricDataList = biometricDataService.findAll();
+			model.addAttribute("biometricDataList", biometricDataList);
+			model.addAttribute("biometricData", biometricData);
+			model.addAttribute("edit", false);
+			User profile = userService.findByUserName(getPrincipal());
+			logger.debug("Exception StackTrace is ");
+			e.printStackTrace();
+			model.addAttribute("profile", profile);
+			model.addAttribute("error", "Exception reading data. Exception message is "+e.getMessage() +"StackTrace\n "+e.getStackTrace().toString());
+			model.addAttribute("loggedinuser", getPrincipal());
+			return "viewBiometricData";
+
+		}
+	}
 
 	/**
 	 * This method will provide the medium to add a Salary Division Details.
@@ -97,264 +258,59 @@ public class BiometricDataController {
 	}
 
 
-	@RequestMapping(value = { "/view-Attendance-{userId}" }, method = RequestMethod.GET)
-	public String getUserAttendance(@PathVariable String userId, ModelMap model) {
-		List<UserBiometricData> userAttendanceLog = userBiometricDataService.findByUserId(userId);
-		/*model.addAttribute("userAttendanceLog", userAttendanceLog);*/
+	@RequestMapping(value = { "/view-Attendance" }, method = RequestMethod.GET)
+	public String getUserAttendance(ModelMap model) {
+		/*List<UserBiometricData> userAttendanceLog = userBiometricDataService.findByUserId(userId);
+		model.addAttribute("userAttendanceLog", userAttendanceLog);*/
 		model.addAttribute("userBiometricData", new UserBiometricData());
 		User profile = userService.findByUserName(getPrincipal());
+
+		if(profile.getUserProfile().getType().equals(BiometricConstants.ADMIN_ROLE)){
+			List<User> usersList = userService.findAllUsers();
+			model.addAttribute("usersList", usersList);
+		} else {
+			List<User> usersList = new ArrayList<User>();
+			usersList.add(profile);
+			model.addAttribute("usersList", usersList);
+		}
 
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "viewUserAttendanceData";
 	}
-	
-	@RequestMapping(value = { "/view-Attendance-{userId}" }, method = RequestMethod.POST)
-	public String searchSelfAttendance(@Valid UserBiometricData userBiometricData, @PathVariable int userId, BindingResult result,
+
+	@RequestMapping(value = { "/view-Attendance" }, method = RequestMethod.POST)
+	public String searchSelfAttendance(@Valid UserBiometricData userBiometricData, BindingResult result,
 			ModelMap model) throws IOException {
+		Integer userId = userBiometricData.getUserId();
 		List<UserBiometricData> userAttendanceLog = userBiometricDataService.findByYearAndMonth(userBiometricData.getYear(),userBiometricData.getMonth(),userId);
 		model.addAttribute("userAttendanceLog", userAttendanceLog);
 		model.addAttribute("userBiometricData", new UserBiometricData());
 		User profile = userService.findByUserName(getPrincipal());
-
+		if(profile.getUserProfile().getType().equals(BiometricConstants.ADMIN_ROLE)){
+			List<User> usersList = userService.findAllUsers();
+			model.addAttribute("usersList", usersList);
+		} else {
+			List<User> usersList = new ArrayList<User>();
+			usersList.add(profile);
+			model.addAttribute("usersList", usersList);
+		}
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "viewUserAttendanceData";
-	}
-
-
-	/**
-	 * This method will provide the medium to add a Salary Division Details.
-	 */
-	@RequestMapping(value = { "/save-biometricData" }, method = RequestMethod.GET)
-	public String saveBiometricData(ModelMap model) {
-		BiometricData biometricData = new BiometricData();
-		model.addAttribute("biometricData", biometricData);
-		model.addAttribute("edit", false);
-		User profile = userService.findByUserName(getPrincipal());
-
-		model.addAttribute("profile", profile);
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "viewBiometricData";
-	}
-
-	/**
-	 * This method will provide the medium to add a Salary Division Details.
-	 * @throws IOException 
-	 */
-	@RequestMapping(value = { "/view-BiometricData" }, method = RequestMethod.POST)
-	public String saveBiometricData(@Valid BiometricData biometricData, BindingResult result,
-			ModelMap model) throws IOException {
-		try{
-			if (result.hasErrors()) {
-				List<BiometricData> biometricDataList = biometricDataService.findAll();
-				model.addAttribute("biometricDataList", biometricDataList);
-				model.addAttribute("biometricData", biometricData);
-				model.addAttribute("edit", false);
-				User profile = userService.findByUserName(getPrincipal());
-
-				model.addAttribute("profile", profile);
-				model.addAttribute("loggedinuser", getPrincipal());
-				return "viewBiometricData";
-			}
-
-			MultipartFile multipartFile = biometricData.getFile();
-			String fileName = multipartFile.getOriginalFilename();
-			String extension = fileName.substring(fileName.lastIndexOf(".")+1,fileName.length());
-			logger.debug("ANITH: File Extension is "+extension);
-			File csvFile = null;
-			boolean isDuplicatesFound = false;
-			if(extension.equals("xls") || extension.equals("xlsx") || extension.equals("csv") || extension.equals("dat")){
-
-				File tmpFile = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + 
-						multipartFile.getOriginalFilename());
-				multipartFile.transferTo(tmpFile);
-
-				csvFile = datToCSVFile(tmpFile);
-				byte[] fileBytes = readBytesFromFile(csvFile);
-				biometricData.setName(csvFile.getName());
-				biometricData.setType("text/csv");
-				//biometricData.setContent(multipartFile.getBytes());
-				biometricData.setContent(fileBytes);
-
-				//START: Read the data in file and insert the values to list
-
-				Scanner scanner1=new Scanner(csvFile);
-				ArrayList< ArrayList<String>> bioDataList = new ArrayList< ArrayList<String>>();
-				while(scanner1.hasNext()){
-					String line=scanner1.nextLine();
-					String[] lineArr = line.split(",");
-					ArrayList<String> data = new ArrayList<String>(Arrays.asList(lineArr));
-					bioDataList.add(data);
-				}
-				logger.debug("ANITH: bioDataList==>"+bioDataList);
-				ArrayList<HashMap<String, ArrayList<ArrayList<String>>>> userDataList = getMapFromList(bioDataList);
-				for(int i=0;i < userDataList.size(); i++){
-					HashMap<String, ArrayList<ArrayList<String>>> userData = userDataList.get(i);
-					//Block to read List and filter based on user Id's END
-					//Calculate Login and Logout Time based on map generated above.START
-					//Above map(userData) contains entries based on id's as keys. It contains all entries present in file as arrayList
-					Set<Entry<String, ArrayList<ArrayList<String>>>> keySet = userData.entrySet();
-					Iterator<Entry<String, ArrayList<ArrayList<String>>>> iterator = keySet.iterator();
-					String enteredYear = biometricData.getYear();
-					String enteredMonth = biometricData.getMonth();
-					ArrayList<UserBiometricData> listOfAttendance = new ArrayList<UserBiometricData>();
-					while(iterator.hasNext())
-					{
-						Entry<String, ArrayList<ArrayList<String>>> me = iterator.next();
-						String userIdinMap = me.getKey();
-						ArrayList<ArrayList<String>> data = me.getValue();
-						User user = userService.findById(Integer.parseInt(userIdinMap));
-						if(user == null){
-							List<BiometricData> biometricDataList = biometricDataService.findAll();
-							model.addAttribute("biometricDataList", biometricDataList);
-							model.addAttribute("biometricData", biometricData);
-							model.addAttribute("edit", false);
-							User profile = userService.findByUserName(getPrincipal());
-
-							model.addAttribute("profile", profile);
-							model.addAttribute("error", "User with ID=>"+userIdinMap +" not found. "
-									+ "Please add User details before uploading biometric data. ");
-							model.addAttribute("loggedinuser", getPrincipal());
-							return "viewBiometricData";
-						} else {
-							if(biometricData.isMultipleShift()){
-								//TODO: need to add logic here to support multiple shifts
-								getMultipleShiftData(data);
-							} else {
-								ArrayList<String> login = data.get(0);
-								ArrayList<String> logout = data.get(data.size()-1);
-								UserBiometricData biometricDataSS = getSingleShiftData(login, logout, user);
-								String yearInLog = biometricDataSS.getYear()+"";
-								String monthInLog = biometricDataSS.getMonth()+"";
-								if(yearInLog.equals(enteredYear) && monthInLog.equals(enteredMonth)){
-									listOfAttendance.add(biometricDataSS);
-								} else {
-									List<BiometricData> biometricDataList = biometricDataService.findAll();
-									model.addAttribute("biometricDataList", biometricDataList);
-									model.addAttribute("biometricData", biometricData);
-									model.addAttribute("edit", false);
-									User profile = userService.findByUserName(getPrincipal());
-
-									model.addAttribute("profile", profile);
-									model.addAttribute("error", "Log Contains Data from other Year or Month which is entered. "
-											+ "Please upload correct log file for correct Month and Year.");
-									model.addAttribute("loggedinuser", getPrincipal());
-									return "viewBiometricData";
-								}
-							}
-						}
-					}
-
-					logger.debug("ANITH: listOfAttendance==>"+listOfAttendance.size());
-					for(UserBiometricData data:listOfAttendance){
-						List<UserBiometricData> existingUserData = userBiometricDataService.findByDateAndUserId(data.getYear(), data.getMonth(), data.getDate(), data.getUserId());
-						if(existingUserData !=null && existingUserData.size() > 0){
-							isDuplicatesFound = true;
-						} else{
-							userBiometricDataService.save(data);
-						}
-					}
-					//Calculate Login and Logout Time based on map generated above.END
-				}
-				//END
-				scanner1.close();
-				/*}*/
-			} else {
-				List<BiometricData> biometricDataList = biometricDataService.findAll();
-				model.addAttribute("biometricDataList", biometricDataList);
-				model.addAttribute("biometricData", biometricData);
-				model.addAttribute("edit", false);
-				User profile = userService.findByUserName(getPrincipal());
-
-				model.addAttribute("profile", profile);
-				model.addAttribute("error", "File Format is not supported. Please select correct file. Allowed file types are .csv OR .dat OR .xls OR .xlsx");
-				model.addAttribute("loggedinuser", getPrincipal());
-				return "viewBiometricData";
-			}
-
-
-			biometricDataService.saveDocument(biometricData);//save csv file
-
-			if(isDuplicatesFound){
-				model.addAttribute("success", "Biometric Data saved Successfully. Biometric Data had duplicates which are ignored. "
-						+ "If you want to update, first delete existing data and then upload biometric data again.");
-			} else {
-				model.addAttribute("success", "Biometric Data saved Successfully..");
-			}
-			model.addAttribute("loggedinuser", getPrincipal());
-			model.addAttribute("url", "viewBiometricData");
-			return "result";
-
-		}catch(TransientObjectException e){
-			List<BiometricData> biometricDataList = biometricDataService.findAll();
-			model.addAttribute("biometricDataList", biometricDataList);
-			model.addAttribute("biometricData", biometricData);
-			model.addAttribute("edit", false);
-			User profile = userService.findByUserName(getPrincipal());
-
-			model.addAttribute("profile", profile);
-			model.addAttribute("error", "Biometric Data with same month and year is present.. Please delete existing data" +
-					" and upload again if you want to change.");
-			model.addAttribute("loggedinuser", getPrincipal());
-			return "viewBiometricData";
-		}
 	}
 
 	@RequestMapping(value = { "/download-document-{docId}" }, method = RequestMethod.GET)
 	public String downloadDocument( @PathVariable int docId, HttpServletResponse response) throws IOException {
 		BiometricData document = biometricDataService.findById(docId);
-		response.setContentType(document.getType());
+		response.setContentType(document.getFileType());
 		response.setContentLength(document.getContent().length);
-		response.setHeader("Content-Disposition","attachment; filename=\"" + document.getName() +"\"");
+		response.setHeader("Content-Disposition","attachment; filename=\"" + document.getMachine().getMachineName() +"\"");
 
 		FileCopyUtils.copy(document.getContent(), response.getOutputStream());
 
 		return "viewBiometricData";
 	}
-
-	//Attendance Related START
-
-	/*@RequestMapping(value = { "/view-searchAttendance" }, method = RequestMethod.GET)
-	public String viewAttendance(ModelMap model) {
-		List<UserBiometricData> userAttendanceLog = new ArrayList<UserBiometricData>();
-		model.addAttribute("userAttendanceLog", userAttendanceLog);
-		model.addAttribute("userBiometricData", new UserBiometricData());
-		User profile = userService.findByUserName(getPrincipal());
-
-		model.addAttribute("profile", profile);
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "viewUserAttendanceData";
-	}
-
-
-	@RequestMapping(value = { "/view-searchAttendance" }, method = RequestMethod.POST)
-	public String searchAttendance(@Valid UserBiometricData userBiometricData, BindingResult result,
-			ModelMap model) throws IOException {
-		List<UserBiometricData> userAttendanceLog = userBiometricDataService.findByYearAndMonth(userBiometricData.getYear(),userBiometricData.getMonth(),userBiometricData.getUserId());
-		model.addAttribute("userAttendanceLog", userAttendanceLog);
-		model.addAttribute("userBiometricData", new UserBiometricData());
-		User profile = userService.findByUserName(getPrincipal());
-
-		model.addAttribute("profile", profile);
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "viewUserAttendanceData";
-	}
-	
-	@RequestMapping(value = { "/view-searchAttendance-{id}" }, method = RequestMethod.POST)
-	public String searchSelfAttendance(@Valid UserBiometricData userBiometricData, @PathVariable int id, BindingResult result,
-			ModelMap model) throws IOException {
-		List<UserBiometricData> userAttendanceLog = userBiometricDataService.findByYearAndMonth(userBiometricData.getYear(),userBiometricData.getMonth(),id);
-		model.addAttribute("userAttendanceLog", userAttendanceLog);
-		model.addAttribute("userBiometricData", new UserBiometricData());
-		User profile = userService.findByUserName(getPrincipal());
-
-		model.addAttribute("profile", profile);
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "viewUserAttendanceData";
-	}*/
-	//Attendance Related END
-
 
 	/**
 	 * This method returns the principal[user-name] of logged-in user.
@@ -412,84 +368,300 @@ public class BiometricDataController {
 		return bytesArray;
 	}
 
-	private ArrayList<HashMap<String, ArrayList<ArrayList<String>>>> getMapFromList(ArrayList< ArrayList<String>> bioDataList){
-		ArrayList<String> loginData= new ArrayList<String>();
-		ArrayList<String> logoutData= new ArrayList<String>();
-		ArrayList<ArrayList<String>> nextData = new ArrayList<ArrayList<String>>();
-		HashMap<String, ArrayList<ArrayList<String>>> userData= new HashMap<String, ArrayList<ArrayList<String>>>();
-		String userId=null;
-		ArrayList<HashMap<String, ArrayList<ArrayList<String>>>> attendanceList = new ArrayList<HashMap<String, ArrayList<ArrayList<String>>>>();
-		for (int i=0; i<bioDataList.size(); i++) {
-			nextData = new ArrayList<ArrayList<String>>();
-			loginData= bioDataList.get(i);
-			logoutData= new ArrayList<String>();
-			String loginDate = loginData.get(1);
-			userId=loginData.get(0);
-			for(int j=i+1 ;j<bioDataList.size();j++){
-				logoutData= bioDataList.get(j);
-				String logoutDate = logoutData.get(1);
-				String userId1=logoutData.get(0);
-				if(userId1.equals(userId) && loginDate.equals(logoutDate)){
-					nextData.add(loginData);
-					nextData.add(logoutData);
-				}
+	public HashMap<Integer, ArrayList<HashMap<String,String>>> calculateWorkingHours(HashMap<Integer, ArrayList<LocalDateTime>> userAttDataMap){
+
+		HashMap<Integer, ArrayList<HashMap<String,String>>> userAttDetails = new HashMap<Integer, ArrayList<HashMap<String,String>>>();
+		for (Map.Entry<Integer, ArrayList<LocalDateTime>> entry : userAttDataMap.entrySet()) {
+			logger.debug("calculateWorkingHours : Inside Date Calculation => ");
+			Integer key = entry.getKey();
+			logger.debug("calculateWorkingHours : Inside Date Calculation => Key is "+key);
+
+			ArrayList<LocalDateTime> dateTimeList = entry.getValue();
+			logger.debug("calculateWorkingHours : Inside Date Calculation => Value is "+dateTimeList);
+
+			HashMap<String,String> attDetails = new HashMap<String,String>();
+			ArrayList<HashMap<String,String>> userAttDetailsList = new ArrayList<HashMap<String,String>>();
+			for(int i=0,j=1;i<dateTimeList.size();){
+				attDetails = new HashMap<String,String>();
+				LocalDateTime loginDateTime = dateTimeList.get(i);
+				LocalDateTime logoutDateTime = null;
+				LocalDate logDate = loginDateTime.toLocalDate();
+				if(j < dateTimeList.size() && logDate.isEqual(dateTimeList.get(j).toLocalDate())){
+					j = j+1;//increments pointer to next data in a list
+					continue;
+				} else if(j > i){//If above block is entered, that means
+					logoutDateTime = dateTimeList.get(j-1);
+					if((j-1) != i && logoutDateTime.toLocalDate().equals(logDate)){
+						i = j ;//points to the last index() where match was found.(j value starts from 1.)
+						LocalTime loginTime = loginDateTime.toLocalTime();
+						LocalTime logoutTime = logoutDateTime.toLocalTime();
+
+						long diffMilliSecs = ChronoUnit.MILLIS.between(loginTime, logoutTime );
+						long diffinMins= (diffMilliSecs/1000)/60;
+						long workHours= diffinMins/60;
+						long workMins= diffinMins%60;
+						attDetails.put(BiometricConstants.LOGIN_DATE, logDate.toString());
+						attDetails.put(BiometricConstants.LOGIN_TIME, loginTime.toString());
+						attDetails.put(BiometricConstants.LOGOUT_TIME, logoutTime.toString());
+						attDetails.put(BiometricConstants.WORK_HOURS, ""+workHours);
+						attDetails.put(BiometricConstants.WORK_MINS, workMins+"");
+					}else {//No logout found
+						LocalTime loginTime = loginDateTime.toLocalTime();
+						attDetails.put(BiometricConstants.LOGIN_DATE, logDate.toString());
+						attDetails.put(BiometricConstants.LOGIN_TIME, loginTime.toString());
+						attDetails.put(BiometricConstants.LOGOUT_TIME, "---");
+						attDetails.put(BiometricConstants.WORK_HOURS, "0");
+						attDetails.put(BiometricConstants.WORK_MINS, "0");
+						i = j;
+					}
+				} 
+
+				userAttDetailsList.add(attDetails);
+				attDetails = null;
+				loginDateTime = null;
 			}
-			if(nextData.size()>0){
-				userData.put(userId, nextData);
-				nextData = null;
-				attendanceList.add(userData);
-				userData = new HashMap<String, ArrayList<ArrayList<String>>>();
-			}
+			userAttDetails.put(key, userAttDetailsList);
+			userAttDetailsList = null;
+			attDetails = null;
 		}
-		return attendanceList;
+		logger.debug("calculateWorkingHours :Final for all Users. After calculating time difference userAttDetails ==>" + userAttDetails);
+		return userAttDetails;
+
 	}
 
-	private UserBiometricData getSingleShiftData(ArrayList<String> login, ArrayList<String> logout, User user){
-		String loginDate = new String(login.get(1));
-		String loginTime = new String(login.get(2));
-		String logoutTime = new String(logout.get(2));
+	public ArrayList<ArrayList<String>> readFromFile(String fileNameWithoutExt, String extension, File csvFile) throws Exception{
+		//START: Read the data in file and insert the values to list
+		ArrayList< ArrayList<String>> bioDataList = new ArrayList< ArrayList<String>>();
+		try{
+			Scanner scanner1=new Scanner(csvFile);
 
-		String year = loginDate.substring(0,loginDate.indexOf("-"));
-		String subStr = loginDate.substring(loginDate.indexOf("-")+1);
-		String month = subStr.substring(0,subStr.indexOf("-"));
-		String date = subStr.substring(subStr.indexOf("-")+1);
+			while(scanner1.hasNext()){
+				String line=scanner1.nextLine();
+				String[] lineArr = line.split(",");
+				ArrayList<String> data = new ArrayList<String>();
+				data.add(lineArr[0]); //User ID
+				data.add(lineArr[1]); //Log Date
+				data.add(lineArr[2]); //Log Time
 
-		String inHour = loginTime.substring(0,loginTime.indexOf(":"));
-		subStr=loginTime.substring(loginTime.indexOf(":")+1); 
-		String inMin = subStr.substring(0,subStr.indexOf(":"));
+				bioDataList.add(data);
+			}
+			scanner1.close();
+			logger.debug("readFromFile: bioDataList==>"+bioDataList);
+		} catch(Exception e){
+			throw e;
+		}
+		return bioDataList;
+	}
 
-		String outHour = logoutTime.substring(0,logoutTime.indexOf(":"));
-		subStr=logoutTime.substring(logoutTime.indexOf(":")+1); 
-		String outMin = subStr.substring(0,subStr.indexOf(":"));
+	public HashMap<Integer, ArrayList<LocalDateTime>> sortAndDivideArrayList(ArrayList< ArrayList<String>> bioDataList) throws Exception{
+		Collections.sort(bioDataList, new CustomUserIdComparator());// Sorts Based on IDs-Considers First Column as ID
+		HashMap<Integer, List<ArrayList<String>>> userAttDataMap = new HashMap<Integer, List<ArrayList<String>>>();
+		Integer index=0,startIndex=0, endIndex=0;
+		//Below loop is used to separate the data based on User IDs and put it in a HashMap with User ID as Key and ArrayList of login and logout data as value
+		for(int i=0; i < bioDataList.size(); i++){
+			logger.debug(bioDataList.get(i).toString());
+			if(i < bioDataList.size()-1){
+				if(Integer.parseInt(bioDataList.get(i).get(0)) == Integer.parseInt(bioDataList.get(i+1).get(0))){
+					continue;
+				}
+			}
+			endIndex = i+1;
 
-		logger.debug("Anith: ShiftData==> \n inHour==>"+inHour +"\n inMin==>"+inMin
-				+"\n outHour==>"+outHour +"\n outMin==>"+outMin);
-		GregorianCalendar calendar= new GregorianCalendar(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(date),
-				Integer.parseInt(inHour), Integer.parseInt(inMin));
+			logger.debug("sortAndDivideArrayList Index=> "+startIndex +" End Index => "+endIndex);
+			List<ArrayList<String>> subList = bioDataList.subList(startIndex, endIndex);
+			logger.debug("sortAndDivideArrayList=> "+subList.toString());
+			userAttDataMap.put(Integer.parseInt(subList.get(0).get(0)), subList);
+			startIndex = endIndex;
+		}
+		logger.debug("sortAndDivideArrayList: 1Sorted bioDataList==>END");
+		logger.debug("sortAndDivideArrayList: 1Sorted bioDataList in a Map==>"+userAttDataMap);
+		//Below loop is to sort the attendance data based on time(if it is not sorted already)
+		HashMap<Integer, ArrayList<LocalDateTime>> dataWithDate = new HashMap<Integer, ArrayList<LocalDateTime>>();
+		try{
+			for (Map.Entry<Integer, List<ArrayList<String>>> entry : userAttDataMap.entrySet()) {
 
-		GregorianCalendar calendar1= new GregorianCalendar(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(date),
-				Integer.parseInt(outHour), Integer.parseInt(outMin));
+				Integer key = entry.getKey();
+				List<ArrayList<String>> loginLogout = entry.getValue();
+				ArrayList<LocalDateTime> loginLogoutDates = new ArrayList<LocalDateTime>();
+				logger.debug("sortAndDivideArrayList: 1loginLogout is ==>"+loginLogout);
 
-		long startTime=calendar.getTimeInMillis();
-		long endTime=calendar1.getTimeInMillis();
+				for(int j=0; j< loginLogout.size(); j++){
+					logger.debug("sortAndDivideArrayList: 2loginLogout at J is  ==>"+loginLogout.get(j));
+					/*DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd");*/
 
-		long diff=endTime-startTime;
+					String now = (loginLogout.get(j).get(1)) +" "+(loginLogout.get(j).get(2)) ;
 
-		long diffinMins= (diff/1000)/60;
-		long workHours= diffinMins/60;
-		long workMins= diffinMins%60;
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-		logger.debug("Anith ShiftData: \nworkHours==>"+workHours+"\n workMins==>"+workMins);
-		UserBiometricData userBiometricData = new UserBiometricData();
-		userBiometricData.setDate(Integer.parseInt(date));
-		userBiometricData.setMonth(Integer.parseInt(month));
-		userBiometricData.setYear(Integer.parseInt(year));
-		userBiometricData.setNoOfHours(workHours+"");
-		userBiometricData.setNoOfMins(workMins+"");
-		userBiometricData.setLoginTime(loginTime);
-		userBiometricData.setLogoutTime(logoutTime);
-		userBiometricData.setUserId(Integer.parseInt(login.get(0)));
-		return userBiometricData;
+					LocalDateTime formatDateTime = LocalDateTime.parse(now, formatter);
+
+					//Date dateTime = dateTimeFormat.parse(input);
+					logger.debug("sortAndDivideArrayList: 39DateTime after parse is ==>"+formatDateTime);
+					loginLogoutDates.add(formatDateTime);
+				}
+				logger.debug("sortAndDivideArrayList: 1loginLogoutDates Before Sorting==>"+loginLogoutDates);
+				Collections.sort(loginLogoutDates, new CustomDateTimeComparator());
+				logger.debug("sortAndDivideArrayList: 1loginLogoutDates After Sorting==>"+loginLogoutDates);
+				dataWithDate.put(key, loginLogoutDates);
+			}
+			logger.debug("sortAndDivideArrayList: 1Map after DateTime and User ID Sorting==>"+dataWithDate);
+		} catch(Exception e){
+			throw e;
+		}
+		return dataWithDate;
+	}
+
+	public ArrayList<UserBiometricData> convertToUserBiometricObject(HashMap<Integer, ArrayList<HashMap<String,String>>> userAttDetails, String logYear, String logMonth) throws Exception{
+		logger.debug("convertToUserBiometricObject START userAttDetails ==> "+userAttDetails);
+		int[] days = {
+				0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+		};
+		ArrayList<UserBiometricData> userBiometricDataObjsList = new ArrayList<UserBiometricData>(); 
+		try{
+			
+			List<Holidays> holidaysList = holidaysService.findHolidaysByMonthAndYear(Integer.parseInt(logMonth), Integer.parseInt(logYear));
+			for (Map.Entry<Integer, ArrayList<HashMap<String,String>>> entry : userAttDetails.entrySet()) {
+				Integer userId = entry.getKey();
+				List<UserBiometricData> userBioList = userBiometricDataService.findLeavesByUserInMonth(userId, Integer.parseInt(logMonth), Integer.parseInt(logYear));
+				UserBiometricData boimetricData = null;
+				UserBiometricData absentData = null;
+				ArrayList<HashMap<String,String>> attendanceDataList = entry.getValue();
+				int nextDay = 1;
+				for(int i=0;i< attendanceDataList.size() ;i++){
+					HashMap<String,String> attendanceDataMap = attendanceDataList.get(i);
+					String loginDate 	= attendanceDataMap.get(BiometricConstants.LOGIN_DATE);
+					String loginTime 	= attendanceDataMap.get(BiometricConstants.LOGIN_TIME);
+					String logoutTime 	= attendanceDataMap.get(BiometricConstants.LOGOUT_TIME);
+					String workHours 	= attendanceDataMap.get(BiometricConstants.WORK_HOURS);
+					String workMins 	= attendanceDataMap.get(BiometricConstants.WORK_MINS);
+					boimetricData = new UserBiometricData();
+					boimetricData.setUserId(userId);
+					boimetricData.setNoOfHours(workHours);
+					boimetricData.setNoOfMins(workMins);
+					boimetricData.setLoginTime(loginTime);
+					boimetricData.setLogoutTime(logoutTime);
+					String dateSplit[] = loginDate.split("-");
+					Integer year = Integer.parseInt(dateSplit[0]);
+					Integer month = Integer.parseInt(dateSplit[1]);
+					Integer date = Integer.parseInt(dateSplit[2]);//current date in a  map
+					
+					if(logoutTime != "---" ){
+						boimetricData.setStatus(BiometricConstants.PRESENT);
+						/*//TODO: need to consider working weekends as OT
+						 * LocalDate localDate = LocalDate.of(year, month, nextDay);
+						DayOfWeek dayOfWeek = localDate.getDayOfWeek();
+						if(dayOfWeek.toString().equals(BiometricConstants.WEEKEND_SUNDAY)){
+							boimetricData.setStatus(BiometricConstants.OVERTIME);
+						} else { */ 
+							if(holidaysList != null && nextDay == date ){
+								for(int k=0;k<holidaysList.size();k++){
+									Holidays holiday = holidaysList.get(k);
+									if(holiday.getHolidayDate().equals(nextDay)){
+										logger.debug("convertToUserBiometricObject --> Holiday OT nextDay=>"+nextDay+" Current Date in Map==>"+date+" holiday Date==> "+holiday.getHolidayDate());
+										boimetricData.setStatus(BiometricConstants.OVERTIME);
+										break;
+									}
+								}
+							}
+						/*}*/
+					} else {
+						boimetricData.setStatus(BiometricConstants.DEFECTIVE_STATUS);
+					}
+					
+					int numberOfDays = days[month];
+					logger.debug("convertToUserBiometricObject --> nextDay=>"+nextDay+" Current Date in Map==>"+date);
+					if(i!=0 && date != nextDay){//If some date is missing in middle
+						int missingNoOfDays =  date - nextDay;
+						logger.debug("convertToUserBiometricObject --> Some Date is missing. Number of days missing is "+ missingNoOfDays);
+						
+						while(missingNoOfDays != 0){//loop till nextDay reaches the current date in Map.
+							//Absent
+							absentData = new UserBiometricData();
+							LocalDate localDate = LocalDate.of(year, month, nextDay);
+							DayOfWeek dayOfWeek = localDate.getDayOfWeek();
+							absentData.setUserId(userId);
+							if(dayOfWeek.toString().equals(BiometricConstants.WEEKEND_SUNDAY)){//Sunday
+								absentData.setStatus(BiometricConstants.WEEKEND_STATUS);
+								absentData.setLoginTime("---");//empty
+								absentData.setLogoutTime("---");//empty
+								absentData.setNoOfHours("0");
+								absentData.setNoOfMins("0");
+								absentData.setDate(nextDay);
+								absentData.setYear(year);
+								absentData.setMonth(month);
+								userBiometricDataObjsList.add(absentData);
+								nextDay+=1;
+								missingNoOfDays -= 1;
+								logger.debug("convertToUserBiometricObject missingNoOfDays and nextDay after Sunday is "+missingNoOfDays+"->"+nextDay);
+								absentData = null;
+								continue;
+							} else {
+								absentData = new UserBiometricData();
+								absentData.setUserId(userId);
+								logger.debug("convertToUserBiometricObject nextDay is "+nextDay);
+								logger.debug("convertToUserBiometricObject month is "+month);
+								logger.debug("convertToUserBiometricObject year is "+year);
+								
+								if(holidaysList != null){
+									for(int k=0;k<holidaysList.size();k++){
+										Holidays holiday = holidaysList.get(k);
+										if(holiday.getHolidayDate().equals(nextDay)){
+											nextDay+=1;
+											missingNoOfDays -= 1;
+											logger.debug("convertToUserBiometricObject missingNoOfDays and nextDay after Holiday is "+missingNoOfDays+"->"+nextDay);
+											continue;
+										}
+									}
+								}
+								if(userBioList != null){
+									for(int k=0;k<userBioList.size();k++){
+										UserBiometricData data = userBioList.get(k);
+										logger.debug("convertToUserBiometricObject Leaves Date and Next Date is "+data.getDate() +" -> "+nextDay);
+										logger.debug("convertToUserBiometricObject Condition on Date is "+data.getDate().equals(nextDay));
+										if(data.getDate().equals(nextDay) && data.getYear().equals(year)){
+											nextDay+=1;
+											missingNoOfDays -= 1;
+											logger.debug("convertToUserBiometricObject missingNoOfDays and nextDay after leave is "+missingNoOfDays+"->"+nextDay);
+											continue;
+										}
+									}
+								}
+								if(missingNoOfDays == 0 ){
+									break;
+								}
+								// Mark Absent only if some date is either holiday or taken leave.
+								absentData.setStatus(BiometricConstants.ABSENT);
+								absentData.setLoginTime("---");//empty
+								absentData.setLogoutTime("---");//empty
+								absentData.setNoOfHours("0");
+								absentData.setNoOfMins("0");
+
+								absentData.setDate(nextDay);
+								absentData.setYear(year);
+								absentData.setMonth(month);
+								userBiometricDataObjsList.add(absentData);
+								nextDay+=1;
+								missingNoOfDays -= 1;
+								logger.debug("convertToUserBiometricObject missingNoOfDays and nextDay after ABSENT is "+missingNoOfDays+"->"+nextDay);
+								absentData = null;
+							}
+						}
+					}
+					boimetricData.setDate(date);
+					boimetricData.setYear(year);
+					boimetricData.setMonth(month);
+					userBiometricDataObjsList.add(boimetricData);	
+					boimetricData = null;
+					nextDay+=1;
+					logger.debug("convertToUserBiometricObject nextDay after PRESENT is "+nextDay);
+				}
+
+			}
+		} catch(Exception e){
+			throw e;
+		}
+		logger.debug("convertToUserBiometricObject END--> userBiometricDataObjsList==>\n "+userBiometricDataObjsList+"\n\n");
+		return userBiometricDataObjsList;
 	}
 
 	private UserBiometricData getMultipleShiftData(ArrayList<ArrayList<String>> data){

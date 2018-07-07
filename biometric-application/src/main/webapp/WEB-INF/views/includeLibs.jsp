@@ -21,3 +21,5 @@
 <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src='<c:url value='/static/jQuery/bootstrap.min.js'/>'></script>
 <script src='<c:url value='/static/jQuery/jQuery.js'/>'></script>
+<script src='<c:url value='/static/jQuery/jquery-1.10.2.min.js'/>'></script>
+<script src='<c:url value='/static/jQuery/jquery.tablesorter.min.js'/>'></script>

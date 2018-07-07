@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.siddhrans.biometric.dao.UserDao;
+import com.siddhrans.biometric.dao.UserProfileDao;
 import com.siddhrans.biometric.model.User;
 import com.siddhrans.biometric.service.UserService;
  
@@ -65,11 +66,13 @@ public class UserServiceImpl implements UserService{
             entity.setLastName(user.getLastName());
             entity.setEmail(user.getEmail());
             entity.setAddress(user.getAddress());
-            entity.setDlNo(user.getDlNo());
+            /*entity.setDlNo(user.getDlNo());*/
             entity.setDob(user.getDob());
             entity.setPhoneNo(user.getPhoneNo());
             entity.setDoj(user.getDoj());
             entity.setUserProfiles(user.getUserProfiles());
+            entity.setOverTime(user.getOverTime());
+            entity.setDesignation(user.getDesignation());
         }
     }
  
@@ -77,9 +80,17 @@ public class UserServiceImpl implements UserService{
     public void deleteUserByUserName(String userName) {
         dao.deleteByUserName(userName);
     }
+    
+    public void deleteUserById(Integer userId) {
+        dao.deleteUserById(userId);
+    }
  
     public List<User> findAllUsers() {
         return dao.findAllUsers();
+    }
+    
+    public List<User> findAllInactiveUsers() {
+        return dao.findAllInactiveUsers();
     }
  
     public boolean isUserNameUnique(Integer id, String userName) {
@@ -95,5 +106,5 @@ public class UserServiceImpl implements UserService{
     public boolean isDlNoUnique(Integer id, String dlNo) {
         User user = findByDlNo(dlNo);
         return ( user == null || ((id != null) && (user.getId() == id)));
-    }     
+    }
 }

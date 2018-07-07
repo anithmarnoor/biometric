@@ -82,5 +82,8 @@ for driver, login with username=anma1213 and password=anma1213
 
 
 
+*********************************For Developer************************************
+1) To redirect from POST to POST, use below before return statement.
+request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
 
  

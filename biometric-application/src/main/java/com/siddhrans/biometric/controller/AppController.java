@@ -1,26 +1,11 @@
 package com.siddhrans.biometric.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
-
-
-
-
-
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
-
-
-
-
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,13 +29,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.siddhrans.biometric.dao.impl.HibernateTokenRepositoryImpl;
+import com.siddhrans.biometric.model.Designation;
 import com.siddhrans.biometric.model.User;
 import com.siddhrans.biometric.model.UserProfile;
+import com.siddhrans.biometric.service.DesignationService;
 import com.siddhrans.biometric.service.UserProfileService;
 import com.siddhrans.biometric.service.UserService;
 import com.siddhrans.biometric.validator.FileValidator;
-
-
 
 @Controller
 @RequestMapping("/")
@@ -60,10 +45,16 @@ public class AppController {
 	static final Logger logger = LoggerFactory.getLogger(HibernateTokenRepositoryImpl.class);
 
 	@Autowired
+	HttpServletRequest request;
+
+	@Autowired
 	UserService userService;
 
 	@Autowired
 	UserProfileService userProfileService;
+
+	@Autowired
+	private DesignationService designationService;
 
 	@Autowired
 	MessageSource messageSource;
@@ -89,35 +80,29 @@ public class AppController {
 	public String listUsers(ModelMap model) {
 
 		List<User> users = userService.findAllUsers();
-		List<User> adminUsers = new ArrayList();
-		List<User> drivers = new ArrayList();
-		/*		//filter admin users
-		for(User user:users){
-			UserProfile userProfile = userProfileService.findById(user.getId());
-			if(userProfile != null)
-				if((userProfile.getType()).equals("ADMIN")){
-					adminUsers.add(user);
-				}else{
-					drivers.add(user);
-				}
-		}*/
-		for(User user:users){
-			Set<UserProfile> userProfiles =  user.getUserProfiles();
-			UserProfile profile=  userProfiles.iterator().next();
-			if((profile.getType()).equals("ADMIN")){
-				adminUsers.add(user);
-			} else {
-				drivers.add(user);
-			}
-		}
-		model.addAttribute("drivers", drivers);
-		model.addAttribute("adminUsers", adminUsers);
+		model.addAttribute("users", users);
 		User profile = userService.findByUserName(getPrincipal());
 
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "userslist";
 	}
+
+	/**
+	 * This method will list all existing users.
+	 */
+	@RequestMapping(value = { "/inactiveUsersList" }, method = RequestMethod.GET)
+	public String listOfInactiveUsers(ModelMap model) {
+
+		List<User> users = userService.findAllInactiveUsers();
+		model.addAttribute("users", users);
+		User profile = userService.findByUserName(getPrincipal());
+
+		model.addAttribute("profile", profile);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "userslist";
+	}
+
 	/**
 	 * This method will list all existing users.
 	 */
@@ -132,11 +117,27 @@ public class AppController {
 	}
 
 	/**
+	 * This method will list all existing users.
+	 */
+	@RequestMapping(value = { "/getCompleteUserProfile" }, method = RequestMethod.POST)
+	public String myCompleteUserProfile(ModelMap model) {
+		String userId = request.getParameter("userId");
+		User profile = userService.findById(Integer.parseInt(userId));
+
+		model.addAttribute("profile", profile);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "myProfile";
+	}
+
+	/**
 	 * This method will provide the medium to add a new user.
 	 */
 	@RequestMapping(value = { "/newuser" }, method = RequestMethod.GET)
 	public String newUser(ModelMap model) {
 		User user = new User();
+		List<Designation> designations = designationService.findAllDesignations();
+		logger.debug("designations size is "+designations.size());
+		model.addAttribute("designations", designations);
 		model.addAttribute("user", user);
 		model.addAttribute("edit", false);
 		model.addAttribute("roleChange", true);
@@ -151,14 +152,18 @@ public class AppController {
 	 * This method will be called on form submission, handling POST request for
 	 * saving user in database. It also validates the user input
 	 */
-	@RequestMapping(value = { "/newuser" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "/newUser" }, method = RequestMethod.POST)
 	public String saveUser(@Valid User user, BindingResult result,
 			ModelMap model) {
 
+		List<Designation> designations = designationService.findAllDesignations();
+		logger.debug("designations size is "+designations.size());
+		model.addAttribute("designations", designations);
 		if (result.hasErrors()) {
 			model.addAttribute("user", user);
 			model.addAttribute("edit", false);
 			model.addAttribute("roleChange", true);
+
 			User profile = userService.findByUserName(getPrincipal());
 
 			model.addAttribute("profile", profile);
@@ -184,11 +189,11 @@ public class AppController {
 			result.addError(phoneNoError);
 			return "registration";
 		}
-		if(!userService.isDlNoUnique(user.getId(), user.getDlNo())){
+		/*if(!userService.isDlNoUnique(user.getId(), user.getDlNo())){
 			FieldError dlNoError =new FieldError("user","dlNo",messageSource.getMessage("non.unique.dlNo", new String[]{user.getDlNo()}, Locale.getDefault()));
 			result.addError(dlNoError);
 			return "registration";
-		}
+		}*/
 		userService.saveUser(user);
 
 		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " registered successfully");
@@ -204,10 +209,14 @@ public class AppController {
 	/**
 	 * This method will provide the medium to update an existing user.
 	 */
-	@RequestMapping(value = { "/edit-user-{userName}" }, method = RequestMethod.GET)
-	public String editUser(@PathVariable String userName, ModelMap model) {
-		User user = userService.findByUserName(userName);
-		model.addAttribute("user", user);
+	@RequestMapping(value = { "/editUserView" }, method = RequestMethod.POST)
+	public String editUserView( ModelMap model) {
+		String userId = request.getParameter("userId");
+		User user = userService.findById(Integer.parseInt(userId));
+		List<Designation> designations = designationService.findAllDesignations();
+		logger.debug("designations size is in editUserView===>"+designations.size());
+		model.addAttribute("designations", designations);
+		model.addAttribute("editUser", user);
 		model.addAttribute("edit", true);
 		model.addAttribute("roleChange", false);
 		User profile = userService.findByUserName(getPrincipal());
@@ -221,13 +230,15 @@ public class AppController {
 	 * This method will be called on form submission, handling POST request for
 	 * updating user in database. It also validates the user input
 	 */
-	@RequestMapping(value = { "/edit-user-{userName}" }, method = RequestMethod.POST)
-	public String updateUser(@Valid User user, BindingResult result,
-			ModelMap model, @PathVariable String userName) {
-
+	@RequestMapping(value = { "/editUser" }, method = RequestMethod.POST)
+	public String updateUser(@Valid User editUser, BindingResult result,
+			ModelMap model) {
 		logger.debug("Anith New Error in edit is "+result.toString()+" \n\n Error message END");
 		if (result.hasErrors()) {
-			model.addAttribute("user", user);
+			List<Designation> designations = designationService.findAllDesignations();
+			logger.debug("designations size is "+designations.size());
+			model.addAttribute("designations", designations);
+			model.addAttribute("user", editUser);
 			model.addAttribute("edit", true);
 			model.addAttribute("roleChange", false);
 			User profile = userService.findByUserName(getPrincipal());
@@ -245,9 +256,9 @@ public class AppController {
         }*/
 
 
-		userService.updateUser(user);
+		userService.updateUser(editUser);
 
-		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " updated successfully");
+		model.addAttribute("success", "User " + editUser.getFirstName() + " "+ editUser.getLastName() + " updated successfully");
 		User profile = userService.findByUserName(getPrincipal());
 
 		model.addAttribute("profile", profile);
@@ -260,9 +271,11 @@ public class AppController {
 	/**
 	 * This method will delete an user by it's USER_NAME value.
 	 */
-	@RequestMapping(value = { "/delete-user-{userName}" }, method = RequestMethod.GET)
-	public String deleteUser(@PathVariable String userName) {
-		userService.deleteUserByUserName(userName);
+	@RequestMapping(value = { "/deleteUser" }, method = RequestMethod.POST)
+	public String deleteUser(ModelMap model) {
+		String userId = request.getParameter("userId");
+		userService.deleteUserById(Integer.parseInt(userId));
+		model.addAttribute("success", "User is Deleted successfully.");
 		return "redirect:/list";
 	}
 

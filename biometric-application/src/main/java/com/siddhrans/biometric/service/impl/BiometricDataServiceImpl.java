@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.siddhrans.biometric.dao.BiometricDataDao;
+import com.siddhrans.biometric.dao.BiometricMachineDao;
 import com.siddhrans.biometric.model.BiometricData;
+import com.siddhrans.biometric.model.BiometricMachine;
 import com.siddhrans.biometric.service.BiometricDataService;
 
 @Service("biometricDataService")
@@ -17,7 +19,9 @@ public class BiometricDataServiceImpl implements BiometricDataService {
 	@Autowired
 	BiometricDataDao biometricDao;
 	
-	@Override
+	@Autowired
+	BiometricMachineDao biometricMachineDao;
+
 	public BiometricData findById(int id) {
 		 return biometricDao.findById(id);
 	}
@@ -40,5 +44,39 @@ public class BiometricDataServiceImpl implements BiometricDataService {
 	@Override
 	public void deleteBiometricDataById(int id) {
 		biometricDao.deleteBiometricDataById(id);
+	}
+
+
+	@Override
+	public List<BiometricMachine> findAllMachines() {
+		return biometricMachineDao.findAllMachines();
+	}
+
+
+	@Override
+	public BiometricMachine findMachineById(int id) {
+		return biometricMachineDao.findMachineById(id);
+	}
+
+
+	@Override
+	public BiometricMachine findMachineByModel(String machineModel) {
+		return biometricMachineDao.findMachineByModel(machineModel);
+	}
+
+
+	@Override
+	public void deleteMachineById(int id) {
+		biometricMachineDao.deleteMachineById(id);
+	}
+
+	@Override
+	public void saveMachine(BiometricMachine machine) {
+		biometricMachineDao.saveMachine(machine);
+	}
+
+	@Override
+	public void editMachine(BiometricMachine machine) {
+		biometricMachineDao.editMachine(machine);
 	}
 }

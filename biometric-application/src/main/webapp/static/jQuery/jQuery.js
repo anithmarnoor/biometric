@@ -13,13 +13,20 @@ $(function() {
 });
 
 $(function() {
-	$("#doj").datepicker();
+	$("#holidayDate").datepicker();
 });
 
-/*$(function() {
+$(function() {
 	$("#startDate").datepicker();
 });
 
 $(function() {
 	$("#endDate").datepicker();
-});*/
+});
+
+$(function() {
+	$("#doj").datepicker();
+});
+$(function() {
+	$("#dlExpiryDate").datepicker();
+});

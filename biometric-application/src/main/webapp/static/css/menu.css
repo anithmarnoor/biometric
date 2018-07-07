@@ -1,10 +1,10 @@
 .nav-side-menu {
- overflow: auto;
+ /* overflow: auto; */
   font-family: verdana;
   font-weight: 200;
   background-color: #4682B4;
   position: fixed;
-  width:  194px;
+  width:  180px;
   height: 100%;
   color: #ffffff;
 }
@@ -93,7 +93,7 @@
   color: #ffffff;
 }
 .nav-side-menu li a i {
-  padding-left: 10px;
+  padding-left: 29px;
   width: 20px;
   padding-right: 20px;
 }

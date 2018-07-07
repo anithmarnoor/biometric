@@ -17,7 +17,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import com.siddhrans.biometric.convertor.DeptStrToDeptConverter;
+import com.siddhrans.biometric.convertor.DesignationToUserConverter;
+import com.siddhrans.biometric.convertor.LeaveTypeStrToLeaveType;
+import com.siddhrans.biometric.convertor.MachineStrToMachineConverter;
 import com.siddhrans.biometric.convertor.RoleToUserProfileConverter;
+import com.siddhrans.biometric.convertor.SalDivStrToSalDivConverter;
+import com.siddhrans.biometric.convertor.UserStrToUserConverter;
 
 
 @Configuration
@@ -28,6 +34,24 @@ public class AppConfig extends WebMvcConfigurerAdapter{
 
 	@Autowired
 	RoleToUserProfileConverter roleToUserProfileConverter;
+	
+	@Autowired
+	DeptStrToDeptConverter deptStrToDeptConverter;
+	
+	@Autowired
+	DesignationToUserConverter designationToUserConverter;
+	
+	@Autowired
+	SalDivStrToSalDivConverter salDivStrToSalDivConverter;
+	
+	@Autowired
+	LeaveTypeStrToLeaveType leaveTypeStrToLeaveType;
+	
+	@Autowired
+	UserStrToUserConverter userStrToUserConverter;
+	
+	@Autowired
+	MachineStrToMachineConverter machineStrToMachineConverter;
 
 
 	@Bean(name="multipartResolver")
@@ -61,6 +85,12 @@ public class AppConfig extends WebMvcConfigurerAdapter{
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
 		registry.addConverter(roleToUserProfileConverter);
+		registry.addConverter(deptStrToDeptConverter);
+		registry.addConverter(designationToUserConverter);
+		registry.addConverter(salDivStrToSalDivConverter);
+		registry.addConverter(leaveTypeStrToLeaveType);
+		registry.addConverter(userStrToUserConverter);
+		registry.addConverter(machineStrToMachineConverter);
 	}
 
 

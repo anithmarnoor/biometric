@@ -7,147 +7,188 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<script type="text/javascript">
+	function submitEditAction() {
+		document.getElementById("submitForm").action = "editUserView";
+		document.getElementById("submitForm").submit();
+	}
+	function submitShowProfileAction() {
+		document.getElementById("submitForm").action = "getCompleteUserProfile";
+		document.getElementById("submitForm").submit();
+	}
+	function submitDeleteAction() {
+		document.getElementById("submitForm").action = "deleteUser";
+		document.getElementById("submitForm").submit();
+	}
+	function submitPayRollAction() {
+		document.getElementById("submitForm").action = "getPayRollAddPage";
+		document.getElementById("submitForm").submit();
+	}
+	function submitPayRollViewAction() {
+		document.getElementById("submitForm").action = "payRollDetails-view";
+		document.getElementById("submitForm").submit();
+	}
+</script>
 <title>Users List</title>
 </head>
 
 <body>
 	<%@include file="authheader.jsp"%>
 	<div class="generic-container">
-		<div class="row">
-			<div class="panel panel-default">
-				<!-- Default panel contents -->
-				<div class="panel-heading">
-					<sec:authorize access="hasRole('ADMIN') ">
-						<span class="lead">Drivers </span>
-					</sec:authorize>
-					<sec:authorize access="hasRole('USER')">
-						<span class="lead">Your Profile</span>
-					</sec:authorize>
-				</div>
-				<div id="no-more-tables">
-					<table
-						class="col-md-12 table-bordered table-striped table-condensed cf">
-						<thead class="cf" id="thcolor">
-							<tr>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Phone No</th>
-								<th>UserName</th>
-								<th>ID</th>
-								<th>DL NO.</th>
-								<th>DOB</th>
-								<th>Address</th>
-								<th>Joining Date</th>
-								<sec:authorize access="hasRole('ADMIN')">
-									<th width="100"></th>
-								</sec:authorize>
-							</tr>
-						</thead>
-						<tbody>
-							<sec:authorize access="hasRole('ADMIN')">
-								<c:forEach items="${drivers}" var="user">
-									<tr>
-										<td data-title="Name">${user.firstName} ${user.lastName}</td>
-										<td data-title="Email">${user.email}</td>
-										<td data-title="Phone No">${user.phoneNo}</td>
-										<td data-title="UserName">${user.userName}</td>
-										<td data-title="Id">${user.id}</td>
-										<td data-title="DL No">${user.dlNo}</td>
-										<td data-title="DOB">${user.dob}</td>
-										<td data-title="Address">${user.address}</td>
-										<td data-title="Joining Date">${user.doj}</td>
-										<td><sec:authorize access="hasRole('ADMIN')">
-												<a href="<c:url value='/edit-user-${user.userName}' />"
-													class="btn btn-success custom-width">edit</a>
-											</sec:authorize> <sec:authorize access="hasRole('ADMIN')">
-												<a href="<c:url value='/delete-user-${user.userName}' />"
-													class="btn btn-danger custom-width">delete</a>
-											</sec:authorize></td>
-									</tr>
-								</c:forEach>
-							</sec:authorize>
-							<sec:authorize access="hasRole('USER')">
-								<c:forEach items="${drivers}" var="user">
-									<c:if test="${user.userName eq loggedinuser}">
-										<tr>
-											<td data-title="Name">${user.firstName} ${user.lastName}</td>
-											<td data-title="Email">${user.email}</td>
-											<td data-title="Phone No">${user.phoneNo}</td>
-											<td data-title="UserName">${user.userName}</td>
-											<td data-title="Id">${user.id}</td>
-											<td data-title="DL No">${user.dlNo}</td>
-											<td data-title="DOB">${user.dob}</td>
-											<td data-title="Address">${user.address}</td>
-											<td data-title="Joining Date">${user.doj}</td>
-											<td><a
-												href="<c:url value='/edit-user-${user.userName}' />"
-												class="btn btn-success custom-width">edit</a></td>
-										</tr>
-									</c:if>
-								</c:forEach>
-							</sec:authorize>
-						</tbody>
-					</table>
-				</div>
-				<sec:authorize access="hasRole('ADMIN')">
-					<br>
-					<br>
+		<form:form id="submitForm" method="POST" modelAttribute="user">
+			<div class="row">
+				<div class="panel panel-default">
+					<!-- Default panel contents -->
 					<div class="panel-heading">
-						<span class="lead">Administrators</span>
+						<span class="lead">Employees </span>
 					</div>
-					<div id="no-more-tables">
-						<table
-							class="col-md-12 table-bordered table-striped table-condensed cf">
-							<thead class="cf" id="thcolor">
-								<tr>
-									<th>Name</th>
-									<th>Email</th>
-									<th>Phone No</th>
-									<th>UserName</th>
-									<th>ID</th>
-									<th>DL NO.</th>
-									<th>DOB</th>
-									<th>Address</th>
-									<th>Joining Date</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								<sec:authorize access="hasRole('ADMIN')">
-									<c:forEach items="${adminUsers}" var="user">
-										<c:if test="${user.userName ne loggedinuser}">
-											<tr>
-												<td data-title="Name">${user.firstName}
-													${user.lastName}</td>
-												<td data-title="Email">${user.email}</td>
-												<td data-title="Phone No">${user.phoneNo}</td>
-												<td data-title="UserName">${user.userName}</td>
-												<td data-title="Id">${user.id}</td>
-												<td data-title="DL No">${user.dlNo}</td>
-												<td data-title="DOB">${user.dob}</td>
-												<td data-title="Address">${user.address}</td>
-												<td data-title="Joining Date">${user.doj}</td>
 
-												<td><a
-													href="<c:url value='/edit-user-${user.userName}' />"
-													class="btn btn-success custom-width">Edit</a> <a
-													href="<c:url value='/delete-user-${user.userName}' />"
-													class="btn btn-danger custom-width">Delete</a></td>
-											</tr>
-										</c:if>
+					<!--      Changes done by M-->
+					<input type="text" id="txtSearch" placeholder="Search here.."
+						title="Type in a name">
+
+					<!--      close          -->
+					<div class="wrapper">
+						<div id="no-more-tables">
+
+							<table id="tblSearch"
+								class="col-md-12 table-bordered table-striped table-condensed cf"
+								border="0" cellpadding="0" cellspacing="0" width="60%"
+								class="scrollTable">
+								<thead class="cf" id="thcolor">
+									<tr>
+										<th><span>Select</span></th>
+										<th><span>Name</span></th>
+										<!-- <th><span>Email</span></th> -->
+										<th><span>Phone No</span></th>
+										<th><span>UserName</span></th>
+										<th><span>ID</span></th>
+										<!-- <th><span>DOB</span></th>
+										<th><span>Address</span></th>
+										<th><span>Joining Date</span></th> -->
+										<th><span>Status</span></th>
+										<!-- <th><span>Left On</span></th> -->
+										<!-- <th><span>Department</span></th> -->
+										<th><span>Designation</span></th>
+										<th><span>Role</span></th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach items="${users}" var="user">
+										<tr>
+											<td id="tdd1" data-title="Select"><input type="radio"
+												name="userId" value="${user.id}" /></td>
+											<td id="tdd1" data-title="Name">${user.firstName}${user.lastName}</td>
+											<%-- <td id="tdd2" data-title="Email">${user.email}</td> --%>
+											<td id="tdd3" data-title="Phone No">${user.phoneNo}</td>
+											<td id="tdd4" data-title="UserName">${user.userName}</td>
+											<td id="tdd5" data-title="Id">${user.id}</td>
+											<%-- <td id="tdd8" data-title="Joining Date">${user.doj}</td> --%>
+											<td id="tdd11" data-title="Status">${user.status}</td>
+											<%-- <c:choose>
+												<c:when test="${user.status ne 'Active'}">
+													<td data-title="Left On">${user.leftDate}</td>
+												</c:when>
+												<c:otherwise>
+													<td id="tdd12" data-title="Left On">-</td>
+												</c:otherwise>
+											</c:choose> --%>
+											<td id="tdd14" data-title="Designation">${user.designation.designationName}</td>
+											<td id="tdd15" data-title="Role">${user.userProfile.type}</td>
+										</tr>
 									</c:forEach>
-								</sec:authorize>
-							</tbody>
-						</table>
+								</tbody>
+							</table>
+
+						</div>
 					</div>
+				</div>
+			</div>
+			<div class="well">
+				<sec:authorize access="hasRole('ADMIN')">
+					<c:choose>
+						<c:when test="${inactiveUsers eq 'Yes'}">
+						</c:when>
+						<c:otherwise>
+							<input type="button" onclick="submitShowProfileAction()"
+								value="Show Complete Profile" />
+							<input type="button" onclick="submitEditAction()" value="Edit" />
+							<input type="button" onclick="submitDeleteAction()"
+								value="Delete" />
+							<input type="button" onclick="submitPayRollAction()"
+								value="Define Payroll" />
+							<input type="button" onclick="submitPayRollViewAction()"
+								value="View Payroll" />
+						</c:otherwise>
+					</c:choose>
+
 				</sec:authorize>
 			</div>
-		</div>
-		<sec:authorize access="hasRole('ADMIN')">
-			<div class="well">
-				<a href="<c:url value='/newuser' />">Add New User</a>
-			</div>
-		</sec:authorize>
+		</form:form>
 	</div>
+
+	<script type="text/javascript">
+		jQuery.expr[":"].containsNoCase = function(el, i, m) {
+			var search = m[3];
+			if (!search)
+				return false;
+			return eval("/" + search + "/i").test($(el).text());
+		};
+
+		jQuery(document)
+				.ready(
+						function() {
+
+							jQuery('#txtSearch').keyup(function(event) {
+								if (event.keyCode == 27) {
+									resetSearch();
+								}
+							});
+
+							jQuery('#txtSearch')
+									.keyup(
+											function() {
+
+												if (jQuery('#txtSearch').val().length > 2) {
+													jQuery('#tblSearch tr')
+															.hide();
+													jQuery(
+															'#tblSearch tr:first')
+															.show();
+													jQuery(
+															'#tblSearch tr td:containsNoCase(\''
+																	+ jQuery(
+																			'#txtSearch')
+																			.val()
+																	+ '\')')
+															.parent().show();
+
+												} else if (jQuery('#txtSearch')
+														.val().length == 0) {
+													resetSearch();
+												}
+
+												if (jQuery('#tblSearch tr:visible').length == 1) {
+													jQuery('.norecords')
+															.remove();
+													jQuery('#tblSearch')
+															.append(
+																	'<tr class="norecords"><td colspan="5" class="Normal">No records were found</td></tr>');
+												}
+											});
+						});
+
+		function resetSearch() {
+			jQuery('#txtSearch').val('');
+			jQuery('#tblSearch tr').show();
+			jQuery('.norecords').remove();
+			jQuery('#txtSearch').focus();
+		}
+		//table sorting   
+		$(function() {
+			$('#tblSearch').tablesorter();
+		});
+	</script>
 </body>
 </html>

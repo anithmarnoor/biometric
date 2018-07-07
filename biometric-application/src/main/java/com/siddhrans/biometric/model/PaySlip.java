@@ -4,18 +4,23 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
 @Entity
-@Table(name="PAY_DETAILS")
+@Table(name="PAYSLIP_DETAILS_USER")
 public class PaySlip implements Serializable{
  
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="PAY_SLIP_ID")
     private Integer id;
     
     @Column(name="USER_ID")
@@ -27,11 +32,11 @@ public class PaySlip implements Serializable{
     @Column(name="CONVEYANCE")
     private Float conveyance;
     
-    @Column(name="HRA")
-    private Float hra;	
-    
-    @Column(name="LTA")
-    private Float lta;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "PAYSLIP_PDU_AU", 
+             joinColumns = { @JoinColumn(name = "PAY_SLIP_ID") }, 
+             inverseJoinColumns = { @JoinColumn(name = "USER_ID")  })
+	User user;
     
     @Column(name="MED_R")
     private Float mr;
@@ -54,12 +59,6 @@ public class PaySlip implements Serializable{
     @Column(name="ATTENDANCE")
     private Float attendance;
     
-    @Column(name="TOTAL_SALARY")
-    private Float totalSalary;
-    
-    @Column(name="OVER_TIME_AMOUNT")
-    private Float overTimeAmount;
-    
     @Column(name="OVER_TIME_HOURS")
     private Float overTimeHours;
     
@@ -69,23 +68,12 @@ public class PaySlip implements Serializable{
     @Column(name="MONTH")
     private Integer month;
 
-    @Column(name="YEAR")
-    private Integer year;
-    
-    public Float getTotalSalary() {
-		return totalSalary;
+	public Float getAttendance() {
+		return attendance;
 	}
 
-	public void setTotalSalary(Float totalSalary) {
-		this.totalSalary = totalSalary;
-	}
-
-	public Float getOverTimeAmount() {
-		return overTimeAmount;
-	}
-
-	public void setOverTimeAmount(Float overTimeAmount) {
-		this.overTimeAmount = overTimeAmount;
+	public void setAttendance(Float attendance) {
+		this.attendance = attendance;
 	}
 
 	public Float getOverTimeHours() {
@@ -96,14 +84,14 @@ public class PaySlip implements Serializable{
 		this.overTimeHours = overTimeHours;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
-    
+
 	public Float getAttendance() {
 		return attendance;
 	}
@@ -226,8 +214,8 @@ public class PaySlip implements Serializable{
 	
 	@Override
     public String toString() {
-        return "User [id=" + id + ", basic=" + basic + ", conveyance=" + conveyance
-                + ", Attendance=" + attendance + ", total Salary=" + totalSalary
-                + ", OT Salary=" + overTimeAmount + "]";
+        return "User [id=" + id + ", componentName=" + componentName + ", value=" + value
+                + ", userId=" + user.getId() + ", month=" + month
+                + ", year=" + year + "]";
     }
 }

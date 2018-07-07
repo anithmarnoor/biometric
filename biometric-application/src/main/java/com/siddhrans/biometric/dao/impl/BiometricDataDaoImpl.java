@@ -1,10 +1,11 @@
 package com.siddhrans.biometric.dao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.siddhrans.biometric.dao.AbstractDao;
@@ -29,7 +30,7 @@ public class BiometricDataDaoImpl extends AbstractDao<Integer, BiometricData>  i
 	public void save(BiometricData document) {
 		List<BiometricData> dataList = findByYearAndMonth(document.getYear(), document.getMonth());
 		
-		if(dataList.size() <= 0){
+		if(dataList.isEmpty() || dataList.size() <= 0){
 			persist(document);
 		} else {
 			super.update(document);

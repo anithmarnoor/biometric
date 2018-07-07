@@ -19,4 +19,6 @@ public interface UserBiometricDataDao {
 	public void save(UserBiometricData document);
 
 	public void deleteUserBiometricDataByUserId(String userId);
+	
+	List<UserBiometricData> findLeavesByUserInMonth(int userId, int month, int year);
 }

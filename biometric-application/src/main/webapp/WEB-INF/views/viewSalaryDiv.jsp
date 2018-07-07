@@ -12,7 +12,7 @@
 
 <body>
 	<%@include file="authheader.jsp"%>
-	<div class="generic-container">
+	<div class="generic-container-2">
 		<div class="row">
 			<div class="panel panel-default">
 				<!-- Default panel contents -->
@@ -24,51 +24,39 @@
 						class="col-md-12 table-bordered table-striped table-condensed cf">
 						<thead class="cf" id="thcolor">
 							<tr>
-								<th>Basic</th>
-								<th>Conveyance</th>
-								<th>HRA</th>
-								<th>LTA</th>
-								<th>Medical Reimbursement</th>
-								<th>ESI</th>
-								<th>Special Allowance</th>
-								<th>Income Tax</th>
-								<th>Provident Fund</th>
-								<th>Profession Tax</th>
+								<th>Component ID</th>
+								<th>Component Name</th>
+								<th>Is Deductible From Salary?</th>
+								<th></th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
 							<c:forEach items="${salaryDivision}" var="division">
 								<tr>
-									<td data-title="Basic">${division.basicPercentage}</td>
-									<td data-title="Conveyance">${division.conveyancePercentage}</td>
-									<td data-title="HRA">${division.hraPercentage}</td>
-									<td data-title="LTA">${division.ltaPercentage}</td>
-									<td data-title="Medical Reimbursement">${division.mrPercentage}</td>
-									<td data-title="ESI">${division.esiPercentage}</td>
-									<td data-title="Special Allowance">${division.saPercentage}</td>
-									<td data-title="Income Tax">${division.incomeTaxPercentage}</td>
-									<td data-title="Provident Fund">${division.pfPercentage}</td>
-									<td data-title="Profession Tax">${division.ptPercentage}</td>
+									<td data-title="Component ID">${division.componentId}</td>
+									<td data-title="Component Name">${division.componentName}</td>
+									<td data-title="Is Deductible">${division.isDeductible}</td>
+									<td><a
+										href="<c:url value='/salaryDivision-edit-${division.componentId}' />">Edit</a></td>
+									<td><a
+										href="<c:url value='/salaryDivision-delete-${division.componentId}' />">Delete</a></td>
 								</tr>
 							</c:forEach>
-
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		<c:choose>
-			<c:when test="${fn:length(salaryDivision) > 0}">
-				<a href="<c:url value='/edit-salaryDivision${1}' />">Edit Salary
-					Break Down</a>
-			</c:when>
-			<c:otherwise>
-				<a href="<c:url value='/save-salaryDivision' />">Add Salary
-					Break Down</a>
-			</c:otherwise>
-		</c:choose>
-	</div>
-
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="alert alert-success lead">${error}${success}</div>
+				<span class="lead">Add Salary BreakDown Components</span>
+			</div>
+			<div class="uploadcontainer">
+				<%@include file="addsalarydivision.jsp"%>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

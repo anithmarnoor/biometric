@@ -2,6 +2,7 @@
 body{
 	height: 100%;
 	background-color:#F5DEB3;
+	width: 87%;
 }
 
 
@@ -31,12 +32,23 @@ background-image: linear-gradient(to top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, 
 .has-error{
 	color:red;
 }
+.generic-container-2{
+	width: 82%;
+    margin-top: 80px;
+    margin-bottom: 20px;
+    margin-left: 292px;
+    padding: 20px;
+    background-color: #A2D9CE;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 0 30px black;
+}
 
 .generic-container-1 {
     width: 37%;
     margin-top: 80px;
     margin-bottom: 20px;
-    margin-left: 441px;
+    margin-left: 562px;
     padding: 20px;
     background-color:#A2D9CE;
     border: 1px solid #ddd;
@@ -46,16 +58,17 @@ background-image: linear-gradient(to top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, 
 }
 
 .generic-container {
-    width: 84%;
+    width: 89%;
   margin-top: 80px;
   margin-bottom: 20px;
-  margin-left:  205px;
+  margin-left:  256px;
   padding: 20px;
   background-color: #A2D9CE;
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 0 30px black;
 }
+
 
 .custom-width {
     width: 80px !important;
@@ -101,9 +114,10 @@ body, #mainWrapper, .form-control{
 .top-name{
 	font-size:42px;
 	margin-top: 0px;
-	padding-top: 15px;
+	padding-top: 23px;
 	font-family: cursive;
-	color:#991f00;	
+	color:#991f00;
+    margin-left: auto;	
 }
 
 .application-name {
@@ -153,7 +167,7 @@ body {
 
 @media only screen and (max-width: 800px) {
     
-    /* Force table to not be like tables anymore */
+   /*  Force table to not be like tables anymore */
 	#no-more-tables table, 
 	#no-more-tables thead, 
 	#no-more-tables tbody, 
@@ -207,4 +221,149 @@ body {
 }
 #log{
 	font-size: 24px;
+}
+
+#txtSearch {
+ background-image: url(../Images/save.png);
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    width: 20%;
+    height: 51px;
+    margin-left: 8px;
+    font-size: 16px;
+    padding: 7px 20px 12px 40px;
+    border: 1px solid #ddd;
+    margin-bottom: 14px;
+    margin-top: 10px;
+}
+#tblSearch{
+	  cursor: pointer;
+  background: #A2D9CE;
+
+}
+#tblSearch thead tr th.headerSortUp, #keywords thead tr th.headerSortDown {
+  background: #F5DEB3;
+}
+
+#tblSearch thead tr th.headerSortUp span {
+  background-image: url(../Images/up-arrow.png);
+}
+#tblSearch thead tr th.headerSortDown span {
+  background-image: url(../Images/down-arrow.png);
+}
+#tblSearch thead tr th span { 
+/*  padding-right: 75px; */
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+}
+#tblSearch table {
+    overflow-x: scroll;
+}
+#tblSearch thead tr {
+    display: block;
+    width: 40%;
+}
+#tblSearch tbody {
+    overflow-y: auto;
+    display: block;
+}
+
+.wrapper {
+    overflow-x: auto;
+    width: auto;
+}
+/*#tblSearch td,th {
+	width:100px;
+}*/
+#ss1{
+	width:100px;
+}
+/*#tblSearch td{
+padding-right: 65px; 	
+}*/
+#ss1{
+padding-right: 119px; 	
+}
+#ss2{
+padding-right: 127px; 	
+}
+#ss3{
+padding-right: 139px; 	
+}
+#ss4{
+padding-right: 53px; 	
+}
+#ss5{
+padding-right: 62px; 	
+}
+#ss6{
+padding-right: 100px; 	
+}
+#ss7{
+padding-right: 80px; 	
+}
+#ss8{
+padding-right: 100px; 	
+}
+#ss9{
+padding-right: 131px; 	
+}
+#ss10{
+padding-right: 100px; 	
+}
+#ss11{
+padding-right: 49px; 	
+}
+#ss12{
+padding-right: 97px; 	
+}#ss13{
+padding-right: 139px; 	
+}
+#ss14{
+padding-right: 139px; 	
+}
+#tdd1{
+padding-right: 20px;
+}
+#tdd2{
+padding-right: 65px;	
+}
+#tdd3{
+padding-right: 65px;	
+}
+#tdd4{
+padding-right: 65px;	
+}
+#tdd5{
+padding-right: 72px;	
+}
+#tdd6{
+padding-right: 65px;	
+}
+#tdd7{
+padding-right: 65px;	
+}
+#tdd8{
+padding-right: 65px;	
+}
+#tdd9{
+padding-right: 65px;	
+}
+#tdd10{
+padding-right: 65px;	
+}
+#tdd11{
+padding-right: 65px;	
+}
+#tdd12{
+padding-right: 112px;	
+}
+#tdd13{
+padding-right: 65px;	
+}
+#tdd14{
+padding-right: 65px;	
+}
+#tdd15{
+padding-right: 65px;	
 }
