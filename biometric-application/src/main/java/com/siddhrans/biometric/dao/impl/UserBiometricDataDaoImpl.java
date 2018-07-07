@@ -17,18 +17,18 @@ import com.siddhrans.biometric.utils.BiometricConstants;
 @Repository("userBiometricDataDao")
 public class UserBiometricDataDaoImpl extends AbstractDao<Integer, UserBiometricData>  implements UserBiometricDataDao {
 
-	@Override
+	
 	public List<UserBiometricData> findAll() {
 		Criteria crit = createEntityCriteria();
         return (List<UserBiometricData>)crit.list();
 	}
 
-	@Override
+	
 	public UserBiometricData findById(int id) {
 		return getByKey(id);
 	}
 	
-	@Override
+	
 	public List<UserBiometricData> findByUserId(String userId) {
 		Criteria crit = createEntityCriteria();
 		crit.add(Restrictions.eq("userId", Integer.parseInt(userId)));
@@ -36,7 +36,7 @@ public class UserBiometricDataDaoImpl extends AbstractDao<Integer, UserBiometric
 		return dataList;
 	}
 
-	@Override
+	
 	public List<UserBiometricData> findByDateAndUserId(Integer year, Integer month, Integer date, Integer id) {
 		Criteria crit = createEntityCriteria();
 		crit.add(Restrictions.eq("userId", id));
@@ -47,7 +47,7 @@ public class UserBiometricDataDaoImpl extends AbstractDao<Integer, UserBiometric
 		return dataList;
 	}
 	
-	@Override
+	
 	public List<UserBiometricData> findByYearAndMonth(Integer year, Integer month, Integer id) {
 		Criteria crit = createEntityCriteria().addOrder(Order.asc("date"));
 		crit.add(Restrictions.eq("userId", id));
@@ -56,12 +56,12 @@ public class UserBiometricDataDaoImpl extends AbstractDao<Integer, UserBiometric
 		List<UserBiometricData> dataList = (List<UserBiometricData>)crit.list();
 		return dataList;
 	}
-	@Override
+	
 	public void save(UserBiometricData data) {
 		persist(data);
 	}
 
-	@Override
+	
 	public void deleteUserBiometricDataByUserId(String userId) {
 		Criteria crit = createEntityCriteria();
 		crit.add(Restrictions.eq("userId", userId));

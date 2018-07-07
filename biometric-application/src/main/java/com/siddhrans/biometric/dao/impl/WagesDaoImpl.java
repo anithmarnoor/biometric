@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.siddhrans.biometric.dao.AbstractDao;
@@ -17,12 +18,12 @@ import com.siddhrans.biometric.model.Wages;
 public class WagesDaoImpl extends AbstractDao<Integer, Wages> implements WagesDao {
 
 	public void save(Wages wages) {
-		wages.setId(1);//Only one row should be present. So setting it to 1
+		//wages.setId(1);//Only one row should be present. So setting it to 1
 		super.persist(wages);
 	}
 
 	public void update(Wages wages) {
-		wages.setId(1);//Only one row should be present. Always update same. So setting it to 1
+		//wages.setId(1);//Only one row should be present. Always update same. So setting it to 1
 		super.update(wages);
 	}
 

@@ -3,7 +3,7 @@ package com.siddhrans.biometric.security;
 
 import java.util.ArrayList;
 import java.util.List;
- 
+
 
 
 
@@ -22,8 +22,8 @@ import com.siddhrans.biometric.model.User;
 import com.siddhrans.biometric.model.UserProfile;
 import com.siddhrans.biometric.service.UserService;
 
- 
- 
+
+
 @Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService{
 

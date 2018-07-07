@@ -80,6 +80,8 @@ Now go to DB and run the queries with sample data present in initialData.sql fil
 Now login with admin->username=sam and password=abc125
 for driver, login with username=anma1213 and password=anma1213
 
+-----------------------------------Oracle----------------------------------------
+https://thomaslarock.com/2010/09/how-to-connect-to-oracle-when-you-forgot-your-password/
 
 
 *********************************For Developer************************************

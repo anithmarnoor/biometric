@@ -15,10 +15,11 @@ import javax.persistence.Table;
 @Table(name="WAGES")
 public class Wages {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="WAGES_ID", nullable=true)
     private Integer id;
  
-    @Column(name="NORMAL_SHIFT", nullable=false)
+    @Column(name="NORMAL_SHIFT", nullable=true)
     private String normalShift;
     
     @Column(name="CTC", nullable=true)

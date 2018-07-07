@@ -15,18 +15,18 @@ import com.siddhrans.biometric.model.BiometricData;
 @Repository("biometricDataDao")
 public class BiometricDataDaoImpl extends AbstractDao<Integer, BiometricData>  implements BiometricDataDao {
 
-	@Override
+	
 	public List<BiometricData> findAll() {
 		Criteria crit = createEntityCriteria();
         return (List<BiometricData>)crit.list();
 	}
 
-	@Override
+	
 	public BiometricData findById(int id) {
 		return getByKey(id);
 	}
 
-	@Override
+	
 	public void save(BiometricData document) {
 		List<BiometricData> dataList = findByYearAndMonth(document.getYear(), document.getMonth());
 		
@@ -37,7 +37,7 @@ public class BiometricDataDaoImpl extends AbstractDao<Integer, BiometricData>  i
 		}
 	}
 	
-	@Override
+	
 	public List<BiometricData> findByYearAndMonth(String year, String month) {
 		Criteria crit = createEntityCriteria();
 		crit.add(Restrictions.eq("year", year));
@@ -47,7 +47,7 @@ public class BiometricDataDaoImpl extends AbstractDao<Integer, BiometricData>  i
 	}
 	
 
-	@Override
+	
 	public void deleteBiometricDataById(int id) {
 		BiometricData document =  getByKey(id);
         delete(document);

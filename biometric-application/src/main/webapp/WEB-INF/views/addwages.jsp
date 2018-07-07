@@ -16,14 +16,26 @@
 			Salary Details for particular designation</div>
 		<form:form method="POST" modelAttribute="wages"
 			class="form-horizontal">
+			<form:input type="hidden" path="id" id="id" />
 			<div class="row">
 				<div class="form-group col-md-12">
-					<label class="col-md-3 control-lable" for="normalShift">Normal 8hr shift</label>
-					<div class="col-md-7">
-						<form:input type="text" path="normalShift"
-							id="normalShift" class="form-control input-sm" />
+					<label class="col-md-2 control-lable" for="normalShift">Normal
+						8hr shift</label>
+					<div class="col-md-3">
+						<form:input type="text" path="normalShift" id="normalShift"
+							class="form-control input-sm" />
 						<div class="has-error">
 							<form:errors path="normalShift" class="help-inline" />
+						</div>
+					</div>
+					<div class="col-md-2">OR</div>
+					<label class="col-md-1 control-lable" for="ctc">CTC Per
+						Annum</label>
+					<div class="col-md-3">
+						<form:input type="text" path="ctc" id="normalShift"
+							class="form-control input-sm" />
+						<div class="has-error">
+							<form:errors path="ctc" class="help-inline" />
 						</div>
 					</div>
 				</div>

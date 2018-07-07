@@ -23,14 +23,11 @@ public class PaySlip implements Serializable{
     @Column(name="PAY_SLIP_ID")
     private Integer id;
     
-    @Column(name="USER_ID")
-    private Integer userId;
-
-	@Column(name="BASIC")
-    private Float basic;
+    @Column(name="COMPONENT_NAME")
+    private String componentName;
     
-    @Column(name="CONVEYANCE")
-    private Float conveyance;
+    @Column(name="VALUE")
+    private Float value;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "PAYSLIP_PDU_AU", 
@@ -38,35 +35,17 @@ public class PaySlip implements Serializable{
              inverseJoinColumns = { @JoinColumn(name = "USER_ID")  })
 	User user;
     
-    @Column(name="MED_R")
-    private Float mr;
+    @Column(name="MONTH")
+    private Integer month;
+
+    @Column(name="YEAR")
+    private Integer year;
     
-    @Column(name="ESI")
-    private Float esi;
-    
-    @Column(name="SA")
-    private Float sa;
-    
-    @Column(name="TAX")
-    private Float incomeTax;
-    
-    @Column(name="PF")
-    private Float pf;
-    
-    @Column(name="PT")
-    private Float pt;
-   
     @Column(name="ATTENDANCE")
     private Float attendance;
     
     @Column(name="OVER_TIME_HOURS")
     private Float overTimeHours;
-    
-    @Column(name="PAN")
-    private String panNo;
-    
-    @Column(name="MONTH")
-    private Integer month;
 
 	public Float getAttendance() {
 		return attendance;
@@ -90,22 +69,6 @@ public class PaySlip implements Serializable{
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public Float getAttendance() {
-		return attendance;
-	}
-
-	public void setAttendance(Float attendance) {
-		this.attendance = attendance;
-	}
-
-	public String getPanNo() {
-		return panNo;
-	}
-
-	public void setPanNo(String panNo) {
-		this.panNo = panNo;
 	}
 
 	public Integer getMonth() {
@@ -132,86 +95,22 @@ public class PaySlip implements Serializable{
 		this.id = id;
 	}
 
-	public Float getBasic() {
-		return basic;
+	public String getComponentName() {
+		return componentName;
 	}
 
-	public void setBasic(Float basic) {
-		this.basic = basic;
+	public void setComponentName(String componentName) {
+		this.componentName = componentName;
 	}
 
-	public Float getConveyance() {
-		return conveyance;
+	public Float getValue() {
+		return value;
 	}
 
-	public void setConveyance(Float conveyance) {
-		this.conveyance = conveyance;
+	public void setValue(Float value) {
+		this.value = value;
 	}
 
-	public Float getHra() {
-		return hra;
-	}
-
-	public void setHra(Float hra) {
-		this.hra = hra;
-	}
-
-	public Float getLta() {
-		return lta;
-	}
-
-	public void setLta(Float lta) {
-		this.lta = lta;
-	}
-
-	public Float getMr() {
-		return mr;
-	}
-
-	public void setMr(Float mr) {
-		this.mr = mr;
-	}
-
-	public Float getEsi() {
-		return esi;
-	}
-
-	public void setEsi(Float esi) {
-		this.esi = esi;
-	}
-
-	public Float getSa() {
-		return sa;
-	}
-
-	public void setSa(Float sa) {
-		this.sa = sa;
-	}
-
-	public Float getIncomeTax() {
-		return incomeTax;
-	}
-
-	public void setIncomeTax(Float incomeTax) {
-		this.incomeTax = incomeTax;
-	}
-
-	public Float getPf() {
-		return pf;
-	}
-
-	public void setPf(Float pf) {
-		this.pf = pf;
-	}
-
-	public Float getPt() {
-		return pt;
-	}
-
-	public void setPt(Float pt) {
-		this.pt = pt;
-	}
-	
 	@Override
     public String toString() {
         return "User [id=" + id + ", componentName=" + componentName + ", value=" + value

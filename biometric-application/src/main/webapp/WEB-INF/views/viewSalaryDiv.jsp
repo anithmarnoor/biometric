@@ -32,7 +32,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${salaryDivision}" var="division">
+							<c:forEach items="${salaryDivisionList}" var="division">
 								<tr>
 									<td data-title="Component ID">${division.componentId}</td>
 									<td data-title="Component Name">${division.componentName}</td>

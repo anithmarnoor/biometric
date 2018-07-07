@@ -33,13 +33,13 @@ public class UserServiceImpl implements UserService{
         return user;
     }
     
-	@Override
+	
 	public User findByPhoneNo(String phoneNo) {
 		 User user = dao.findByPhoneNo(phoneNo);
 	        return user;
 	}
 
-	@Override
+	
 	public User findByDlNo(String dlNo) {
 		 User user = dao.findByDlNo(dlNo);
 	        return user;
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService{
             entity.setDob(user.getDob());
             entity.setPhoneNo(user.getPhoneNo());
             entity.setDoj(user.getDoj());
-            entity.setUserProfiles(user.getUserProfiles());
+            entity.setUserProfile(user.getUserProfile());
             entity.setOverTime(user.getOverTime());
             entity.setDesignation(user.getDesignation());
         }

@@ -13,6 +13,7 @@
 <body>
 	<%@include file="authheader.jsp"%>
 	<div class="generic-container-2">
+	<div class="alert alert-success lead">${error}</div>
 		<div class="row">
 			<div class="panel panel-default">
 				<!-- Default panel contents -->
@@ -46,16 +47,8 @@
 				</div>
 			</div>
 		</div>
-		<c:choose>
-			<c:when test="${fn:length(wagesList) > 0}">
-				<a href="<c:url value='/edit-wages${1}' />">Edit Wage amounts</a>
-			</c:when>
-			<c:otherwise>
-				<a href="<c:url value='/save-wages' />">Add Wage amounts</a>
-			</c:otherwise>
-		</c:choose>
+		<a href="<c:url value='/save-wages' />">Add Wage amounts</a>
 	</div>
 
-	</div>
 </body>
 </html>

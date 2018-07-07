@@ -52,24 +52,13 @@
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="gender">Gender</label>
 					<div class="col-md-7">
-						<%-- 	<c:choose>
-							<c:when test="${edit}">
-								<form:radiobutton path="gender" id="gender" value="Male"
-									disabled="true" label="Male" />
-								<form:radiobutton path="gender" id="gender" value="Female"
-									disabled="true" label="Female" />
-							</c:when>
-							<c:otherwise> --%>
 						<form:radiobutton path="gender" id="gender" value="Male"
-							label="Male" />&nbsp;&nbsp;
+							label="Male" />
 						<form:radiobutton path="gender" id="gender" value="Female"
 							label="Female" />
 						<div class="has-error">
 							<form:errors path="gender" class="help-inline" />
 						</div>
-						<%-- </c:otherwise>
-						</c:choose> --%>
-
 					</div>
 				</div>
 			</div>
@@ -105,19 +94,10 @@
 					<label class="col-md-3 control-lable" for="doj">Date Of
 						Joining</label>
 					<div class="col-md-7">
-						<%-- <c:choose>
-							<c:when test="${edit}">
-								<form:input path="doj" id="doj" class="form-control input-sm"
-									disabled="true" />
-							</c:when>
-							<c:otherwise> --%>
 						<form:input path="doj" id="doj" class="form-control input-sm" />
 						<div class="has-error">
 							<form:errors path="doj" class="help-inline" />
 						</div>
-						<%-- </c:otherwise>
-						</c:choose>
- --%>
 					</div>
 				</div>
 			</div>
@@ -132,8 +112,6 @@
 						<div class="has-error">
 							<form:errors path="userName" class="help-inline" />
 						</div>
-							</c:otherwise>
-						</c:choose>
 					</div>
 				</div>
 			</div>
@@ -230,8 +208,6 @@
 					<input type="submit" value="Register"
 						class="btn btn-primary btn-sm" /> or <a
 						href="<c:url value='/list' />">Cancel</a>
-						</c:otherwise>
-					</c:choose>
 				</div>
 			</div>
 		</form:form>

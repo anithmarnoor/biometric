@@ -26,22 +26,22 @@ public class BiometricDataServiceImpl implements BiometricDataService {
 		 return biometricDao.findById(id);
 	}
 
-	@Override
+	
 	public List<BiometricData> findAll() {
 		return biometricDao.findAll();
 	}
 
-	@Override
+	
 	public List<BiometricData> findByYearAndMonth(String year, String month) {
 		return biometricDao.findByYearAndMonth(year, month);
 	}
 
-	@Override
+	
 	public void saveDocument(BiometricData document) {
 		biometricDao.save(document);
 	}
 
-	@Override
+	
 	public void deleteBiometricDataById(int id) {
 		biometricDao.deleteBiometricDataById(id);
 	}

@@ -1,5 +1,7 @@
 package com.siddhrans.biometric.dao;
 
+import java.util.List;
+
 import com.siddhrans.biometric.model.PaySlip;
 import com.siddhrans.biometric.model.User;
 

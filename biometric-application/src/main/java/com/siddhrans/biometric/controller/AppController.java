@@ -194,6 +194,7 @@ public class AppController {
 			result.addError(dlNoError);
 			return "registration";
 		}*/
+		user.setStatus("Active");
 		userService.saveUser(user);
 
 		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " registered successfully");
@@ -201,7 +202,7 @@ public class AppController {
 
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
-		model.addAttribute("url", "view-BiometricData");
+		model.addAttribute("url", "list");
 		return "result";
 	}
 
@@ -223,7 +224,7 @@ public class AppController {
 
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
-		return "registration";
+		return "editUser";
 	}
 
 	/**
@@ -245,7 +246,7 @@ public class AppController {
 
 			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
-			return "registration";
+			return "editUser";
 		}
 
 		/*//Uncomment below 'if block' if you WANT TO ALLOW UPDATING USER_NAME in UI which is a unique key to a User.

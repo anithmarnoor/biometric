@@ -23,6 +23,9 @@ public class PaySlipDaoImpl extends AbstractDao<Integer, PaySlip> implements Pay
 		crit.add(Restrictions.eq("user", user));
 		crit.add(Restrictions.eq("year", year));
 		crit.add(Restrictions.eq("month", month));
+		if(componentName != null ){
+			crit.add(Restrictions.eq("componentName", componentName));
+		}
 		List<PaySlip> list = (List<PaySlip>)crit.list();
 		PaySlip dataList = null;
 		if(list != null && list.size()>0){
@@ -32,12 +35,12 @@ public class PaySlipDaoImpl extends AbstractDao<Integer, PaySlip> implements Pay
 			}
 			
 		}
-		return dataList;
+		return list;
 	}
 
 
 	public boolean savePayDetails(PaySlip paySlip) {
-		/*PaySlip existingPaySlip = getPayDetails(paySlip.getUserId(), paySlip.getYear(), paySlip.getMonth());
+		/*PaySlip existingPaySlip = getPayDetails(paySlip.getUserId(), paySlip.getYear(), paySlip.getMonth(), paySlip.getComponentName());
 		if(existingPaySlip == null)*/
 		persist(paySlip);
 		/*else 

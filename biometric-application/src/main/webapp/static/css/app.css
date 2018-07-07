@@ -26,7 +26,7 @@ background-image: linear-gradient(to top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, 
 
 .floatRight{
 	float:right;
-	margin-right: 85px;
+	margin-right:  240px;
 }
 
 .has-error{
@@ -71,7 +71,7 @@ background-image: linear-gradient(to top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, 
 
 
 .custom-width {
-    width: 80px !important;
+    width: 71px !important;
 }
 
 body, #mainWrapper, .form-control{
@@ -106,7 +106,7 @@ body, #mainWrapper, .form-control{
 .authbar{
 	margin-bottom:15px;
 	float: right;
-	margin-right: -4%;
+	margin-right: -14%;
     margin-top: 0%;
     color: red;
 }

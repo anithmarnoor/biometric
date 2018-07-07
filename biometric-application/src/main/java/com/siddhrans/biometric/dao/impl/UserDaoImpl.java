@@ -1,5 +1,8 @@
 package com.siddhrans.biometric.dao.impl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -15,9 +18,6 @@ import com.siddhrans.biometric.dao.UserDao;
 import com.siddhrans.biometric.model.Department;
 import com.siddhrans.biometric.model.Designation;
 import com.siddhrans.biometric.model.User;
- 
- 
- 
 @Repository("userDao")
 public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 	static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
@@ -119,29 +119,28 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 	}
 
 	public User findByPhoneNo(String phoneNo) {
-        logger.info("PhoneNo : {}", phoneNo);
-        Criteria crit = createEntityCriteria();
-        crit.add(Restrictions.eq("phoneNo", phoneNo));
-        User user = (User)crit.uniqueResult();
-        if(user!=null){
-        	logger.info("user Found for Phone Number criteria : {}", user.getId());
-            Hibernate.initialize(user.getUserProfiles());
-        }
-        return user;
+		logger.info("PhoneNo : {}", phoneNo);
+		Criteria crit = createEntityCriteria();
+		crit.add(Restrictions.eq("phoneNo", phoneNo));
+		User user = (User)crit.uniqueResult();
+		if(user!=null){
+			logger.info("user Found for Phone Number criteria : {}", user.getId());
+			Hibernate.initialize(user.getUserProfile());
+		}
+		return user;
 	}
 
 
 	public User findByDlNo(String dlNo) {
-        logger.info("dlNo : {}", dlNo);
-        Criteria crit = createEntityCriteria();
-        crit.add(Restrictions.eq("dlNo", dlNo));
-        User user = (User)crit.uniqueResult();
-        
-        if(user!=null){
-        	logger.info("user Found for DL No criteria : {}", user.getId());
-            Hibernate.initialize(user.getUserProfiles());
-        }
-        return user;
+		logger.info("dlNo : {}", dlNo);
+		Criteria crit = createEntityCriteria();
+		crit.add(Restrictions.eq("dlNo", dlNo));
+		User user = (User)crit.uniqueResult();
+		if(user!=null){
+			logger.info("user Found for DL No criteria : {}", user.getId());
+			Hibernate.initialize(user.getUserProfile());
+		}
+		return user;
 	}
 
 	public User findByDesignationName(String designationName) {

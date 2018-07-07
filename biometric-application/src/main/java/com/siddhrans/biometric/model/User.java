@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -160,12 +161,12 @@ public class User implements Serializable{
 		this.userName = userName;
 	}
 
-	@NotEmpty
-    @ManyToMany(fetch = FetchType.EAGER)
+	
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "APP_USER_USER_PROFILE", 
              joinColumns = { @JoinColumn(name = "USER_ID") }, 
              inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
-    private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
+    private UserProfile userProfile;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "USER_DESIGNATION", 
@@ -228,16 +229,16 @@ public class User implements Serializable{
     public void setEmail(String email) {
         this.email = email;
     }
- 
-    public Set<UserProfile> getUserProfiles() {
-        return userProfiles;
-    }
- 
-    public void setUserProfiles(Set<UserProfile> userProfiles) {
-        this.userProfiles = userProfiles;
-    }
- 
-    @Override
+
+	public UserProfile getUserProfile() {
+		return userProfile;
+	}
+
+	public void setUserProfile(UserProfile userProfile) {
+		this.userProfile = userProfile;
+	}
+
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

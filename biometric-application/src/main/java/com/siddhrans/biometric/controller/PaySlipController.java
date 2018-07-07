@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -69,6 +70,9 @@ public class PaySlipController {
 
 	@Autowired
 	UserPayRollService userPayRollService;
+
+	@Autowired
+	UserProfileService userProfileService;
 
 	@Autowired
 	UserBiometricDataService userBiometricDataService;
@@ -278,7 +282,7 @@ public class PaySlipController {
 		request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
 		return "redirect:payRollDetails-view";
 	}
-	
+
 	/**
 	 * This method will provide the medium to add a Salary Division Details.
 	 */
@@ -322,7 +326,7 @@ public class PaySlipController {
 			}
 			List<Wages> wages = paySlipService.findWages();
 			List<SalaryComponent> salaryComponents = paySlipService.findAllSalaryDivisions();
-		
+
 			if(wages.size()<=0 /*|| salaryDivision.size() <=0*/){
 				model.addAttribute("error", "Either Wages or Salary Division Information is not present.<br>"
 						+ " Please Add Wages or Salary Division Details before Generating PaySlip");
@@ -512,7 +516,6 @@ public class PaySlipController {
 			bis.close();
 			file.delete();//Delete Excel file as the data is stored in database.
 		}
-		return paySlip;
 	}
 
 	/**
