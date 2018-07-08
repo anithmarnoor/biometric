@@ -137,4 +137,15 @@ public class LeavesServiceImpl implements LeavesService {
 	public void deleteLeavesAvailable(LeavesAvailable leavesAvailable) {
 		availableLeavesDao.deleteLeavesAvailable(leavesAvailable);
 	}
+
+	@Override
+	public List<LeavesLimit> findLeavesLimitByUser(Integer userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<LeavesAvailable> findAvailableLeavesByUser(User user) {
+		return availableLeavesDao.findAvailableLeavesByUser(user);
+	}
 }

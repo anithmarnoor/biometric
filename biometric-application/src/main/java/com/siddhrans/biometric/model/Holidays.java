@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -19,6 +20,9 @@ public class Holidays {
 	Integer holidayId;
 	
 	@NotEmpty
+	@Transient
+	String holiday;
+
 	@Column(name="HOLIDAY_DATE", unique=true,  nullable=false)
 	Integer holidayDate;
 	
@@ -30,6 +34,14 @@ public class Holidays {
 	
 	@Column(name="HOLIDAY_REASON", nullable=false)
 	String holidayReason;
+	
+	public String getHoliday() {
+		return holiday;
+	}
+
+	public void setHoliday(String holiday) {
+		this.holiday = holiday;
+	}
 
 	public Integer getHolidayId() {
 		return holidayId;

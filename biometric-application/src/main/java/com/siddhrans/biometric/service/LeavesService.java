@@ -22,6 +22,8 @@ public interface LeavesService {
     
     LeavesLimit findLeavesLimitByLeavesType(LeaveTypes leavesType);
     
+    List<LeavesLimit> findLeavesLimitByUser(Integer userId);
+    
     List<LeaveTypes> findAllLeaveTypes();
     
     LeaveTypes findLeaveTypeById(int typeId);
@@ -45,6 +47,8 @@ public interface LeavesService {
     void deleteLeave(Leaves leave);
     
     LeavesAvailable findAvailableLeavesByUserAndType(User user, LeaveTypes leaveTypes);
+    
+    List<LeavesAvailable> findAvailableLeavesByUser(User user);
     
     void saveLeavesAvailable(LeavesAvailable leavesAvailable);
     

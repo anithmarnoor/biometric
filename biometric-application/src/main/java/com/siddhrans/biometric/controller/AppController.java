@@ -99,6 +99,7 @@ public class AppController {
 		User profile = userService.findByUserName(getPrincipal());
 
 		model.addAttribute("profile", profile);
+		model.addAttribute("inactiveUsers", "Yes");
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "userslist";
 	}

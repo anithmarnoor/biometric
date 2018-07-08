@@ -61,7 +61,7 @@ public class Leaves {
 		this.leaveStatus = leaveStatus;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "LEAVE_USER", 
              joinColumns = { @JoinColumn(name = "LEAVE_ID") }, 
              inverseJoinColumns = { @JoinColumn(name = "USER_ID")  })

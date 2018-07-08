@@ -71,13 +71,13 @@
 
 						<div class="row">
 							<div class="form-group col-md-12">
-								<label class="col-md-3 control-lable" for="holidayDate">Holiday
+								<label class="col-md-3 control-lable" for="holiday">Holiday
 									Date</label>
 								<div class="col-md-7">
-									<form:input path="holidayDate" id="holidayDate"
+									<form:input path="holiday" id="holiday"
 										class="form-control input-sm" />
 									<div class="has-error">
-										<form:errors path="holidayDate" class="help-inline" />
+										<form:errors path="holiday" class="help-inline" />
 									</div>
 								</div>
 							</div>

@@ -13,7 +13,7 @@ $(function() {
 });
 
 $(function() {
-	$("#holidayDate").datepicker();
+	$("#holiday").datepicker();
 });
 
 $(function() {

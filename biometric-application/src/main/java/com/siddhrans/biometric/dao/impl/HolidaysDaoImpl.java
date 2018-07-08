@@ -58,9 +58,9 @@ public class HolidaysDaoImpl extends AbstractDao<Integer, Holidays> implements H
 	public List<Holidays> findHolidaysByMonthAndYearAndDate(int month, int year, int date) {
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("id"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
-		criteria.add(Restrictions.eq("holidayYear", year+""));
-		criteria.add(Restrictions.eq("holidayMonth", month+""));
-		criteria.add(Restrictions.eq("holidayDate", date+""));
+		criteria.add(Restrictions.eq("holidayYear", year));
+		criteria.add(Restrictions.eq("holidayMonth", month));
+		criteria.add(Restrictions.eq("holidayDate", date));
 		List<Holidays> holidaysList = (List<Holidays>) criteria.list();
 		if(holidaysList.size() >0){
 			return holidaysList;
@@ -72,7 +72,7 @@ public class HolidaysDaoImpl extends AbstractDao<Integer, Holidays> implements H
 	public List<Holidays> findHolidaysByDate(String date) {
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("id"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
-		criteria.add(Restrictions.eq("holidayDate", date));
+		criteria.add(Restrictions.eq("holidayDate", Integer.parseInt(date)));
 		List<Holidays> holidaysList = (List<Holidays>) criteria.list();
 		if(holidaysList.size() >0){
 			return holidaysList;

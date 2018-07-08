@@ -44,5 +44,17 @@ public class AvailableLeavesDaoImpl extends AbstractDao<Integer, LeavesAvailable
 	@Override
 	public void deleteLeavesAvailable(LeavesAvailable leavesAvailable) {
 		delete(leavesAvailable);
+	}
+
+	@Override
+	public List<LeavesAvailable> findAvailableLeavesByUser(User user) {
+		Criteria criteria = createEntityCriteria().addOrder(Order.asc("id"));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
+		criteria.add(Restrictions.eq("user", user));
+		List<LeavesAvailable> leavesAvailable = (List<LeavesAvailable>) criteria.list();
+		if(leavesAvailable.size() >0){
+			return leavesAvailable;
+		}
+		return null;
 	}	
 }

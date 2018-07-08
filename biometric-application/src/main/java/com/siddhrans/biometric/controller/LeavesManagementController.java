@@ -216,12 +216,22 @@ public class LeavesManagementController {
 			logger.debug("Leaves Limit Id to SAVE is "+leavesLimit.getLeavesLimitId());
 			leavesService.saveLeavesLimit(leavesLimit);
 			message="Leaves Limit Added Successfully.";
+			List<User> usersList = userService.findAllUsers();
+			for(User user:usersList){
+				LeavesAvailable leavesAvailable = new LeavesAvailable();
+				leavesAvailable.setAvailability(Float.parseFloat(leavesLimit.getLimit()));
+				leavesAvailable.setLeaveType(leavesLimit.getLeaveType());
+				leavesAvailable.setUser(user);
+				leavesService.saveLeavesAvailable(leavesAvailable);
+			}
 		} else{
 			logger.debug("Leaves Limit Id to EDIT is "+leavesLimitId);
 			leavesLimit.setLeavesLimitId(Integer.parseInt(leavesLimitId));
 			leavesService.updateLeavesLimit(leavesLimit);
 			message="Leaves Limit Updated Successfully.";
 		}
+		
+		
 		logger.debug(" Leaves Limit Edit or Save message is  "+message);
 		model.addAttribute("success", message);
 		User profile = userService.findByUserName(getPrincipal());
@@ -328,13 +338,13 @@ public class LeavesManagementController {
 
 		LeavesLimit limit = leavesService.findLeavesLimitByLeavesType(leaveType);
 		LeavesAvailable leavesAvailable = leavesService.findAvailableLeavesByUserAndType(leaves.getUser(), leaveType);
-		if(leavesAvailable == null){
+		/*if(leavesAvailable == null){
 			leavesAvailable = new LeavesAvailable();
 			leavesAvailable.setAvailability(Float.parseFloat(limit.getLimit()));
 			leavesAvailable.setLeaveType(leaveType);
 			leavesAvailable.setUser(leaves.getUser());
 			logger.debug("Saving not leaves Available 1 ");
-		}
+		}*/
 
 		Integer test = Integer.parseInt(limit.getLimit());
 		logger.debug("Test Limit is "+test);
@@ -435,6 +445,22 @@ public class LeavesManagementController {
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "viewLeaves";
+	}
+	
+	/**
+	 * This method will provide the medium to add a Salary Division Details.
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = { "/user-leavesLimit-list" }, method = RequestMethod.GET)
+	public String userLeavesLimitList(ModelMap model) {
+		//model.addAttribute("leaves", new Leaves());
+		User profile = userService.findByUserName(getPrincipal());
+		List<LeavesAvailable>  leavesAvailableList = leavesService.findAvailableLeavesByUser(profile);
+		model.addAttribute("leavesAvailableList", leavesAvailableList);
+		model.addAttribute("profile", profile);
+		model.addAttribute("loggedinuser", getPrincipal());
+		
+		return "viewUserLeavesLimit";
 	}
 
 	/**

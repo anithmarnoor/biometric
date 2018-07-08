@@ -75,13 +75,13 @@ public class HolidaysManagementController {
 			model.addAttribute("holidays", holidays);
 			User profile = userService.findByUserName(getPrincipal());
 			logger.debug(" Has Errors in Holidays save "+result.getAllErrors());
-
+			model.addAttribute("message", "Error occurred.");
 			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
 			return "addHolidays";
 		}
 		String message ="";
-		String[] dateS = holidays.getHolidayDate().toString().split("/");
+		String[] dateS = holidays.getHoliday().split("/");
 		Integer year = Integer.parseInt(dateS[2]);
 		Integer month = Integer.parseInt(dateS[1]);
 		Integer date = Integer.parseInt(dateS[0]);
@@ -124,6 +124,7 @@ public class HolidaysManagementController {
 		}
 
 		logger.debug("Holidays Save message is  "+message);
+		model.addAttribute("message", message);
 		model.addAttribute("success", message);
 		User profile = userService.findByUserName(getPrincipal());
 

@@ -43,12 +43,33 @@
 					<div class="panel-heading">
 						<span class="lead">Employees </span>
 					</div>
+					<div class="well">
+						<!--      Changes done by M-->
+						<input type="text" id="txtSearch" placeholder="Search here.."
+							title="Type in a name">
 
-					<!--      Changes done by M-->
-					<input type="text" id="txtSearch" placeholder="Search here.."
-						title="Type in a name">
+						<!--      close          -->
+						<sec:authorize access="hasRole('ADMIN')">
+							<c:choose>
+								<c:when test="${inactiveUsers eq 'Yes'}">
+								</c:when>
+								<c:otherwise>
+									<input type="button" onclick="submitShowProfileAction()"
+										value="Show Profile" />
+									<input type="button" onclick="submitEditAction()" value="Edit" />
+									<input type="button" onclick="submitDeleteAction()"
+										value="Delete" />
+									<input type="button" onclick="submitPayRollAction()"
+										value="Define Payroll" />
+									<input type="button" onclick="submitPayRollViewAction()"
+										value="View Payroll" />
+								</c:otherwise>
+							</c:choose>
 
-					<!--      close          -->
+						</sec:authorize>
+
+					</div>
+
 					<div class="wrapper">
 						<div id="no-more-tables">
 
@@ -105,26 +126,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="well">
-				<sec:authorize access="hasRole('ADMIN')">
-					<c:choose>
-						<c:when test="${inactiveUsers eq 'Yes'}">
-						</c:when>
-						<c:otherwise>
-							<input type="button" onclick="submitShowProfileAction()"
-								value="Show Complete Profile" />
-							<input type="button" onclick="submitEditAction()" value="Edit" />
-							<input type="button" onclick="submitDeleteAction()"
-								value="Delete" />
-							<input type="button" onclick="submitPayRollAction()"
-								value="Define Payroll" />
-							<input type="button" onclick="submitPayRollViewAction()"
-								value="View Payroll" />
-						</c:otherwise>
-					</c:choose>
 
-				</sec:authorize>
-			</div>
 		</form:form>
 	</div>
 
