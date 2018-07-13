@@ -85,7 +85,7 @@ public class DepartmentController {
 	@RequestMapping(value = { "/addDepartment" }, method = RequestMethod.POST)
 	public String saveDepartment(@Valid Department department, BindingResult result,
 			ModelMap model) {
-		
+		User profile = userService.findByUserName(getPrincipal());
 		if (result.hasErrors() || department == null || department.getDepartmentName() == "") {
 			logger.debug("ERROR IS : "+result.getAllErrors()+" error count is "+result.getErrorCount());
 			if(department == null || department.getDepartmentName() == "") {
@@ -94,8 +94,6 @@ public class DepartmentController {
 			model.addAttribute("department", department);
 			model.addAttribute("edit", false);
 			model.addAttribute("roleChange", true);
-			User profile = userService.findByUserName(getPrincipal());
-
 			model.addAttribute("profile", profile);
 			model.addAttribute("loggedinuser", getPrincipal());
 			return "adddepartment";
@@ -105,8 +103,6 @@ public class DepartmentController {
 		
 		model.addAttribute("department", new Department());
 		
-		User profile = userService.findByUserName(getPrincipal());
-
 		model.addAttribute("success", "Department added successfully");
 		model.addAttribute("profile", profile);
 		model.addAttribute("loggedinuser", getPrincipal());

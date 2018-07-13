@@ -6,7 +6,7 @@
 	<artifactId>biometric-application</artifactId>
 	<packaging>war</packaging>
 	<version>1.0.0</version>
-	<name>PAM</name>
+	<name>bam</name>
 
 	<properties>
 		<springframework.version>4.2.5.RELEASE</springframework.version>
@@ -226,7 +226,7 @@
 				<version>2.4</version>
 				<configuration>
 					<warSourceDirectory>src/main/webapp</warSourceDirectory>
-					<warName>PAM</warName>
+					<warName>bam</warName>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
@@ -235,11 +235,11 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<url>http://softappz.in:33566/manager/text</url>
+					<url>http://localhost:8080/manager/text</url>
 					<server>TomcatServer</server>
 					<username>root</username>
 					<password>root</password>
-					<path>/PAM</path>
+					<path>/bam</path>
 				</configuration>
 			</plugin>
 			<plugin>

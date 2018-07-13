@@ -8,7 +8,7 @@
 
 			<ul id="menu-content" class="menu-content collapse out">
 
-				<li><a href="/PAM/myProfile"> <i class="fa fa-user fa-lg"></i>
+				<li><a href="myProfile"> <i class="fa fa-user fa-lg"></i>
 						My Profile
 				</a></li>
 				<sec:authorize access="hasRole('ADMIN') ">
@@ -35,19 +35,33 @@
 					<li><a href="list">Users List</a></li>
 					<sec:authorize access="hasRole('ADMIN') ">
 						<li><a href="inactiveUsersList">Inactive Users</a></li>
+						<li><a href="update-results">Update Results</a></li>
 					</sec:authorize>
 				</ul>
-				<sec:authorize access="hasRole('ADMIN') ">
-					<li data-toggle="collapse" data-target="#attendance"
-						class="collapsed"><a href="#"><i class="fa fa-pie-chart"></i>Attendance
-							<span class="arrow"></span></a></li>
-					<ul class="sub-menu collapse" id="attendance">
+				<li data-toggle="collapse" data-target="#exams" class="collapsed"><a
+					href="#"><i class="fa fa-credit-card"></i> Exams <span
+						class="arrow"></span></a></li>
+				<ul class="sub-menu collapse" id="exams">
+					<sec:authorize access="hasRole('ADMIN') ">
+						<!-- <li><a href="overtimes-list">OT Details</a></li> -->
+						<li><a href="view-exams">Exams</a></li>
+						<li><a href="view-results-">Results</a></li>
+					</sec:authorize>
+					<li><a href="view-results-${profile.id}">My Results</a></li>
+				</ul>
+
+				<li data-toggle="collapse" data-target="#attendance"
+					class="collapsed"><a href="#"><i class="fa fa-pie-chart"></i>Attendance
+						<span class="arrow"></span></a></li>
+				<ul class="sub-menu collapse" id="attendance">
+					<sec:authorize access="hasRole('ADMIN') ">
 						<li><a href="addMachine">Add Machine</a></li>
 						<li><a href="attendanceLog">Attendance Log</a></li>
+					</sec:authorize>
 					<li><a href="view-Attendance">Search Attendance</a></li>
 
-					</ul>
-				</sec:authorize>
+				</ul>
+
 
 				<li data-toggle="collapse" data-target="#leaves" class="collapsed">
 					<a href="#"><i class="fa fa-pie-chart"></i>Leaves <span
@@ -66,21 +80,22 @@
 						<li><a href="applied-leaves">View All Leaves</a></li>
 					</sec:authorize>
 				</ul>
-				<li data-toggle="collapse" data-target="#payslips" class="collapsed"><a
+				<!-- <li data-toggle="collapse" data-target="#payslips" class="collapsed"><a
 					href="#"><i class="fa fa-credit-card"></i> PayRoll <span
 						class="arrow"></span></a></li>
 				<ul class="sub-menu collapse" id="payslips">
 					<sec:authorize access="hasRole('ADMIN') ">
-						<!-- <li><a href="overtimes-list">OT Details</a></li> -->
+						<li><a href="overtimes-list">OT Details</a></li>
 						<li><a href="view-wages">Set Wages</a></li>
 						<li><a href="view-salaryDivision">Salary Division</a></li>
 						<li><a href="list-formula">Payroll Formula</a></li>
-						<!-- <li><a href="list-formula">View Payroll Formula</a></li> -->
-						<!-- <li><a href="view-searchAttendance">Search Attendance</a></li> -->
+						<li><a href="list-formula">View Payroll Formula</a></li>
+						<li><a href="view-searchAttendance">Search Attendance</a></li>
 						<li><a href="generate-PaySlip">Generate Pay Slip</a></li>
 					</sec:authorize>
 					<li><a href="view-PaySlip">View My PaySlip</a></li>
-				</ul>
+				</ul> -->
+
 			</ul>
 		</div>
 	</div>
