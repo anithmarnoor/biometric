@@ -349,9 +349,7 @@ jobs:
             git commit -m "Migrate to Spring Boot (initial commit): parent pom, Application, app.yml, Dockerfile, CI, services"
           fi
 
-      - name: Push branch using PAT
-    env:
-      PUSH_PAT: ${{ secrets.PUSH_PAT }}
+      - name: Push branch using PAT env PUSH_PAT: ${{ secrets.PUSH_PAT }}
     run: |
       set -eux
       git remote set-url origin https://x-access-token:${PUSH_PAT}@github.com/${{ github.repository }}.git
