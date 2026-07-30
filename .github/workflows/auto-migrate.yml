@@ -11,8 +11,8 @@ on:
 permissions:
   contents: write
   pull-requests: write 
-actions: defaults:
-workflows: write
+  security-events: write
+  
 
 jobs:
   migrate:
