@@ -351,6 +351,7 @@ jobs:
 
       - name: Push branch using PAT
         env:
+          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
           PUSH_PAT: ${{ secrets.PUSH_PAT }} 
         run: |
           set -eux
